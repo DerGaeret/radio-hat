@@ -8,19 +8,19 @@ Ein JLCONE-Projekt wurde nicht angelegt. JLCONE läuft auf dem eigenen Rechner u
 
 ## Ergebnis in Kürze
 
-Die Fertigungsdaten sind in sich stimmig und bestellbar. Es gibt keinen Verdrahtungsfehler gegenüber der README. Vor der Bestellung sind vier Punkte zu klären, siehe „Befunde“.
+Die Fertigungsdaten sind in sich stimmig und bestellbar. Es gibt keinen Verdrahtungsfehler gegenüber der README. Vor der Bestellung sind die Befunde 1, 3 und 4 zu beachten.
 
 ## Befunde
 
 | Nr. | Gewicht | Befund | Empfehlung |
 |---|---|---|---|
 | 1 | hoch | C23 (22 µF, 25 V, Eingang des 5-V-Reglers) liegt direkt an der Netzteilspannung. Die README erlaubt bis 26 V, das liegt über der Nennspannung. Bei 20 V bleibt wegen der Spannungsabhängigkeit von X5R nur ein Bruchteil der 22 µF wirksam. | Entweder die Obergrenze in der README auf 24 V senken oder C23 gegen einen 1206-Typ mit 35 V oder 50 V tauschen (z. B. 10 µF 50 V). |
-| 2 | hoch | Der 5-V-Regler TPS54302 liefert höchstens 3 A, die Spule L5 ist für 2,45 A Dauerstrom angegeben (Sättigung 3,5 A). Die README rechnet mit „Pi bis etwa 17 W“, das wären 3,4 A. | Mit einem Pi 3 oder Pi 4 ohne stromhungrige USB-Geräte passt es. Für einen Pi 5 unter Last reicht der Regler nicht. Pi-Modell klären. |
+| 2 | hoch | Der 5-V-Regler TPS54302 liefert höchstens 3 A, die Spule L5 ist für 2,45 A Dauerstrom angegeben (Sättigung 3,5 A). Die README rechnet mit „Pi bis etwa 17 W“, das wären 3,4 A. | Geklärt: Es wird ein Pi 4 verwendet. Das passt, solange keine stromhungrigen USB-Geräte (z. B. Festplatten ohne eigenes Netzteil) am Pi hängen. Für einen Pi 5 unter Last würde der Regler nicht reichen. |
 | 3 | mittel | LCSC-Nummer C377117 (680 nF 50 V X7R 1206, C15–C18) ließ sich online nicht bestätigen. | Beim BOM-Abgleich in JLCONE prüfen, ob 680 nF / 50 V / 1206 angezeigt wird. Ersatz: FH 1206B684K500NT (C1881). |
 | 4 | mittel | Drehlage von U1, U2, Q1 und D1 in der CPL ist offline nicht prüfbar, weil JLCPCB je Bauteil eine eigene Nulllage hat. Die CPL enthält bereits Korrekturen (U1 und U2 jeweils +270° gegenüber KiCad, Q1 +180°). | In der Bestückungsvorschau von JLCONE die Pin-1-Markierung prüfen: U1 Pin 1 oben rechts, U2 Pin 1 (GND) oben rechts, D1 Kathode unten (zu R8/R9). |
 | 5 | niedrig | `radio_hat_start.sh` verwies auf `ANLEITUNG.md`, die Datei heißt `README.md`. | Im Skript korrigiert. |
 | 6 | niedrig | C7 (4,7 µF 25 V) sitzt an 3,3 V, C26/C27 (22 µF 25 V) an 5 V. | In Ordnung, keine Änderung. |
-| 7 | Hinweis | Um die vier Befestigungslöcher (2,75 mm) reicht die Kupferfläche bis etwa 0,3 bis 0,6 mm an den Lochrand. Schraubenköpfe liegen auf lackiertem Kupfer. | Kunststoff-Unterlegscheiben oder Kunststoff-Abstandshalter verwenden. |
+| 7 | Hinweis | Um die vier Befestigungslöcher (2,75 mm) reicht die Kupferfläche bis auf 0,2 bis 0,6 mm an den Lochrand. Schraubenköpfe liegen auf lackiertem Kupfer. | Kunststoff-Unterlegscheiben oder Kunststoff-Abstandshalter verwenden. |
 
 ## Platine (aus Gerber und Bohrdaten)
 
