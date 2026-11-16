@@ -8,6 +8,9 @@ Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω)
 | `JLCPCB/BOM_RadioHAT.csv` | Stückliste für die SMD-Bestückung |
 | `JLCPCB/CPL_RadioHAT.csv` | Bauteilpositionen für die SMD-Bestückung |
 | `radio_hat_start.sh` | Startskript für den Verstärker auf dem Pi |
+| `KiCad/` | Platine als KiCad-Projekt zum Ändern, dazu das Skript für die Bestückungsdatei |
+| `PRUEFBERICHT.md` | Was geprüft und geändert wurde, offene Punkte |
+| `REICHELT.md` | Bestellliste für die Teile zum Selbstlöten |
 | `Bilder/` | Ober- und Unterseite der Platine als Lötvorlage |
 
 ![Oberseite](Bilder/render_top.png)
@@ -24,12 +27,25 @@ Web-Preis am 8.11.2026: 32,66 € für 5 Platinen, davon 2 mit allen SMD-Teilen 
 
 In JLCONE: Neues Angebot für Standard PCB/PCBA öffnen, `Gerber_RadioHAT.zip` hochladen, die Einstellungen oben wählen, dann bei der Bestückung `BOM_RadioHAT.csv` und `CPL_RadioHAT.csv` hochladen. Bei „Product Description“ passt „Audio and Video Appliance / Audio Amplifiers“.
 
+Die Dateien wurden am 16.11.2026 leicht geändert (siehe `PRUEFBERICHT.md`), der Preis kann deshalb um wenige Cent abweichen.
+
+Vor dem Bezahlen in der Bestückungsvorschau die Drehlage von vier Bauteilen prüfen. Die Platine liegt dabei wie im Bild oben, der 40-polige Sockel oben:
+
+| Bauteil | So muss es aussehen |
+|---|---|
+| U1 (Verstärker, Mitte) | Pinreihen oben und unten, Pin-1-Punkt oben rechts |
+| U2 (5-V-Regler, links) | Pinreihen oben und unten, Pin 1 oben rechts |
+| Q1 (Transistor, links) | zwei Pins links, ein Pin rechts |
+| D1 (Diode, links) | Kathodenstrich unten |
+
+Liegt ein Bauteil anders, in der Vorschau drehen. Außerdem im BOM-Abgleich prüfen, ob der Verstärker U1 (C478472) lieferbar ist.
+
 ## Selbst zu löten
 
 JLCPCB liefert nur die SMD-Teile. Alle Durchsteckteile lötest du selbst ein:
 
 - **Sockel J1:** von der Unterseite einstecken, auf der Oberseite verlöten (40 Lötstellen). Pin 1 liegt rechts oben, weil die Platine um 180° gedreht auf dem Pi sitzt.
-- **Elkos C1, C2 (470 µF):** Der Minus-Streifen des Elkos gehört auf die weiß gefüllte Hälfte des Aufdrucks, das lange Bein (+) ins Loch neben dem „+“.
+- **Elkos C1, C2 (470 µF, mindestens 35 V, 10 mm Durchmesser, 5 mm Raster):** Der Minus-Streifen des Elkos gehört auf die weiß gefüllte Hälfte des Aufdrucks, das lange Bein (+) ins Loch neben dem „+“.
 - **JST-Stecker S1–S6, X1, E1–E3:** Die Gehäuse passen genau in die weißen Umrisse.
 - **Schraubklemmen J2, J3, J4:** deine eigenen, Raster 5,0 oder 5,08 mm. Die Kabeleinführung zum Platinenrand drehen.
 
@@ -49,8 +65,9 @@ Pin 1 ist an jedem Stecker das eckige Lötpad. Beim Encoder-Kabel die Reihenfolg
 - 20 V Gleichspannung, 3 A oder mehr (60 bis 65 W).
 - Angeschlossen wird es an der Schraubklemme J4 (+ links, − rechts). Das Kabel also abisolieren oder über einen Hohlbuchsen-Adapter mit Schraubklemme führen.
 - Polung vor dem ersten Einschalten messen. Die Platine hat keinen Verpolungsschutz.
-- Rechnung: Verstärker höchstens 2 × 20 W / 0,88 ≈ 45,5 W, Pi bis etwa 17 W, zusammen etwa 62 W.
-- Nicht mehr als 26 V anschließen, die Elkos und der Verstärker sind darauf nicht ausgelegt.
+- Rechnung: Verstärker höchstens 2 × 20 W / 0,88 ≈ 45,5 W, 5-V-Regler für den Pi bis etwa 17 W (3 A am Ausgang), zusammen etwa 62 W.
+- Der 5-V-Regler liefert höchstens 3 A. Für einen Pi 4 reicht das, solange keine stromhungrigen USB-Geräte am Pi hängen. Für einen Pi 5 unter Last reicht es nicht.
+- Nicht mehr als 26 V anschließen. Der Verstärker ist bis 26,4 V ausgelegt, die Elkos C1 und C2 müssen dafür mindestens 35 V vertragen.
 - Den Pi nie gleichzeitig über USB-C versorgen, er bekommt seine 5 V von der Platine.
 - Die Lautsprecher haben 8 Ω. Bei 20 V dürfen es nicht weniger als 4,8 Ω sein.
 
@@ -131,3 +148,28 @@ Das Skript `radio_hat_start.sh` nach jedem Start einmal ausführen, zum Beispiel
 4. Erst dann Lautsprecher anschließen und mit der voreingestellten Lautstärke (−24 dB) probieren.
 
 Offen und erst am echten Gerät prüfbar: ob der Verstärker nach Pausen ohne I²S-Takt von selbst weiterspielt. Falls nicht, das Startskript erneut ausführen oder dauerhaft einen Stille-Datenstrom laufen lassen.
+
+## KiCad-Projekt
+
+Im Ordner `KiCad` liegt die Platine als `RadioHAT.kicad_pcb` mit Design-Regeln in `RadioHAT.kicad_pro`. Sie wurde aus den Fertigungsdaten vom 8.11.2026 zurückgewonnen, mit allen Netznamen, Bauteilen und Pin-Nummern. Die Dateien im Ordner `JLCPCB` sind aus genau dieser Platine erzeugt.
+
+- Einen Schaltplan gibt es nicht. Änderungen macht man direkt im Platineneditor. „Platine aus Schaltplan aktualisieren“ nicht verwenden.
+- Die Datei ist im Format von KiCad 7 gespeichert. KiCad 10 öffnet sie und speichert sie im neuen Format. Nach dem ersten Öffnen einmal die Flächen neu füllen (Taste B) und den DRC starten.
+- Der Bestückungsdruck besteht aus einzelnen Linien, die Texte sind nicht als Text bearbeitbar. Die Bauteilbezeichner stehen zusätzlich als Text auf der Lage F.Fab.
+- Die beiden Masseflächen: Abstand 0,2 mm, Mindestbreite 0,15 mm, Pads voll angebunden, Inseln entfernen.
+- Ursprung für Gerber, Bohrdaten und Bestückungsdatei ist die linke untere Platinenecke („Bohr-/Platzierungsursprung verwenden“).
+
+Neue Fertigungsdaten nach einer Änderung:
+
+1. Gerber plotten: F.Cu, B.Cu, F.Paste, F.Mask, B.Mask, F.Silkscreen, B.Silkscreen, Edge.Cuts, dazu die Bohrdateien (PTH und NPTH getrennt). Alles in `Gerber_RadioHAT.zip` packen.
+2. Bestückungsdatei erzeugen. Das Skript rechnet die Drehwinkel auf die Zählweise von JLCPCB um:
+
+```bash
+kicad-cli pcb export pos --format csv --units mm --side front --smd-only --use-drill-file-origin -o pos.csv KiCad/RadioHAT.kicad_pcb
+```
+
+```bash
+python3 KiCad/jlc_cpl.py pos.csv JLCPCB/CPL_RadioHAT.csv
+```
+
+3. Geänderte Bauteilwerte von Hand in `JLCPCB/BOM_RadioHAT.csv` nachtragen.
