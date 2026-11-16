@@ -14,10 +14,10 @@ Die Fertigungsdaten sind in sich stimmig und bestellbar. Es gibt keinen Verdraht
 
 | Nr. | Gewicht | Befund | Empfehlung |
 |---|---|---|---|
-| 1 | hoch | C23 (22 µF, 25 V, Eingang des 5-V-Reglers) liegt direkt an der Netzteilspannung. Die README erlaubt bis 26 V, das liegt über der Nennspannung. Bei 20 V bleibt wegen der Spannungsabhängigkeit von X5R nur ein Bruchteil der 22 µF wirksam. | Entweder die Obergrenze in der README auf 24 V senken oder C23 gegen einen 1206-Typ mit 35 V oder 50 V tauschen (z. B. 10 µF 50 V). |
+| 1 | hoch | C23 (22 µF, 25 V, Eingang des 5-V-Reglers) liegt direkt an der Netzteilspannung. Die README erlaubt bis 26 V, das liegt über der Nennspannung. Bei 20 V bleibt wegen der Spannungsabhängigkeit von X5R nur ein Bruchteil der 22 µF wirksam. | Entweder die Obergrenze in der README auf 24 V senken oder C23 gegen einen 1206-Typ mit 35 V oder 50 V tauschen (z. B. 10 µF 50 V). Eine konkrete LCSC-Nummer dafür wurde nicht geprüft. |
 | 2 | hoch | Der 5-V-Regler TPS54302 liefert höchstens 3 A, die Spule L5 ist für 2,45 A Dauerstrom angegeben (Sättigung 3,5 A). Die README rechnet mit „Pi bis etwa 17 W“, das wären 3,4 A. | Geklärt: Es wird ein Pi 4 verwendet. Das passt, solange keine stromhungrigen USB-Geräte (z. B. Festplatten ohne eigenes Netzteil) am Pi hängen. Für einen Pi 5 unter Last würde der Regler nicht reichen. |
 | 3 | mittel | LCSC-Nummer C377117 (680 nF 50 V X7R 1206, C15–C18) ließ sich online nicht bestätigen. | Beim BOM-Abgleich in JLCONE prüfen, ob 680 nF / 50 V / 1206 angezeigt wird. Ersatz: FH 1206B684K500NT (C1881). |
-| 4 | mittel | Drehlage von U1, U2, Q1 und D1 in der CPL ist offline nicht prüfbar, weil JLCPCB je Bauteil eine eigene Nulllage hat. Die CPL enthält bereits Korrekturen (U1 und U2 jeweils +270° gegenüber KiCad, Q1 +180°). | In der Bestückungsvorschau von JLCONE die Pin-1-Markierung prüfen: U1 Pin 1 oben rechts, U2 Pin 1 (GND) oben rechts, D1 Kathode unten (zu R8/R9). |
+| 4 | mittel | Drehlage von U1, U2, Q1 und D1 in der CPL ist offline nicht prüfbar, weil JLCPCB je Bauteil eine eigene Nulllage hat. Die CPL enthält vermutlich bereits Korrekturen (U1 und U2 je +270°, Q1 +180° gegenüber der üblichen KiCad-Nulllage). Das ist aus der Pad-Anordnung geschlossen, nicht belegt, zumal U1 einen eigenen Footprint hat. | In der Bestückungsvorschau von JLCONE die Pin-1-Markierung prüfen: U1 Pin 1 oben rechts, U2 Pin 1 (GND) oben rechts, D1 Kathode unten (zu R8/R9). |
 | 5 | niedrig | `radio_hat_start.sh` verwies auf `ANLEITUNG.md`, die Datei heißt `README.md`. | Im Skript korrigiert. |
 | 6 | niedrig | C7 (4,7 µF 25 V) sitzt an 3,3 V, C26/C27 (22 µF 25 V) an 5 V. | In Ordnung, keine Änderung. |
 | 7 | Hinweis | Um die vier Befestigungslöcher (2,75 mm) reicht die Kupferfläche bis auf 0,2 bis 0,6 mm an den Lochrand. Schraubenköpfe liegen auf lackiertem Kupfer. | Kunststoff-Unterlegscheiben oder Kunststoff-Abstandshalter verwenden. |
@@ -56,7 +56,7 @@ Alle Angaben der README wurden in den Gerber-Daten wiedergefunden:
 - I²C an GPIO2/3, I²S an GPIO18 (Takt), 19 (LR), 21 (Daten) über je 33 Ω, PDN an GPIO9 mit 10 kΩ nach GND.
 - Schalter: GPIO10 am Kollektor von Q1, GPIO4 über D1 am EN-Eingang des Reglers. Frei: GPIO14, 15, 20 sowie ID-Pins 27/28.
 - 5-V-Regler: Spannungsteiler 75 kΩ / 10 kΩ ergibt 5,07 V. EN-Spannung bei 20 V etwa 3,4 V (zulässig bis 7 V).
-- TAS5805M: Versorgung, Bootstrap-Kondensatoren (220 nF), Ausgangsfilter (10 µH + 680 nF) und Massepins passen zur Pinbelegung laut Datenblatt-Auszügen. Kanal A geht an J3 „LINKS“, Kanal B an J2 „RECHTS“, Polung wie in der README. Adresswiderstand 15 kΩ nach 3,3 V passt zur Adresse 0x2D im Skript. Die Reihenfolge der Pins 6 bis 12 (I²S, I²C, PDN) konnte nicht aus dem Original-Datenblatt bestätigt werden, die TI-Seite war nicht abrufbar.
+- TAS5805M: Versorgung, Bootstrap-Kondensatoren (220 nF), Ausgangsfilter (10 µH + 680 nF) und Massepins passen zur Pinbelegung, soweit sie aus Datenblatt-Auszügen belegt ist (Pins 1–5, 13–20, 22–24, 26–28). Kanal A geht an J3 „LINKS“, Kanal B an J2 „RECHTS“, Polung wie in der README. Der Adresswiderstand R1 (15 kΩ nach 3,3 V) hängt am Pin ADR. Nicht aus dem Datenblatt bestätigt, weil die TI-Seite nicht abrufbar war: die Reihenfolge der Pins 6 bis 12 (I²S, I²C, PDN), die Pins 21 und 25 (Bootstrap) und dass 15 kΩ die Adresse 0x2D aus dem Skript ergibt. Die Platine ist an diesen Stellen in sich schlüssig, das sollte aber einmal mit dem Datenblatt (Pin-Tabelle und Adress-Tabelle) verglichen werden.
 
 ## LCSC-Nummern
 
@@ -64,7 +64,7 @@ Quelle: Suchmaschinen-Auszüge der Seiten von LCSC und JLCPCB vom 16.11.2026. Di
 
 | LCSC | BOM-Angabe | Gefunden | Urteil |
 |---|---|---|---|
-| C478472 | TAS5805MPWPR | TI TAS5805MPWPR, HTSSOP-28-EP | passt, Bestand knapp (2.000–3.500) |
+| C478472 | TAS5805MPWPR | TI TAS5805MPWPR, HTSSOP-28-EP | Typ passt; JLCPCB-Bestand nicht bestätigt (LCSC-Shop zeigte 2.000–3.500 Stück) |
 | C15849 | 1 µF 50 V X5R 0603 | Samsung CL10A105KB8NNNC | passt |
 | C14663 | 100 nF 50 V X7R 0603 | Yageo CC0603KRX7R9BB104, Basic | passt |
 | C1779 | 4,7 µF 25 V X5R 0805 | Samsung CL21A475KAQNNNE | passt |
@@ -92,5 +92,5 @@ Quelle: Suchmaschinen-Auszüge der Seiten von LCSC und JLCPCB vom 16.11.2026. Di
 
 1. `JLCPCB/Gerber_RadioHAT.zip` hochladen. Erkannte Größe 65 × 65 mm, 2 Lagen.
 2. Einstellungen aus der README wählen, dann `BOM_RadioHAT.csv` und `CPL_RadioHAT.csv` hochladen.
-3. Im BOM-Abgleich: 23 Zeilen, alle zugeordnet, C377117 und C23242 auf Wert und Bauform prüfen, Bestand von C478472.
+3. Im BOM-Abgleich zuerst prüfen, ob U1 (C478472, TAS5805MPWPR) bei JLCPCB lieferbar ist. Ohne U1 lohnt die Bestellung nicht. Dann: 23 Zeilen, alle zugeordnet, C377117 und C23242 auf Wert und Bauform prüfen.
 4. In der Bestückungsvorschau: Pin 1 von U1, U2, Q1, D1 (Befund 4). Alle Teile müssen deckungsgleich auf ihren Pads sitzen.

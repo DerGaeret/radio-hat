@@ -1,6 +1,6 @@
 # Bestellliste Reichelt (Stand 16.11.2026)
 
-Die Liste enthält alles, was JLCPCB nicht bestückt und was laut deiner Angabe noch fehlt. Schraubklemmen J2–J4 und das 20-V-Netzteil hast du schon, sie stehen nicht auf der Liste. Tasten, Encoder und Ein/Aus-Schalter sind laut README ebenfalls vorhanden.
+Die Liste enthält alles, was JLCPCB nicht bestückt und was laut deiner Angabe noch fehlt. Schraubklemmen J2–J4 und das 20-V-Netzteil hast du schon, sie stehen nicht auf der Liste. Tasten, Encoder und Ein/Aus-Schalter sind laut README ebenfalls vorhanden. Sockel J1 und die Elkos C1/C2 stehen auf der Liste, weil ich annehme, dass sie fehlen; falls du sie hast, streichen.
 
 Die Mengen gelten für eine Platine. Für beide bestückten Platinen alles verdoppeln. Artikelnummern stammen aus Suchtreffern der Reichelt-Seiten; Preis und Lagerbestand vor dem Bestellen im Shop prüfen.
 
@@ -18,7 +18,7 @@ Die Mengen gelten für eine Platine. Für beide bestückten Platinen alles verdo
 ## Hinweise
 
 - **Sockel J1:** Der Abstand von 11 mm zwischen Pi und Platine ergibt sich aus 8,5 mm Buchsenhöhe plus dem Kunststoffsockel der Pi-Stiftleiste. Eine höhere „Stacking“-Leiste passt nicht zu den Abstandshaltern.
-- **Elkos:** 35 V ist das Minimum bei 20 V Versorgung. Die Bohrungen haben 1,0 mm bei 5 mm Abstand, der Aufdruck 10 mm Durchmesser. Die Bestellnummer `RAD FR 470/35` hat 3,5 mm Raster und passt nicht.
+- **Elkos:** 35 V ist das Minimum bei 20 V Versorgung. Die Bohrungen haben 1,0 mm bei 5 mm Abstand, der Aufdruck 10 mm Durchmesser. Die Bestellnummer `RAD FR 470/35` hat 3,5 mm Raster und passt nicht. Gleichwertig mit bestätigten Maßen (10 × 20 mm, RM 5): `RAD LXZ 35-470`, https://www.reichelt.com/de/en/elko-radial-470-f-35-v-105-low-esr-10x20-mm-rm-5-rad-lxz-35-470-p166408.html
 - **Crimpkontakte:** Alternative für sehr dünne Litze (30–26 AWG, 0,05–0,13 mm²) ist `JST XH2 CKS`. Zum Crimpen braucht es eine Zange für JST-Kontakte. Wer keine hat, nimmt statt Gehäusen und Kontakten fertig konfektionierte XH-Kabel (2-polig und 4-polig).
 - **Abstandshalter:** Das Set enthält 10-mm-Bolzen. Der fehlende Millimeter wird laut README mit Unterlegscheiben ausgeglichen; ob Scheiben im Set liegen, auf der Artikelseite prüfen. Wegen der Kupferfläche nahe an den Löchern am besten Kunststoffscheiben verwenden.
 - **Nicht geprüft:** Schaltlitze, Lötzinn und ein Gehäuse stehen nicht auf der Liste.
@@ -26,7 +26,6 @@ Die Mengen gelten für eine Platine. Für beide bestückten Platinen alles verdo
 ## Quellen
 
 - https://www.reichelt.com/de/en/shop/product/female_header_2_54mm_straight_2x20-266688
-- https://www.reichelt.com/de/en/shop/product/e-cap_radial_470_uf_35_v_105_c_low_esr-200291
 - https://www.reichelt.com/de/en/jst-pin-header-straight-1x2-pin-xh-jst-xh2p-st-p185073.html
 - https://www.reichelt.com/de/en/shop/product/jst_pin_header_straight_1x4-pin_xh-185075
 - https://www.reichelt.com/de/en/shop/product/jst_socket_housing_1x2-pin_xh-185085
