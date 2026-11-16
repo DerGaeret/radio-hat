@@ -23,7 +23,7 @@ Die Platine ist neu entworfen und ungetestet. Beim ersten Einschalten keine Laut
 
 Dateien im Ordner `JLCPCB`: `Gerber_RadioHAT.zip`, `BOM_RadioHAT.csv`, `CPL_RadioHAT.csv`.
 
-Einstellungen: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm, PCB Qty 5, HASL (with lead). PCB Assembly: Economic, Top Side, PCBA Qty 2. Sonst alles auf Standard lassen.
+Einstellungen: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm, PCB Qty 5, HASL (with lead). PCB Assembly: Top Side, PCBA Qty 2, Economic, falls das Angebot das für vier Lagen anbietet (nicht geprüft), sonst Standard. Sonst alles auf Standard lassen.
 
 Web-Preis am 8.11.2026: 32,66 € für 5 Platinen, davon 2 mit allen SMD-Teilen bestückt, ohne Versand. Für die Platine zeigte das Angebot einen Desktop-Preis von 1,79 € statt 3,58 €.
 
