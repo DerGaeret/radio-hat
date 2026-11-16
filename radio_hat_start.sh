@@ -1,6 +1,6 @@
 #!/bin/bash
 # Startet den TAS5805M auf dem Radio HAT. Ungetestet, beim ersten Mal leise probieren.
-# Einrichtung: siehe ANLEITUNG.md
+# Einrichtung: siehe README.md
 #
 # Aufruf: radio_hat_start.sh [Lautstaerke]
 #   Lautstaerke: 0x30 = 0 dB, jeder Schritt mehr = 0,5 dB leiser. Standard 0x60 = -24 dB.
