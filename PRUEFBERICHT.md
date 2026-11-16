@@ -23,13 +23,16 @@ Geprüft wurde mit KiCad 7.0.11, weil hier keine neuere Version verfügbar war. 
 
 | Nr. | Was | Vorher | Nachher | Grund |
 |---|---|---|---|---|
-| 1 | Drehlage U2 (TPS54302) in der CPL | 180° | 90° | Für TSOT-23-6 gilt bei JLCPCB dieselbe Korrektur wie für SOT-23 (+180°), nicht die für SOIC/TSSOP (+270°). Quelle: Korrekturtabelle von KiBot. |
+| 1 | Drehlage U2 (TPS54302) in der CPL | 180° | 90° | Laut der Korrekturtabelle von KiBot gilt für TSOT-23 bei JLCPCB dieselbe Korrektur wie für SOT-23 (+180°), nicht die für SOIC/TSSOP (+270°). Die Tabelle selbst merkt an, dass JLCPCB die Zählweise über die Zeit geändert hat. Deshalb in der Vorschau prüfen. |
 | 2 | C23, Eingangskondensator des 5-V-Reglers | 22 µF 25 V (C12891) | 10 µF 50 V X5R 1206 (C13585, Samsung CL31A106KBHNNNE, Basic) | C23 liegt an der Netzteilspannung, die README erlaubt bis 26 V. |
 | 3 | Zwei doppelt gesetzte GND-Durchkontaktierungen bei C9 und C10 | je zwei Bohrungen 0,025 mm und 0,225 mm nebeneinander, überlappend | je eine | Überlappende Bohrungen sind ein Fertigungsfehler (DRC „hole_near_hole“). |
-| 4 | Zwei GND-Durchkontaktierungen zwischen C5 und C6, eine bei C7 | Steg zwischen den Bohrungen 0,10 mm und 0,21 mm | 0,30 mm und 0,28 mm | Mindestabstand Bohrung zu Bohrung 0,25 mm. Verschoben um 0,1 mm bzw. 0,2 mm, Anschluss unverändert. |
-| 5 | Lötpaste unter dem Kühlpad von U1 | 3,5 × 1,9 mm (53 % der Padfläche) | 3,65 × 2,6 mm (76 %) | Das Datenblatt verlangt 70 bis 80 % Pastenfläche unter dem Kühlpad. |
+| 4 | Zwei GND-Durchkontaktierungen zwischen C5 und C6 | Steg zwischen den Bohrungen 0,10 mm | eine Durchkontaktierung mittig zwischen den beiden Pads | Mindestabstand Bohrung zu Bohrung 0,25 mm. Für zwei Bohrungen ist die Lücke zwischen den Pads zu schmal. Die Massepads von C5 und C6 hängen zusätzlich voll an der Massefläche der Oberseite. |
+| 5 | GND-Durchkontaktierung bei C7 | Steg zur Nachbarbohrung 0,21 mm | 0,33 mm | Um 0,1 mm verschoben, die Bohrung bleibt außerhalb des Pads von C7. |
+| 6 | Lötpaste unter dem Kühlpad von U1 | 3,5 × 1,9 mm (53 % der Padfläche) | 3,65 × 2,6 mm (76 %) | Das Datenblatt verlangt 70 bis 80 % Pastenfläche unter dem Kühlpad. |
 
-Der Vergleich der neuen Gerber-Dateien mit den alten zeigt genau diese Änderungen und sonst keine: vier Durchkontaktierungen und fünf kurze Leiterbahnstücke im Kupfer, ein Pastenfeld, zwei Bohrungen weniger und drei verschoben. Lötstopp, Bestückungsdruck und Umriss sind unverändert.
+Der Vergleich der neuen Gerber-Dateien mit den alten zeigt genau diese Änderungen: im Kupfer drei Durchkontaktierungen entfernt, zwei verschoben, zwei kurze Leiterbahnstücke entfernt und zwei neu angeschlossen, dazu ein Pastenfeld. In den Bohrdaten sind es entsprechend drei Bohrungen weniger und zwei verschobene. Die Masseflächen hat KiCad 7 neu berechnet, sie sind deckungsgleich mit den alten. Lötstopp, Bestückungsdruck und Umriss sind unverändert.
+
+Die Änderungen 2 und 6 waren nicht ausdrücklich beauftragt. Sie lassen sich rückgängig machen: C23 in der BOM wieder auf C12891 setzen, das Pastenfeld in KiCad am Footprint U1 verkleinern.
 
 ## Drehlagen in der Bestückungsdatei
 
@@ -96,7 +99,7 @@ Abstände: Der kleinste Abstand zwischen verschiedenen Netzen beträgt 0,20 mm (
 |---|---|
 | Größe | 65 × 65 mm, Ecken R 3 mm, 2 Lagen |
 | Kleinste Leiterbahn / kleinster Abstand | 0,25 mm / 0,20 mm |
-| Durchkontaktierungen | 156 × 0,3/0,6 mm, 3 × 0,4/0,8 mm, 8 × 0,3 mm im Kühlpad von U1 |
+| Durchkontaktierungen | 155 × 0,3/0,6 mm, 3 × 0,4/0,8 mm, 8 × 0,3 mm im Kühlpad von U1 |
 | Bauteilbohrungen | 0,95 mm (XH-4), 1,0 mm (Sockel, XH-2, Elkos), 1,4 mm (Klemmen) |
 | Befestigung | 4 × 2,75 mm unbeschichtet, Raster 58 × 49 mm |
 | Bauteile | 86 bestückt (24 Stücklistenzeilen), 16 zum Selbstlöten, 68 Netze |
