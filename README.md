@@ -15,7 +15,7 @@ Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω)
 
 ![Oberseite](Bilder/render_top.png)
 
-Die Bilder zeigen den Stand vom 8.11.2026. Seitdem sind die Beschriftungen E1, E2, E3 und X1 leicht verschoben, sonst sieht die Platine gleich aus.
+Die Bilder zeigen den Stand vom 8.11.2026. Seitdem sind die Beschriftungen E1, E2, E3 und X1 leicht verschoben, C8, C9, C10 und R1 neben dem Verstärker versetzt und die Leiterbahnen zu den Lautsprechern breiter. Die beiden Innenlagen sind auf den Bildern nicht zu sehen.
 
 Die Platine ist neu entworfen und ungetestet. Beim ersten Einschalten keine Lautsprecher anschließen und die Spannungen prüfen (siehe unten).
 
@@ -23,13 +23,13 @@ Die Platine ist neu entworfen und ungetestet. Beim ersten Einschalten keine Laut
 
 Dateien im Ordner `JLCPCB`: `Gerber_RadioHAT.zip`, `BOM_RadioHAT.csv`, `CPL_RadioHAT.csv`.
 
-Einstellungen: FR-4, 2 Lagen, PCB Qty 5, HASL (with lead). PCB Assembly: Economic, Top Side, PCBA Qty 2. Sonst alles auf Standard lassen.
+Einstellungen: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm, PCB Qty 5, HASL (with lead). PCB Assembly: Economic, Top Side, PCBA Qty 2. Sonst alles auf Standard lassen.
 
 Web-Preis am 8.11.2026: 32,66 € für 5 Platinen, davon 2 mit allen SMD-Teilen bestückt, ohne Versand. Für die Platine zeigte das Angebot einen Desktop-Preis von 1,79 € statt 3,58 €.
 
 In JLCONE: Neues Angebot für Standard PCB/PCBA öffnen, `Gerber_RadioHAT.zip` hochladen, die Einstellungen oben wählen, dann bei der Bestückung `BOM_RadioHAT.csv` und `CPL_RadioHAT.csv` hochladen. Bei „Product Description“ passt „Audio and Video Appliance / Audio Amplifiers“.
 
-Die Dateien wurden am 16.11.2026 leicht geändert (siehe `PRUEFBERICHT.md`), der Preis kann deshalb um wenige Cent abweichen.
+Seit dem 16.11.2026 ist die Platine vierlagig (siehe `PRUEFBERICHT.md`). Der Preis oben gilt für den alten zweilagigen Stand; eine vierlagige Platine kostet mehr, den aktuellen Preis zeigt das Angebot.
 
 Vor dem Bezahlen in der Bestückungsvorschau die Drehlage von vier Bauteilen prüfen. Die Platine liegt dabei wie im Bild oben, der 40-polige Sockel oben:
 
@@ -159,12 +159,13 @@ Im Ordner `KiCad` liegt die Platine als `RadioHAT.kicad_pcb` mit Design-Regeln i
 - Die Datei ist im Format von KiCad 7 gespeichert. KiCad 10 öffnet sie und speichert sie im neuen Format. Nach dem ersten Öffnen einmal die Flächen neu füllen (Taste B) und den DRC starten.
 - Der DRC läuft in KiCad 7.0.11 ohne Meldung. Im DRC-Dialog den Abgleich mit dem Schaltplan abgeschaltet lassen. Die Prüfung gegen die Footprint-Bibliothek ist im Projekt abgeschaltet, weil es keine Bibliothek gibt.
 - Der Bestückungsdruck besteht aus einzelnen Linien, die Texte sind nicht als Text bearbeitbar. Die Bauteilbezeichner stehen zusätzlich als Text auf der Lage F.Fab.
-- Die beiden Masseflächen: Abstand 0,2 mm, Mindestbreite 0,15 mm, Pads voll angebunden, Inseln entfernen.
+- Vier Kupferlagen: Oberseite, zwei Masselagen innen (In1.Cu, In2.Cu), Unterseite. Auf In1.Cu liegen außer Masse nur die Doppelbahnen der äußeren Verstärkerausgänge.
+- Die vier Masseflächen: Abstand 0,2 mm, Mindestbreite 0,15 mm, Pads voll angebunden, Inseln entfernen.
 - Ursprung für Gerber, Bohrdaten und Bestückungsdatei ist die linke untere Platinenecke („Bohr-/Platzierungsursprung verwenden“).
 
 Neue Fertigungsdaten nach einer Änderung:
 
-1. Gerber plotten: F.Cu, B.Cu, F.Paste, F.Mask, B.Mask, F.Silkscreen, B.Silkscreen, Edge.Cuts, dazu die Bohrdateien (PTH und NPTH getrennt). Alles in `Gerber_RadioHAT.zip` packen.
+1. Gerber plotten: F.Cu, In1.Cu, In2.Cu, B.Cu, F.Paste, F.Mask, B.Mask, F.Silkscreen, B.Silkscreen, Edge.Cuts, dazu die Bohrdateien (PTH und NPTH getrennt). Alles in `Gerber_RadioHAT.zip` packen.
 2. Bestückungsdatei erzeugen. Das Skript rechnet die Drehwinkel auf die Zählweise von JLCPCB um:
 
 ```bash
