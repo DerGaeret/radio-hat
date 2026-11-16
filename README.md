@@ -15,7 +15,7 @@ Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω)
 
 ![Oberseite](Bilder/render_top.png)
 
-Die Bilder zeigen den Stand vom 8.11.2026. Seitdem sind die Beschriftungen E1, E2, E3 und X1 leicht verschoben, C8, C9, C10 und R1 neben dem Verstärker versetzt und die Leiterbahnen zu den Lautsprechern breiter. Die beiden Innenlagen sind auf den Bildern nicht zu sehen.
+Die Bilder zeigen den aktuellen Stand vom 16.11.2026. Sie sind direkt aus den Gerber-Dateien gerendert und zeigen Kupfer, Lötstopp und Bestückungsdruck der Außenseiten, aber keine Bauteilkörper. Die beiden Innenlagen sind nicht zu sehen.
 
 Die Platine ist neu entworfen und ungetestet. Beim ersten Einschalten keine Lautsprecher anschließen und die Spannungen prüfen (siehe unten).
 
@@ -159,7 +159,7 @@ Im Ordner `KiCad` liegt die Platine als `RadioHAT.kicad_pcb` mit Design-Regeln i
 - Die Datei ist im Format von KiCad 7 gespeichert. KiCad 10 öffnet sie und speichert sie im neuen Format. Nach dem ersten Öffnen einmal die Flächen neu füllen (Taste B) und den DRC starten.
 - Der DRC läuft in KiCad 7.0.11 ohne Meldung. Im DRC-Dialog den Abgleich mit dem Schaltplan abgeschaltet lassen. Die Prüfung gegen die Footprint-Bibliothek ist im Projekt abgeschaltet, weil es keine Bibliothek gibt.
 - Der Bestückungsdruck besteht aus einzelnen Linien, die Texte sind nicht als Text bearbeitbar. Die Bauteilbezeichner stehen zusätzlich als Text auf der Lage F.Fab.
-- Vier Kupferlagen: Oberseite, zwei Masselagen innen (In1.Cu, In2.Cu), Unterseite. Auf In1.Cu liegen außer Masse nur die Doppelbahnen der äußeren Verstärkerausgänge.
+- Vier Kupferlagen: Oberseite, zwei Masselagen innen (In1.Cu, In2.Cu), Unterseite. In2.Cu ist durchgehend Masse. Auf In1.Cu liegen außer Masse die Doppelbahnen der vier Verstärkerausgänge und ein 4,7 mm langes Stück der 3,3-V-Leitung zwischen den Pins des Sockels.
 - Die vier Masseflächen: Abstand 0,2 mm, Mindestbreite 0,15 mm, Pads voll angebunden, Inseln entfernen.
 - Ursprung für Gerber, Bohrdaten und Bestückungsdatei ist die linke untere Platinenecke („Bohr-/Platzierungsursprung verwenden“).
 
