@@ -1,4 +1,4 @@
-# Prüfbericht Radio HAT (Stand 16.11.2026, zweite Fassung)
+# Prüfbericht Radio HAT (Stand 16.11.2026, dritte Fassung)
 
 ## Was gemacht wurde
 
@@ -26,12 +26,13 @@ Geprüft wurde mit KiCad 7.0.11, weil hier keine neuere Version verfügbar war. 
 | 1 | Drehlage U2 (TPS54302) in der CPL | 180° | 90° | Laut der Korrekturtabelle von KiBot gilt für TSOT-23 bei JLCPCB dieselbe Korrektur wie für SOT-23 (+180°), nicht die für SOIC/TSSOP (+270°). Die Tabelle selbst merkt an, dass JLCPCB die Zählweise über die Zeit geändert hat. Deshalb in der Vorschau prüfen. |
 | 2 | C23, Eingangskondensator des 5-V-Reglers | 22 µF 25 V (C12891) | 10 µF 50 V X5R 1206 (C13585, Samsung CL31A106KBHNNNE, Basic) | C23 liegt an der Netzteilspannung, die README erlaubt bis 26 V. |
 | 3 | Zwei doppelt gesetzte GND-Durchkontaktierungen bei C9 und C10 | je zwei Bohrungen 0,025 mm und 0,225 mm nebeneinander, überlappend | je eine | Überlappende Bohrungen sind ein Fertigungsfehler (DRC „hole_near_hole“). |
-| 4 | Zwei GND-Durchkontaktierungen zwischen C5 und C6 | Steg zwischen den Bohrungen 0,10 mm | eine Durchkontaktierung mittig zwischen den beiden Pads | Mindestabstand Bohrung zu Bohrung 0,25 mm. Für zwei Bohrungen ist die Lücke zwischen den Pads zu schmal. Die Massepads von C5 und C6 hängen zusätzlich voll an der Massefläche der Oberseite. |
+| 4 | Zwei GND-Durchkontaktierungen zwischen C5 und C6 | beide in der Lücke zwischen den Pads, Steg zwischen den Bohrungen 0,10 mm | eine rechts von C5 (um 0,05 mm verschoben), die zweite links von C5 | Mindestabstand Bohrung zu Bohrung 0,25 mm. Die Anordnung ist jetzt spiegelbildlich zu C3/C4 auf der anderen Seite; jeder Stützkondensator behält seine eigene Durchkontaktierung zur Massefläche. |
 | 5 | GND-Durchkontaktierung bei C7 | Steg zur Nachbarbohrung 0,21 mm | 0,33 mm | Um 0,1 mm verschoben, die Bohrung bleibt außerhalb des Pads von C7. |
 | 6 | Lötpaste unter dem Kühlpad von U1 | 3,5 × 1,9 mm (53 % der Padfläche) | 3,65 × 2,6 mm (76 %) | Das Datenblatt verlangt 70 bis 80 % Pastenfläche unter dem Kühlpad. |
+| 8 | Ausgangsleitungen vom Verstärker zu den Spulen | 0,4 mm am Pin, dann 0,5 bis 0,6 mm | 0,45 mm am Pin (Padbreite), dann 0,6 bis 0,8 mm, die inneren Ausgänge 0,7 mm | TI SLAA902 verlangt für Class-D-Ausgänge mindestens 30 mil (0,76 mm). Am Pin geht wegen des Rasters von 0,65 mm nicht mehr. |
 | 7 | Bestückungsdruck | Beschriftungen E1 und E2 ragten über den Platinenrand, E3 und X1 lagen auf Pads, 15 Umrisslinien liefen in Pads hinein (17 DRC-Meldungen) | E1 und E2 stehen jetzt innerhalb ihres Steckerumrisses, E3 rechts neben R35, X1 unterhalb des Steckers; die Umrisslinien enden vor den Pads | Damit ist der DRC ohne Meldung. E1 und E2 werden vom eingelöteten Stecker verdeckt, die Zuordnung steht auch in der README. |
 
-Der Vergleich der neuen Gerber-Dateien mit den alten zeigt genau diese Änderungen: im Kupfer drei Durchkontaktierungen entfernt, zwei verschoben, zwei kurze Leiterbahnstücke entfernt und zwei neu angeschlossen, dazu ein Pastenfeld. In den Bohrdaten sind es entsprechend drei Bohrungen weniger und zwei verschobene. Die Masseflächen hat KiCad 7 neu berechnet, sie sind deckungsgleich mit den alten. Im Bestückungsdruck sind nur die vier verschobenen Beschriftungen und die gekürzten Umrisslinien anders. Lötstopp und Umriss sind unverändert.
+Der Vergleich der neuen Gerber-Dateien mit den alten zeigt genau diese Änderungen: im Kupfer zwei Durchkontaktierungen entfernt, drei verschoben, zwei kurze Leiterbahnstücke entfernt, drei neu angeschlossen und 22 Leiterbahnstücke der Ausgänge verbreitert, dazu ein Pastenfeld. In den Bohrdaten sind es entsprechend zwei Bohrungen weniger und drei verschobene. Die Masseflächen hat KiCad 7 neu berechnet, sie sind deckungsgleich mit den alten. Im Bestückungsdruck sind nur die vier verschobenen Beschriftungen und die gekürzten Umrisslinien anders. Lötstopp und Umriss sind unverändert.
 
 Die Änderungen 2 und 6 waren nicht ausdrücklich beauftragt. Sie lassen sich rückgängig machen: C23 in der BOM wieder auf C12891 setzen, das Pastenfeld in KiCad am Footprint U1 verkleinern.
 
@@ -68,7 +69,7 @@ Gerechnet für 35 µm Kupfer nach IPC-2221 (Außenlage, 10 °C Erwärmung): 0,4 
 | Netzteil J4 zum Elko C1 (Unterseite) | 1,5 mm, 39 mm lang | etwa 3 A bei Volllast | in Ordnung, Spannungsabfall etwa 40 mV |
 | 20 V zu den Verstärker-Pins Kanal B | 1,0 mm auf der Oberseite, dann 0,6 mm Stich direkt auf die Pins | etwa 1,1 A im Mittel je Kanal | in Ordnung |
 | 20 V zu Kanal A und Elko C2 | 1,2 mm auf der Unterseite, zwei Durchkontaktierungen 0,4/0,8 mm in Reihe | etwa 1,1 A im Mittel | in Ordnung. Die Stromspitzen liefern C2, C5 und C6, die hinter den Durchkontaktierungen sitzen. |
-| Verstärker-Pin zur Spule | 0,4 mm auf 3,4 mm Länge, dann 0,5 bis 0,6 mm | 1,5 A effektiv bei 19 W Sinus | knapp, aber üblich: breiter geht bei 0,65 mm Pinraster nicht, das Stück ist kurz und gibt Wärme an die Pads ab |
+| Verstärker-Pin zur Spule | 0,45 mm auf 3,4 bis 4,1 mm Länge, dann 0,6 bis 0,8 mm | 1,5 A effektiv bei 19 W Sinus | in Ordnung. Am Pin geht bei 0,65 mm Pinraster nicht mehr, das Stück ist kurz und gibt Wärme an die Pads ab |
 | Spule zur Lautsprecherklemme | 0,8 mm, 21 mm lang | 1,5 A effektiv | in Ordnung |
 | 5 V vom Regler zum Pi | 1,0 mm, 60 mm lang, ohne Durchkontaktierung | bis 3 A | in Ordnung, Spannungsabfall bis 90 mV, Erwärmung bei 3 A Dauerstrom etwa 17 °C |
 | Schaltknoten des 5-V-Reglers | 0,45 mm auf 3 mm | bis 3 A | kurz gehalten, in Ordnung |
@@ -83,6 +84,27 @@ Abstände: Der kleinste Abstand zwischen verschiedenen Netzen beträgt 0,20 mm (
 - **Vergleichbare Platinen:** Der „Louder Raspberry Hat“ und „SquarePi“ verwenden denselben Baustein auf einer Pi-Aufsteckplatine, SquarePi ebenfalls zweilagig mit 65 × 61 mm, der Louder Hat mit einem 5-V-Regler für 3 A. Dieses Konzept ist also üblich.
 - **Wärme:** TI gibt den Wärmewiderstand nur für vierlagige Platinen an (24 bis 29 °C/W). Für diese zweilagige Platine gibt es keinen Wert. Bei Musik entsteht im Mittel unter 1 W Verlust, das ist unkritisch. Dauerhafte Vollaussteuerung mit Sinus (etwa 4 W Verlust) ist auf zwei Lagen nicht abgesichert. Der Baustein regelt bei Übertemperatur selbst zurück (Warnung bei 135 °C).
 
+## Prüfung nach TI SLAA902, PCBWay und Analog Devices
+
+Quellen: die TI-Schrift SLAA902 „PCB Layout Guidelines for TAS2xxx Series Class-D Non-boosted Audio Amplifier“ (vollständig gelesen), der PCBWay-Artikel „PCB Layout of Amplifier“ (vollständig gelesen; er gibt im Wesentlichen dieselben TI-Regeln wieder) und der Artikel „A Practical Guide to High-Speed Printed-Circuit-Board Layout“ von Analog Devices. Dessen Seite ließ sich nicht abrufen, ausgewertet sind nur die Auszüge aus der Websuche. Die Zahlenwerte in SLAA902 gelten für den TAS2770, einen kleineren Baustein für Akkugeräte; sie sind hier Richtwerte, keine Grenzwerte des TAS5805M.
+
+| Regel | Quelle | Stand auf der Platine | Urteil |
+|---|---|---|---|
+| Vier bis sechs Lagen, eigene Masselage | TI, PCBWay | zwei Lagen; die Unterseite ist zu 76 % Massefläche, unter den schaltenden Leitungen zu 80 % | Abweichung, durch das Konzept bedingt. Gleiches gilt für die fehlende Wärmeangabe. |
+| Alle Massepins unter dem Baustein verbinden und mit mehreren Durchkontaktierungen an die Massefläche führen | TI, PCBWay | alle fünf Massepins von U1 hängen auf der Oberseite direkt am Kühlpad, darin acht Durchkontaktierungen | erfüllt |
+| Kleinster Stützkondensator höchstens 1 mm vom Pin, auf derselben Lage, kurzer Rückweg | TI, PCBWay, ADI | PVDD: 1 µF in 0,7 mm, 100 nF in 2,1 mm, alle auf der Oberseite direkt auf der 20-V-Leiterbahn. Regler U2: 100 nF in 0,8 mm | erfüllt. Dass der 1-µF-Typ näher sitzt als der 100-nF-Typ, ist unkritisch: beide haben dieselbe Bauform und damit dieselbe Eigeninduktivität. |
+| wie oben, für die kleinen Versorgungen | TI, ADI | 3,3 V: 100 nF (C8) in 1,7 mm, Zuleitung über zwei Durchkontaktierungen, Masserückweg direkt auf der Oberseite zum Massepin 1. VR_DIG: 1,1 mm. AVDD: 1,8 mm | leichte Abweichung, bei 18 mA Logikstrom ohne Belang. Ein direkter Weg auf der Oberseite würde den Masserückweg von C8 kreuzen. |
+| Mehrere Durchkontaktierungen am Massepad der Stützkondensatoren, dicht am Pad | TI, PCBWay | C3 bis C6: je Seite zwei Durchkontaktierungen unmittelbar an den Pads | erfüllt (nach Änderung 4) |
+| Bootstrap-Kondensator so nah wie möglich am Ausgangspin, sternförmig angeschlossen | TI, PCBWay | äußere Ausgänge (C11, C14): 0,6 mm vom Pin. Innere Ausgänge (C12, C13): 5,7 mm vom Pin, Schleife aus zwei eng parallel geführten Leiterbahnen, geschätzt etwa 4 nH | Abweichung bei C12/C13. Näher geht nicht, ohne die Ausgangsstufe neu zu verlegen: die Pinfolge Ausgang, Bootstrap, Bootstrap, Ausgang im Raster 0,65 mm lässt dazwischen keinen Platz für die Bauform 0603, und daneben sitzen C11 und C14. Im Layoutbeispiel des Datenblatts sitzen diese Kondensatoren ebenfalls einige Millimeter entfernt. Am Gerät prüfen: Fehlerregister nach Volllast. |
+| Class-D-Ausgänge mindestens 30 mil (0,76 mm) breit, Filter nah am Baustein, Längen angeglichen | TI, PCBWay | nach Änderung 8: 0,45 mm auf den ersten 3,4 bis 4,1 mm, dann 0,6 bis 0,8 mm; Spulen 9 bis 15 mm vom Pin; nach den Spulen 0,8 mm. Längenunterschied 6,6 mm, das sind etwa 5 mΩ gegenüber 8 Ω | weitgehend erfüllt. Die 30 mil sind am Pin nicht erreichbar. Laut Tabelle 3 der TI-Schrift trägt 30 mil 3,2 A, gebraucht werden 1,5 A effektiv. |
+| Versorgungsleitungen dick genug, sternförmig von der Quelle | TI, PCBWay | 20 V: 1,5 mm zur ersten Elko-Gruppe, von dort getrennte Zweige zu Verstärker und 5-V-Regler. 3,3 V kommt mit 0,25 mm vom Pi (TI nennt 20 bis 30 mil) | 20 V erfüllt. 3,3 V dünner als empfohlen, bei 18 mA unkritisch. |
+| Schaltende Leitungen nicht ohne Masse dazwischen über oder unter anderen Signalen führen | TI, PCBWay, ADI | Unter den schaltenden Leitungen der Oberseite kreuzen auf der Unterseite die 20-V-Leiterbahn und vier Tasten-/Encoderleitungen (GPIO7, 13, 16, 26). Die Leitungen kreuzen, sie laufen nicht parallel. | Abweichung, auf zwei Lagen nicht vermeidbar. Betroffen sind nur langsame Eingänge mit 1 kΩ und 10 nF Entstörung. |
+| Digitale Signale nicht neben schaltenden Leitungen | TI, PCBWay | I²S und I²C liegen auf der anderen Seite des Bausteins, mehr als 3,5 mm entfernt. Am nächsten kommt GPIO16 mit 0,45 mm | erfüllt |
+| Durchgehende Massefläche, Rückstrom direkt unter dem Signal | ADI | Die 20-V-Leiterbahn der Unterseite schneidet die Massefläche unter der Pinreihe von U1 auf 9 mm Länge. Der Rückstrom der Stützkondensatoren läuft um das Ende dieses Schlitzes, etwa 1 bis 2 mm Umweg | Abweichung, auf zwei Lagen kaum anders lösbar |
+| Analoge und digitale Masse an einem Punkt verbinden | ADI | eine gemeinsame Massefläche, alle Massepins am Kühlpad zusammengeführt | entspricht der Vorgabe von TI für diesen Baustein |
+
+Vom Strom her passen Abstände und Breiten. Was bleibt, sind die Grenzen einer zweilagigen Platine und die Lage von C12/C13. Wer es genau nach Lehrbuch will, braucht vier Lagen mit durchgehender Masse auf Lage 2; das wäre eine neue Platine.
+
 ## Offene Punkte
 
 | Nr. | Punkt | Was tun |
@@ -92,6 +114,7 @@ Abstände: Der kleinste Abstand zwischen verschiedenen Netzen beträgt 0,20 mm (
 | 3 | Drehlagen | In der Bestückungsvorschau nach der Tabelle oben prüfen. |
 | 4 | 5-V-Regler liefert höchstens 3 A, Spule L5 2,45 A Dauerstrom | Mit dem Pi 4 passt das, solange keine stromhungrigen USB-Geräte am Pi hängen. |
 | 5 | Kupfer reicht bis 0,2 mm an die Befestigungslöcher | Kunststoffscheiben unter die Schraubenköpfe. |
+| 7 | Bootstrap-Kondensatoren C12/C13 sitzen 5,7 mm vom Pin | Am Gerät nach Volllast die Fehlerregister lesen. Bei Auffälligkeiten wäre das der erste Verdächtige. |
 | 6 | Elko C1: Massepin auf der Oberseite nur über einen Wärmefallen-Steg angebunden (Unterseite zusätzlich) | Elektrisch in Ordnung, keine Änderung. |
 
 ## Platine in Zahlen
@@ -100,7 +123,7 @@ Abstände: Der kleinste Abstand zwischen verschiedenen Netzen beträgt 0,20 mm (
 |---|---|
 | Größe | 65 × 65 mm, Ecken R 3 mm, 2 Lagen |
 | Kleinste Leiterbahn / kleinster Abstand | 0,25 mm / 0,20 mm |
-| Durchkontaktierungen | 155 × 0,3/0,6 mm, 3 × 0,4/0,8 mm, 8 × 0,3 mm im Kühlpad von U1 |
+| Durchkontaktierungen | 156 × 0,3/0,6 mm, 3 × 0,4/0,8 mm, 8 × 0,3 mm im Kühlpad von U1 |
 | Bauteilbohrungen | 0,95 mm (XH-4), 1,0 mm (Sockel, XH-2, Elkos), 1,4 mm (Klemmen) |
 | Befestigung | 4 × 2,75 mm unbeschichtet, Raster 58 × 49 mm |
 | Bauteile | 86 bestückt (24 Stücklistenzeilen), 16 zum Selbstlöten, 68 Netze |
