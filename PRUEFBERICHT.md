@@ -15,9 +15,9 @@ Nicht gemacht: Es gibt keinen Schaltplan (`.kicad_sch`), nur die Platine mit Net
 | Unveränderte Rekonstruktion wieder als Gerber exportiert und Objekt für Objekt mit den Originalen verglichen (Pads mit Bezeichner, Pin und Netz, Leiterbahnen mit Netz, Masseflächen, Lötstopp, Paste, Bestückungsdruck, Umriss, alle Bohrungen) | identisch, 0 Abweichungen in 3.678 Objekten und 249 Bohrungen |
 | Masseflächen in KiCad neu gefüllt und mit der Originalfüllung verglichen | deckungsgleich (Abweichungen unter 0,02 mm²) |
 | Aus der Platine erzeugte Bestückungsdatei gegen die bisherige CPL | alle 86 Zeilen gleich bis auf die gewollte Korrektur bei U2 |
-| DRC der korrigierten Platine in KiCad 7.0.11 | keine elektrischen Fehler, 0 unverbundene Pads; übrig sind 17 kosmetische Hinweise zum Bestückungsdruck (Druck auf Pads und über den Rand, wird bei der Fertigung abgeschnitten) |
+| DRC der korrigierten Platine in KiCad 7.0.11 | 0 Meldungen, 0 unverbundene Pads, auch nach erneutem Füllen der Flächen. Die Prüfung „Footprint weicht von der Bibliothek ab“ ist im Projekt abgeschaltet, weil es zu dieser Platine keine Footprint-Bibliothek gibt. |
 
-Geprüft wurde mit KiCad 7.0.11, weil hier keine neuere Version verfügbar war. Die Datei lässt sich in KiCad 10 öffnen und wird dabei ins neue Format übernommen. Nach dem ersten Öffnen in KiCad 10 einmal die Flächen neu füllen (Taste B) und den DRC laufen lassen, weil KiCad 10 Flächen geringfügig anders berechnet.
+Geprüft wurde mit KiCad 7.0.11, weil hier keine neuere Version verfügbar war. Die Datei lässt sich in KiCad 10 öffnen und wird dabei ins neue Format übernommen. Nach dem ersten Öffnen in KiCad 10 einmal die Flächen neu füllen (Taste B) und den DRC laufen lassen, weil KiCad 10 Flächen geringfügig anders berechnet und zusätzliche Prüfungen kennt, die hier nicht getestet werden konnten. Im DRC-Dialog den Abgleich mit dem Schaltplan abgeschaltet lassen, es gibt keinen Schaltplan.
 
 ## Änderungen gegenüber dem Stand vom 8.11.2026
 
@@ -29,8 +29,9 @@ Geprüft wurde mit KiCad 7.0.11, weil hier keine neuere Version verfügbar war. 
 | 4 | Zwei GND-Durchkontaktierungen zwischen C5 und C6 | Steg zwischen den Bohrungen 0,10 mm | eine Durchkontaktierung mittig zwischen den beiden Pads | Mindestabstand Bohrung zu Bohrung 0,25 mm. Für zwei Bohrungen ist die Lücke zwischen den Pads zu schmal. Die Massepads von C5 und C6 hängen zusätzlich voll an der Massefläche der Oberseite. |
 | 5 | GND-Durchkontaktierung bei C7 | Steg zur Nachbarbohrung 0,21 mm | 0,33 mm | Um 0,1 mm verschoben, die Bohrung bleibt außerhalb des Pads von C7. |
 | 6 | Lötpaste unter dem Kühlpad von U1 | 3,5 × 1,9 mm (53 % der Padfläche) | 3,65 × 2,6 mm (76 %) | Das Datenblatt verlangt 70 bis 80 % Pastenfläche unter dem Kühlpad. |
+| 7 | Bestückungsdruck | Beschriftungen E1 und E2 ragten über den Platinenrand, E3 und X1 lagen auf Pads, 15 Umrisslinien liefen in Pads hinein (17 DRC-Meldungen) | E1 und E2 stehen jetzt innerhalb ihres Steckerumrisses, E3 rechts neben R35, X1 unterhalb des Steckers; die Umrisslinien enden vor den Pads | Damit ist der DRC ohne Meldung. E1 und E2 werden vom eingelöteten Stecker verdeckt, die Zuordnung steht auch in der README. |
 
-Der Vergleich der neuen Gerber-Dateien mit den alten zeigt genau diese Änderungen: im Kupfer drei Durchkontaktierungen entfernt, zwei verschoben, zwei kurze Leiterbahnstücke entfernt und zwei neu angeschlossen, dazu ein Pastenfeld. In den Bohrdaten sind es entsprechend drei Bohrungen weniger und zwei verschobene. Die Masseflächen hat KiCad 7 neu berechnet, sie sind deckungsgleich mit den alten. Lötstopp, Bestückungsdruck und Umriss sind unverändert.
+Der Vergleich der neuen Gerber-Dateien mit den alten zeigt genau diese Änderungen: im Kupfer drei Durchkontaktierungen entfernt, zwei verschoben, zwei kurze Leiterbahnstücke entfernt und zwei neu angeschlossen, dazu ein Pastenfeld. In den Bohrdaten sind es entsprechend drei Bohrungen weniger und zwei verschobene. Die Masseflächen hat KiCad 7 neu berechnet, sie sind deckungsgleich mit den alten. Im Bestückungsdruck sind nur die vier verschobenen Beschriftungen und die gekürzten Umrisslinien anders. Lötstopp und Umriss sind unverändert.
 
 Die Änderungen 2 und 6 waren nicht ausdrücklich beauftragt. Sie lassen sich rückgängig machen: C23 in der BOM wieder auf C12891 setzen, das Pastenfeld in KiCad am Footprint U1 verkleinern.
 

@@ -155,6 +155,7 @@ Im Ordner `KiCad` liegt die Platine als `RadioHAT.kicad_pcb` mit Design-Regeln i
 
 - Einen Schaltplan gibt es nicht. Änderungen macht man direkt im Platineneditor. „Platine aus Schaltplan aktualisieren“ nicht verwenden.
 - Die Datei ist im Format von KiCad 7 gespeichert. KiCad 10 öffnet sie und speichert sie im neuen Format. Nach dem ersten Öffnen einmal die Flächen neu füllen (Taste B) und den DRC starten.
+- Der DRC läuft in KiCad 7.0.11 ohne Meldung. Im DRC-Dialog den Abgleich mit dem Schaltplan abgeschaltet lassen. Die Prüfung gegen die Footprint-Bibliothek ist im Projekt abgeschaltet, weil es keine Bibliothek gibt.
 - Der Bestückungsdruck besteht aus einzelnen Linien, die Texte sind nicht als Text bearbeitbar. Die Bauteilbezeichner stehen zusätzlich als Text auf der Lage F.Fab.
 - Die beiden Masseflächen: Abstand 0,2 mm, Mindestbreite 0,15 mm, Pads voll angebunden, Inseln entfernen.
 - Ursprung für Gerber, Bohrdaten und Bestückungsdatei ist die linke untere Platinenecke („Bohr-/Platzierungsursprung verwenden“).
