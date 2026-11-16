@@ -9,6 +9,7 @@ Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω)
 | `JLCPCB/CPL_RadioHAT.csv` | Bauteilpositionen für die SMD-Bestückung |
 | `radio_hat_start.sh` | Startskript für den Verstärker auf dem Pi |
 | `Bilder/` | Ober- und Unterseite der Platine als Lötvorlage |
+| `Gehaeuse/` | Holzgehäuse: 3D-Modell, Maßzeichnungen, Zuschnittliste |
 
 ![Oberseite](Bilder/render_top.png)
 
