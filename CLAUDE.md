@@ -16,7 +16,7 @@ Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext -layout` als Text ausl
 | Pfad | Inhalt |
 |---|---|
 | `README.md` | Radio HAT: Platine, Bestellung JLCPCB, Netzteil, Steckerbelegung, Pi-Einrichtung, erster Test |
-| `PRUEFBERICHT.md` | 23 Änderungen an der Platine mit Grund, Prüfung nach TI SLAA902/PCBWay/Analog Devices, Rückmeldung vom 17.11., Datenblattabgleich, offene Punkte, LCSC-Nummern |
+| `PRUEFBERICHT.md` | 24 Änderungen an der Platine mit Grund, Prüfung nach TI SLAA902/PCBWay/Analog Devices, Rückmeldung vom 17.11., Datenblattabgleich, offene Punkte, LCSC-Nummern |
 | `REICHELT.md` | Bestellliste der Teile zum Selbstlöten (Sockel, Elkos, JST) |
 | `Datenblaetter/TAS5805M.md` | Datenblatt TAS5805M (SLASEH5D Rev. D) als Text: deutsche Zusammenfassung (Grenzwerte, Pins, Register, Ein-/Abschaltfolge, Schutz, Filter, Layout, Gehäuse, Abgleich), Bildinhalte, Volltext |
 | `Datenblaetter/TPS54308.md` | Datenblatt TPS54308 (SLUSCV2B Rev. B) als Text: Zusammenfassung mit allen Formeln und Tabelle 7-2, Abgleich mit U2, Bildinhalte, Volltext |
@@ -51,7 +51,7 @@ pip install matplotlib numpy scipy pillow
 
 ```bash
 apt-get update && apt-get install -y kicad zip
-pip install shapely
+pip install shapely numpy   # numpy für router.py
 ```
 
 KiCad 7.0.11 mit `kicad-cli` und Python-Modul `pcbnew` (mit `/usr/bin/python3` aufrufen). `pdftotext` ist vorhanden. Für `bilder.sh`: Node.js und Playwright sind vorinstalliert, Aufruf mit `NODE_PATH=$(npm root -g) bash KiCad/werkzeuge/bilder.sh GERBER-ORDNER`.
@@ -155,7 +155,14 @@ Gehäuse:
 4. LED-Skalenbeleuchtung mit Senderzeiger (WS2812B + RP2040-Zero per USB) oder nur warmweiß über GPIO20?
 5. Druckbettgröße (Teile sind auf ≤ 200 mm ausgelegt).
 
-Platine: keine offenen Fragen (Rückspeiseschutz am 17.11.2026 entschieden: keiner; TPS54308-Datenblatt geprüft).
+Platine: keine offenen Fragen (17.11.2026 entschieden: kein Rückspeiseschutz; Kühlfläche nach TI umgesetzt; Platine bleibt 65 × 65 mm; Analogverstärkung bleibt 0x09).
+
+## Nächste Schritte (Stand Ende der Sitzung vom 17.11.2026)
+
+- Letzte Sitzung: Rückmeldung von außen abgearbeitet (Änderungen 17 bis 19), beide Datenblätter vollständig ausgewertet (Änderungen 20 bis 23), Kühlfläche unter U1 nach TI (Änderung 24). Alles ist auf `main` gepusht; der Arbeitsstand ist sauber.
+- Platine: bestellfertig. Der Nutzer bestellt selbst in JLCONE: README „Bestellen bei JLCPCB“, Prüfliste in `PRUEFBERICHT.md` „In JLCONE zu prüfen“ (Lieferbarkeit, Drehlagen, Via-Abdeckung „Tented“ oder „Epoxy Filled & Capped“). Danach „Erster Test“ nach README und Rückmeldung der Messwerte.
+- Gehäuse: Antworten auf die offenen Fragen 1 bis 5 abwarten, dann Knopfadapter und Druckteile v2.
+- Ohne neue Angaben vom Nutzer gibt es an der Platine nichts zu tun. Nicht von sich aus weiter umbauen.
 
 ## Hinweise
 
