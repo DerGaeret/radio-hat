@@ -8,6 +8,8 @@ Retro-Radio: Holzgehäuse mit Original-Frontplatte und -Lautsprecherabdeckungen 
 |---|---|
 | `README.md` | Radio HAT: Platine, Bestellung JLCPCB, Steckerbelegung, Pi-Einrichtung |
 | `KiCad/`, `JLCPCB/`, `PRUEFBERICHT.md`, `REICHELT.md` | Platine (4 Lagen, 65 × 65 mm, Lochbild wie Pi) |
+| `Datenblaetter/TAS5805M.md` | Datenblatt TAS5805M als Text: Zusammenfassung (Grenzwerte, Register, Ein-/Abschaltfolge, Filter, Layout) und Volltext. Statt PDF lesen. |
+| `radio_hat_start.sh`, `Pi/` | Steuerskript (start/stop/status/clear), systemd-Dienst, ALSA-Einstellung |
 | `Gehaeuse/README.md` | Gehäuse: Aufbau, Zuschnittliste, Leisten, Zusammenbau, Einkaufsliste |
 | `Gehaeuse/gehaeuse.scad` | Gehäusemodell (OpenSCAD), bindet `traeger.scad` ein |
 | `Gehaeuse/zeichnung.py` | Maßzeichnungen → `zeichnung_gehaeuse.pdf`, `bilder/zeichnung_blatt*.png` |
@@ -28,13 +30,14 @@ pip install matplotlib numpy scipy pillow
 - Renderings: `cd Gehaeuse/render && python3 render.py 1600 1000 gut` (ca. 1 min)
 - Maße stehen doppelt in `gehaeuse.scad` und `zeichnung.py` (und teils `render.py`) – bei Änderungen alle anpassen.
 
-## Stand Platine (Radio HAT), 17.11.2026 (sechste Fassung)
+## Stand Platine (Radio HAT), 17.11.2026 (siebte Fassung)
 
 - Fertig zum Bestellen, aber ungetestet. 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads.
 - `KiCad/RadioHAT.kicad_pcb` ist die Quelle. Es gibt keinen Schaltplan; die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen. Änderungen direkt in der Platine machen (KiCad-Python: Objekte erst sammeln, dann entfernen, sonst stürzt `pcbnew` ab).
 - Fertigungsdaten neu erzeugen: `bash KiCad/werkzeuge/fertigungsdaten.sh` (DRC, Gerber-ZIP mit 12 Dateien, CPL). Vorher die Platine mit neu gefüllten Flächen speichern (`drc.py … refill` legt eine gefüllte Kopie an). Stückliste von Hand pflegen. Bilder: `KiCad/werkzeuge/bilder.sh`. Messwerte: `python3 KiCad/werkzeuge/verify.py KiCad/RadioHAT.kicad_pcb`.
 - Werkzeuge in einer frischen Cloud-Session: `apt-get install -y kicad zip` (KiCad 7 mit `kicad-cli` und Python-Modul `pcbnew`), `pip install shapely`; für die Bilder Node.js, `pcb-stackup@4.2.8` und Playwright. ti.com, mouser.com und lcsc.com sind aus der Cloud nicht erreichbar, GitHub schon.
-- `PRUEFBERICHT.md` enthält alle 19 Änderungen, die Prüfung nach TI SLAA902, PCBWay und Analog Devices und die Antwort auf die Rückmeldung vom 17.11. (Eingangsschutz F1/Q2/D2/D3/FB1/C46, Regler TPS54308 statt TPS54302, Startskript mit 768 kHz, 175 kHz Bandbreite, Lautstärke ≤ 0 dB, Hochpass 50 Hz).
+- `PRUEFBERICHT.md` enthält alle 22 Änderungen, die Prüfung nach TI SLAA902, PCBWay und Analog Devices, die Antwort auf die Rückmeldung vom 17.11. (Eingangsschutz F1/Q2/D2/D3/FB1/C46, Regler TPS54308 statt TPS54302, Startskript mit 768 kHz, 175 kHz Bandbreite, Lautstärke ≤ 0 dB, Hochpass 50 Hz) und den Abgleich mit dem vollständigen Datenblatt (C47/C48 10 µF an PVDD, Pastenraster 75 % unter dem Kühlpad, Abschaltfolge per systemd, Fehlerauswertung).
+- Das Datenblatt des TAS5805M ist vollständig geprüft; die Biquad-Adressen (Buch 0xAA, Seite 0x24, ab 0x18) stammen aus TI SLOA263, nicht aus dem Datenblatt. TPS54308-Werte nur aus Suchauszügen.
 - Bewusst so belassen (vom Nutzer bestätigt):
   - Ausgänge am Pin: die ersten 1,5 mm einlagig, davon 0,55 mm schmaler als 0,76 mm. Grund ist das Pinraster von 0,65 mm, das lässt sich nicht ändern.
   - 3,3 V: zwei kurze Stellen mit 0,35 bis 0,45 mm.
@@ -45,6 +48,7 @@ pip install matplotlib numpy scipy pillow
   - bei JLCPCB 4 Lagen wählen; der Preis vom 8.11. galt für 2 Lagen;
   - Lieferbarkeit von U1 (C478472), U2 (C168839), C16772 und den neuen Extended-Teilen prüfen;
   - Drehlagen in der Bestückungsvorschau prüfen, besonders Q2, D2, D3.
+  - Am Gerät: `radio_hat_start.sh status`, Hochpass hörbar, Hörtest auf Pfeifen.
 
 
 

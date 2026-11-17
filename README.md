@@ -7,7 +7,9 @@ Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω)
 | `JLCPCB/Gerber_RadioHAT.zip` | Platinendaten zum Hochladen bei JLCPCB |
 | `JLCPCB/BOM_RadioHAT.csv` | Stückliste für die SMD-Bestückung |
 | `JLCPCB/CPL_RadioHAT.csv` | Bauteilpositionen für die SMD-Bestückung |
-| `radio_hat_start.sh` | Startskript für den Verstärker auf dem Pi |
+| `radio_hat_start.sh` | Steuerskript für den Verstärker auf dem Pi (start, stop, status, clear) |
+| `Pi/` | systemd-Dienst und ALSA-Einstellung für den Pi |
+| `Datenblaetter/TAS5805M.md` | Datenblatt des Verstärkers als Text, mit Zusammenfassung und Abgleich |
 | `KiCad/` | Platine als KiCad-Projekt zum Ändern, dazu das Skript für die Bestückungsdatei |
 | `PRUEFBERICHT.md` | Was geprüft und geändert wurde, offene Punkte |
 | `REICHELT.md` | Bestellliste für die Teile zum Selbstlöten |
@@ -24,7 +26,7 @@ Die Platine ist neu entworfen und ungetestet. Beim ersten Einschalten keine Laut
 
 Dateien im Ordner `JLCPCB`: `Gerber_RadioHAT.zip`, `BOM_RadioHAT.csv`, `CPL_RadioHAT.csv`.
 
-Einstellungen: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm, PCB Qty 5, HASL (with lead). PCB Assembly: Top Side, PCBA Qty 2, Economic, falls das Angebot das für vier Lagen anbietet (nicht geprüft), sonst Standard. Sonst alles auf Standard lassen.
+Einstellungen: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm, PCB Qty 5, HASL (with lead). „Via Covering“ nicht auf „Untented“ stellen: Die acht Durchkontaktierungen im Kühlpad von U1 sind auf der Unterseite mit Lötstopp abgedeckt, damit beim Löten kein Zinn durchläuft (Datenblatt, Gehäuseanhang Anm. 10). Wenn das Angebot „Epoxy Filled & Capped“ anbietet, ist das noch besser. PCB Assembly: Top Side, PCBA Qty 2, Economic, falls das Angebot das für vier Lagen anbietet (nicht geprüft), sonst Standard. Sonst alles auf Standard lassen.
 
 Web-Preis am 8.11.2026: 32,66 € für 5 Platinen, davon 2 mit allen SMD-Teilen bestückt, ohne Versand. Für die Platine zeigte das Angebot einen Desktop-Preis von 1,79 € statt 3,58 €.
 
@@ -77,7 +79,7 @@ Pin 1 ist an jedem Stecker das eckige Lötpad. Beim Encoder-Kabel die Reihenfolg
 - Der 5-V-Regler liefert höchstens 3 A. Für einen Pi 4 reicht das, solange keine stromhungrigen USB-Geräte am Pi hängen. Für einen Pi 5 unter Last reicht es nicht.
 - Nicht mehr als 22 V anschließen. Darüber beginnt die TVS-Diode D2 zu leiten (Durchbruch ab 24,4 V); der Verstärker selbst verträgt 26,4 V. Die Elkos C1 und C2 müssen mindestens 35 V vertragen.
 - Den Pi nie gleichzeitig über USB-C versorgen, er bekommt seine 5 V von der Platine. Die Platine hat keinen Rückspeiseschutz; zwei Netzteile würden gegeneinander arbeiten, und der 5-V-Regler würde Strom aus USB-C zurück in die 20-V-Schiene pumpen.
-- Die Lautsprecher haben 8 Ω. Bei 20 V dürfen es nicht weniger als 4,8 Ω sein.
+- Die Lautsprecher haben 8 Ω. Das Datenblatt verlangt im Stereobetrieb mindestens 6 Ω (Überstromgrenze 5 A je Ausgang).
 - Kein Lautsprecheranschluss darf mit Masse verbunden werden, auch nicht über einen Umschalter oder einen Subwoofer-Verstärker mit gemeinsamer Masse. Beide Klemmen führen Signal (Brückenschaltung), eine Verbindung nach Masse schließt den Ausgang kurz.
 
 ## Steckverbinder
@@ -141,14 +143,44 @@ SPI muss ausgeschaltet bleiben (`dtparam=spi=on` darf nicht aktiv sein), weil GP
 
 Kontrolle: `i2cdetect -y 1` zeigt `2d` erst, nachdem das Startskript den Verstärker eingeschaltet hat. `aplay -l` zeigt die Karte `sndrpihifiberry`.
 
-Das Skript `radio_hat_start.sh` nach jedem Start einmal ausführen, zum Beispiel über einen systemd-Dienst. Es
+Steuerskript, Dienst und ALSA-Einstellung installieren (im Ordner des Repos):
+
+```bash
+sudo install -m 755 radio_hat_start.sh /usr/local/bin/
+```
+
+```bash
+sudo install -m 644 Pi/radio-hat.service /etc/systemd/system/
+```
+
+```bash
+sudo install -m 644 Pi/asound.conf /etc/asound.conf
+```
+
+```bash
+sudo systemctl daemon-reload && sudo systemctl enable --now radio-hat.service
+```
+
+Der Dienst ruft beim Booten `radio_hat_start.sh start` auf und vor dem Herunterfahren `radio_hat_start.sh stop`. Das Skript hält sich an die Ein- und Abschaltfolge aus dem Datenblatt (Kap. 7.5.3) und
 
 - setzt Schaltfrequenz und Modulation fest (768 kHz, BD) und die passende Regelbandbreite (175 kHz),
 - begrenzt die Ausgangsleistung auf etwa 19 W Sinus an 8 Ω (Analogverstärkung 0x09),
 - lässt keine Lautstärke über 0 dB zu (Register 0x4C nicht unter 0x30); darüber würde laute Musik übersteuert und die Lautsprecher bekämen bis zu doppelt so viel Leistung,
-- setzt einen Hochpass bei 50 Hz (Variable `HOCHPASS_HZ`), damit die kleinen Lautsprecher keinen Bass bekommen, den sie nicht abstrahlen können.
+- setzt einen Hochpass bei 50 Hz (Variable `HOCHPASS_HZ`), damit die kleinen Lautsprecher keinen Bass bekommen, den sie nicht abstrahlen können,
+- lässt den Verstärker nach einer Übertemperatur-Abschaltung von selbst wieder anlaufen, sobald er abgekühlt ist,
+- schaltet vor dem Herunterfahren erst leise (Rampe), dann die Ausgänge ab und zieht PDN auf low, bevor die Versorgung des Pi wegfällt.
 
-Wer die Lautstärke später aus einem eigenen Programm über Register 0x4C stellt, muss dort ebenfalls bei 0x30 aufhören. Das Skript liest am Ende die gesetzten Register zurück; stehen dort andere Werte, nicht weiter aufdrehen.
+Weitere Aufrufe:
+
+- `sudo radio_hat_start.sh status` zeigt Zustand, erkannte Abtastrate und alle Fehler im Klartext.
+- `sudo radio_hat_start.sh clear` löscht gespeicherte Fehler. Nach einem Gleichspannungsfehler am Lautsprecher bleibt der Ausgang aus, bis die Ursache behoben und der Fehler gelöscht ist.
+- `sudo radio_hat_start.sh start 0x50` startet mit einer anderen Lautstärke.
+
+Die ALSA-Einstellung `Pi/asound.conf` gibt jede Wiedergabe mit 32 Bit je Kanal aus. Damit läuft der Bittakt immer mit 64 fS und passt zur Voreinstellung des Verstärkers (I²S, 24-Bit-Wörter).
+
+Wer die Lautstärke später aus einem eigenen Programm über Register 0x4C stellt, muss dort ebenfalls bei 0x30 aufhören. Das Skript liest beim Start die gesetzten Register zurück; stehen dort andere Werte, nicht weiter aufdrehen.
+
+Pausen sind kein Problem: Bleibt der I²S-Takt stehen, schaltet der Verstärker die Ausgänge ab und spielt von selbst weiter, sobald der Takt wiederkommt; die Einstellungen bleiben erhalten (Datenblatt Kap. 7.3.4). Nur wenn die 20 V unter 3,5 V fallen, gehen die Einstellungen verloren; dann `radio_hat_start.sh start` erneut ausführen.
 
 ## So funktioniert der Schalter
 
@@ -160,12 +192,12 @@ Wer die Lautstärke später aus einem eigenen Programm über Register 0x4C stell
 
 1. Pi abziehen, keine Lautsprecher anschließen, Netzteil einstecken, Schalter ein.
 2. Am 40-poligen Sockel Pin 2 gegen Pin 6 messen: 4,9 bis 5,2 V. Sonst sofort ausschalten.
-3. Spannungsfrei machen, Pi aufstecken, booten, `radio_hat_start.sh` starten. Die Fehlerregister müssen 0x00 zeigen.
+3. Spannungsfrei machen, Pi aufstecken, booten. Ist der Dienst eingerichtet, startet der Verstärker von selbst; sonst `sudo radio_hat_start.sh start`. Dann `sudo radio_hat_start.sh status`: Zustand Play, 48 kHz und 64 Bittakte je Abtastung, keine Fehler.
 4. Erst dann Lautsprecher anschließen und mit der voreingestellten Lautstärke (−24 dB) probieren.
 5. Ohne Musik das Ohr an den Lautsprecher halten, dann bei mittlerer Lautstärke leise Stellen hören: Pfeifen oder Zirpen deutet auf eine Störung durch den 5-V-Regler hin.
 6. Wer den Verpolungsschutz prüfen will: ohne Pi und Lautsprecher ein Labornetzteil mit Strombegrenzung (etwa 0,2 A) verpolt anschließen. Es darf kein Strom fließen, am Sockel Pin 2 gegen Pin 6 müssen 0 V anliegen.
 
-Offen und erst am echten Gerät prüfbar: ob der Verstärker nach Pausen ohne I²S-Takt von selbst weiterspielt. Falls nicht, das Startskript erneut ausführen oder dauerhaft einen Stille-Datenstrom laufen lassen.
+Am echten Gerät noch zu prüfen: ob der Hochpass hörbar wirkt (Bass leiser unter etwa 50 Hz). Die Adressen der Klangfilter stehen nicht im Datenblatt, sondern in einer TI-Anwendungsschrift.
 
 ## KiCad-Projekt
 
