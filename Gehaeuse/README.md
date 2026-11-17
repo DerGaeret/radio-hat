@@ -4,6 +4,8 @@ Gehäuse aus 8-mm-Dekorplatte Nuss Sizilia. Vom Originalradio bleiben die Frontp
 
 **Außenmaß: 672 × 138 × 190 mm** (Breite × Höhe × Tiefe), dazu 20 mm Füße.
 
+![Rendering](render/rendering_tag.png)
+
 ![Vorderansicht](bilder/ansicht_vorne.png)
 
 | Datei | Inhalt |
@@ -12,6 +14,9 @@ Gehäuse aus 8-mm-Dekorplatte Nuss Sizilia. Vom Originalradio bleiben die Frontp
 | `zeichnung_gehaeuse.pdf` | Maßzeichnungen, 2 Blätter |
 | `zeichnung.py` | erzeugt die Zeichnungen neu, falls sich Maße ändern |
 | `bilder/` | Ansichten, Zeichnungen und Foto der Frontplatte |
+| `DRUCKTEILE.md` | 3D-Druckteile für das Technikfach, Beleuchtung der Skala, Renderings |
+| `traeger.scad`, `stl/` | Modell und Druckdateien der Druckteile |
+| `render/` | realistische Renderings (POV-Ray) |
 
 ## Material
 

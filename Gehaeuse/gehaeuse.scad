@@ -2,6 +2,8 @@
 // Achsen: x = Breite (links -> rechts), y = Tiefe (vorne 0 -> hinten), z = Höhe (Unterkante Boden = 0)
 // Ansicht: "zusammen" | "explosion" | "ohne_deckel" | "hinten_offen"
 ansicht = "zusammen";
+mit_technik = true;   // 3D-Druckteile aus traeger.scad mit anzeigen
+use <traeger.scad>
 
 /* ---------- Eingaben ---------- */
 t        = 8;      // Plattenstärke (alle Bretter)
@@ -148,4 +150,5 @@ module technik_platzhalter() {
 korpus(); frontbrett(); leisten();
 for (x=rmag_x, z=[t+leiste/2, H-t-leiste/2]) color("SlateGray") translate([x, y_hinten-mag_tiefe+20*ex, z]) rotate([-90,0,0]) cylinder(d=mag_d, h=mag_h, $fn=32);
 lautsprecher(true); lautsprecher(false);
-front(); fuesse(); technik_platzhalter();
+front(); fuesse();
+if (mit_technik && ansicht != "explosion") traeger_einbau(); else technik_platzhalter();
