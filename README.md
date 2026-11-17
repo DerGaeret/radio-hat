@@ -1,6 +1,6 @@
 # Radio HAT
 
-Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω), 5-V-Regler für den Pi, sechs Tasten, drei Drehencodern und Ein/Aus-Schalter.
+Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω), 5-V-Regler für den Pi, sechs Tasten, drei Drehencodern und Ein/Aus-Schalter. Der 20-V-Eingang ist mit Sicherung, Verpolungsschutz, TVS-Diode und Ferritfilter geschützt.
 
 | Datei | Wofür |
 |---|---|
@@ -16,7 +16,7 @@ Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω)
 
 ![Oberseite](Bilder/render_top.png)
 
-Die Bilder zeigen den aktuellen Stand vom 16.11.2026. Sie sind direkt aus den Gerber-Dateien gerendert und zeigen Kupfer, Lötstopp und Bestückungsdruck der Außenseiten, aber keine Bauteilkörper. Die beiden Innenlagen sind nicht zu sehen.
+Die Bilder zeigen den aktuellen Stand vom 17.11.2026. Sie sind direkt aus den Gerber-Dateien gerendert und zeigen Kupfer, Lötstopp und Bestückungsdruck der Außenseiten, aber keine Bauteilkörper. Die beiden Innenlagen sind nicht zu sehen.
 
 Die Platine ist neu entworfen und ungetestet. Beim ersten Einschalten keine Lautsprecher anschließen und die Spannungen prüfen (siehe unten).
 
@@ -32,7 +32,7 @@ In JLCONE: Neues Angebot für Standard PCB/PCBA öffnen, `Gerber_RadioHAT.zip` h
 
 Seit dem 16.11.2026 ist die Platine vierlagig (siehe `PRUEFBERICHT.md`). Der Preis oben gilt für den alten zweilagigen Stand; eine vierlagige Platine kostet mehr, den aktuellen Preis zeigt das Angebot.
 
-Vor dem Bezahlen in der Bestückungsvorschau die Drehlage von vier Bauteilen prüfen. Die Platine liegt dabei wie im Bild oben, der 40-polige Sockel oben:
+Vor dem Bezahlen in der Bestückungsvorschau die Drehlage von sieben Bauteilen prüfen. Die Platine liegt dabei wie im Bild oben, der 40-polige Sockel oben:
 
 | Bauteil | So muss es aussehen |
 |---|---|
@@ -40,8 +40,11 @@ Vor dem Bezahlen in der Bestückungsvorschau die Drehlage von vier Bauteilen pr�
 | U2 (5-V-Regler, links) | Pinreihen oben und unten, Pin 1 oben rechts |
 | Q1 (Transistor, links) | zwei Pins links, ein Pin rechts |
 | D1 (Diode, links) | Kathodenstrich unten |
+| Q2 (Verpolungsschutz, links unten) | Pinreihen links und rechts, Pin-1-Punkt oben links |
+| D2 (TVS-Diode, links unten) | Kathodenstrich unten |
+| D3 (Z-Diode, über J4) | Kathodenstrich links |
 
-Liegt ein Bauteil anders, in der Vorschau drehen. Außerdem im BOM-Abgleich prüfen, ob der Verstärker U1 (C478472) lieferbar ist.
+Liegt ein Bauteil anders, in der Vorschau drehen. Außerdem im BOM-Abgleich prüfen, ob der Verstärker U1 (C478472) und der Regler U2 (TPS54308, C168839) lieferbar sind.
 
 ## Selbst zu löten
 
@@ -66,13 +69,16 @@ Pin 1 ist an jedem Stecker das eckige Lötpad. Beim Encoder-Kabel die Reihenfolg
 ## Netzteil
 
 - 20 V Gleichspannung, 3 A oder mehr (60 bis 65 W).
+- Ein geregeltes Schaltnetzteil verwenden. Ein ungeregeltes Trafo-Netzteil würde mit 100 Hz brummen; die Elkos auf der Platine sind kein Netzfilter.
 - Angeschlossen wird es an der Schraubklemme J4 (+ links, − rechts). Das Kabel also abisolieren oder über einen Hohlbuchsen-Adapter mit Schraubklemme führen.
-- Polung vor dem ersten Einschalten messen. Die Platine hat keinen Verpolungsschutz.
+- Eingangsschutz: Sicherung F1 (5 A träge), P-MOSFET Q2 gegen Verpolung, TVS-Diode D2 (SMBJ22A) gegen Spannungsspitzen, Ferrit FB1 mit C46 gegen Störungen auf dem Netzteilkabel. Bei falscher Polung bleibt die Platine aus, es geht nichts kaputt und die Sicherung bleibt ganz.
+- Am besten erst das Netzteil an die Platine stecken und dann in die Steckdose. Beim Einstecken in ein schon laufendes Netzteil fließt ein kurzer hoher Ladestrom in die Elkos.
 - Rechnung: Verstärker höchstens 2 × 20 W / 0,88 ≈ 45,5 W, 5-V-Regler für den Pi bis etwa 17 W (3 A am Ausgang), zusammen etwa 62 W.
 - Der 5-V-Regler liefert höchstens 3 A. Für einen Pi 4 reicht das, solange keine stromhungrigen USB-Geräte am Pi hängen. Für einen Pi 5 unter Last reicht es nicht.
-- Nicht mehr als 26 V anschließen. Der Verstärker ist bis 26,4 V ausgelegt, die Elkos C1 und C2 müssen dafür mindestens 35 V vertragen.
-- Den Pi nie gleichzeitig über USB-C versorgen, er bekommt seine 5 V von der Platine.
+- Nicht mehr als 22 V anschließen. Darüber beginnt die TVS-Diode D2 zu leiten (Durchbruch ab 24,4 V); der Verstärker selbst verträgt 26,4 V. Die Elkos C1 und C2 müssen mindestens 35 V vertragen.
+- Den Pi nie gleichzeitig über USB-C versorgen, er bekommt seine 5 V von der Platine. Die Platine hat keinen Rückspeiseschutz; zwei Netzteile würden gegeneinander arbeiten, und der 5-V-Regler würde Strom aus USB-C zurück in die 20-V-Schiene pumpen.
 - Die Lautsprecher haben 8 Ω. Bei 20 V dürfen es nicht weniger als 4,8 Ω sein.
+- Kein Lautsprecheranschluss darf mit Masse verbunden werden, auch nicht über einen Umschalter oder einen Subwoofer-Verstärker mit gemeinsamer Masse. Beide Klemmen führen Signal (Brückenschaltung), eine Verbindung nach Masse schließt den Ausgang kurz.
 
 ## Steckverbinder
 
@@ -117,7 +123,7 @@ Vom Pi belegt sind außerdem: GPIO2/3 (I²C), GPIO18/19/21 (I²S), GPIO9 (Verst�
 ## Pi einrichten
 
 ```bash
-sudo apt install i2c-tools alsa-utils
+sudo apt install i2c-tools alsa-utils python3
 ```
 
 In `/boot/firmware/config.txt` eintragen und neu starten:
@@ -135,7 +141,14 @@ SPI muss ausgeschaltet bleiben (`dtparam=spi=on` darf nicht aktiv sein), weil GP
 
 Kontrolle: `i2cdetect -y 1` zeigt `2d` erst, nachdem das Startskript den Verstärker eingeschaltet hat. `aplay -l` zeigt die Karte `sndrpihifiberry`.
 
-Das Skript `radio_hat_start.sh` nach jedem Start einmal ausführen, zum Beispiel über einen systemd-Dienst. Es begrenzt die Ausgangsleistung auf etwa 19 W an 8 Ω.
+Das Skript `radio_hat_start.sh` nach jedem Start einmal ausführen, zum Beispiel über einen systemd-Dienst. Es
+
+- setzt Schaltfrequenz und Modulation fest (768 kHz, BD) und die passende Regelbandbreite (175 kHz),
+- begrenzt die Ausgangsleistung auf etwa 19 W Sinus an 8 Ω (Analogverstärkung 0x09),
+- lässt keine Lautstärke über 0 dB zu (Register 0x4C nicht unter 0x30); darüber würde laute Musik übersteuert und die Lautsprecher bekämen bis zu doppelt so viel Leistung,
+- setzt einen Hochpass bei 50 Hz (Variable `HOCHPASS_HZ`), damit die kleinen Lautsprecher keinen Bass bekommen, den sie nicht abstrahlen können.
+
+Wer die Lautstärke später aus einem eigenen Programm über Register 0x4C stellt, muss dort ebenfalls bei 0x30 aufhören. Das Skript liest am Ende die gesetzten Register zurück; stehen dort andere Werte, nicht weiter aufdrehen.
 
 ## So funktioniert der Schalter
 
@@ -149,6 +162,8 @@ Das Skript `radio_hat_start.sh` nach jedem Start einmal ausführen, zum Beispiel
 2. Am 40-poligen Sockel Pin 2 gegen Pin 6 messen: 4,9 bis 5,2 V. Sonst sofort ausschalten.
 3. Spannungsfrei machen, Pi aufstecken, booten, `radio_hat_start.sh` starten. Die Fehlerregister müssen 0x00 zeigen.
 4. Erst dann Lautsprecher anschließen und mit der voreingestellten Lautstärke (−24 dB) probieren.
+5. Ohne Musik das Ohr an den Lautsprecher halten, dann bei mittlerer Lautstärke leise Stellen hören: Pfeifen oder Zirpen deutet auf eine Störung durch den 5-V-Regler hin.
+6. Wer den Verpolungsschutz prüfen will: ohne Pi und Lautsprecher ein Labornetzteil mit Strombegrenzung (etwa 0,2 A) verpolt anschließen. Es darf kein Strom fließen, am Sockel Pin 2 gegen Pin 6 müssen 0 V anliegen.
 
 Offen und erst am echten Gerät prüfbar: ob der Verstärker nach Pausen ohne I²S-Takt von selbst weiterspielt. Falls nicht, das Startskript erneut ausführen oder dauerhaft einen Stille-Datenstrom laufen lassen.
 
@@ -191,4 +206,5 @@ Weitere Werkzeuge in `KiCad/werkzeuge`:
 |---|---|
 | `verify.py` | misst die Werte aus dem Prüfbericht: Leiterbahnbreiten an den Ausgängen, Abstände der Kondensatoren zu den Pins, 3,3-V-Breite, Vergleich der Netzliste mit einer zweiten Platine. Braucht zusätzlich `shapely`. |
 | `drc.py` | DRC auf einer Kopie, mit neu gefüllten Flächen |
+| `eingangsschutz.py` | hat am 17.11.2026 den Eingangsschutz (Änderung 17) in die Platine eingebaut; nur zur Nachvollziehbarkeit, nicht erneut ausführen |
 | `bilder.sh` | rendert `Bilder/render_top.png` und `render_bottom.png` aus einem Gerber-Ordner. Braucht Node.js, das npm-Paket `pcb-stackup` und Playwright. |

@@ -8,11 +8,11 @@ Aufruf:
 
 JLCPCB zaehlt die Drehung je Gehaeuse von einer anderen Nulllage als KiCad.
 Die Korrekturen stammen aus der Tabelle von KiBot (kibot/misc.py, DEFAULT_ROTATIONS):
-  SOT-23, TSOT-23: +180 Grad    HTSSOP/TSSOP: +270 Grad    alles andere: 0 Grad
+  SOT-23, TSOT-23: +180 Grad    HTSSOP/TSSOP, SOIC: +270 Grad    alles andere: 0 Grad
 """
 import csv, re, sys
 
-CORRECTIONS = [(r'^TSOT-23', 180), (r'^SOT-23', 180), (r'^(H?TSSOP-|TAS5805M_PWP28)', 270)]
+CORRECTIONS = [(r'^TSOT-23', 180), (r'^SOT-23', 180), (r'^(H?TSSOP-|TAS5805M_PWP28)', 270), (r'^SOIC-', 270)]
 
 def correction(package):
     for pattern, angle in CORRECTIONS:

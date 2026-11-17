@@ -28,21 +28,23 @@ pip install matplotlib numpy scipy pillow
 - Renderings: `cd Gehaeuse/render && python3 render.py 1600 1000 gut` (ca. 1 min)
 - Maße stehen doppelt in `gehaeuse.scad` und `zeichnung.py` (und teils `render.py`) – bei Änderungen alle anpassen.
 
-## Stand Platine (Radio HAT), 17.11.2026
+## Stand Platine (Radio HAT), 17.11.2026 (sechste Fassung)
 
 - Fertig zum Bestellen, aber ungetestet. 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads.
-- `KiCad/RadioHAT.kicad_pcb` ist die Quelle. Es gibt keinen Schaltplan; die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen. Änderungen direkt in der Platine machen.
-- Fertigungsdaten neu erzeugen: `bash KiCad/werkzeuge/fertigungsdaten.sh` (DRC, Gerber-ZIP mit 12 Dateien, CPL). Stückliste von Hand pflegen. Bilder: `KiCad/werkzeuge/bilder.sh`. Messwerte: `python3 KiCad/werkzeuge/verify.py KiCad/RadioHAT.kicad_pcb`.
-- Werkzeuge in einer frischen Cloud-Session: `apt-get install -y kicad zip` (KiCad 7 mit `kicad-cli` und Python-Modul `pcbnew`), `pip install shapely`; für die Bilder Node.js, `pcb-stackup@4.2.8` und Playwright.
-- `PRUEFBERICHT.md` enthält alle 16 Änderungen und die Prüfung nach TI SLAA902, PCBWay und Analog Devices mit Messwerten.
+- `KiCad/RadioHAT.kicad_pcb` ist die Quelle. Es gibt keinen Schaltplan; die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen. Änderungen direkt in der Platine machen (KiCad-Python: Objekte erst sammeln, dann entfernen, sonst stürzt `pcbnew` ab).
+- Fertigungsdaten neu erzeugen: `bash KiCad/werkzeuge/fertigungsdaten.sh` (DRC, Gerber-ZIP mit 12 Dateien, CPL). Vorher die Platine mit neu gefüllten Flächen speichern (`drc.py … refill` legt eine gefüllte Kopie an). Stückliste von Hand pflegen. Bilder: `KiCad/werkzeuge/bilder.sh`. Messwerte: `python3 KiCad/werkzeuge/verify.py KiCad/RadioHAT.kicad_pcb`.
+- Werkzeuge in einer frischen Cloud-Session: `apt-get install -y kicad zip` (KiCad 7 mit `kicad-cli` und Python-Modul `pcbnew`), `pip install shapely`; für die Bilder Node.js, `pcb-stackup@4.2.8` und Playwright. ti.com, mouser.com und lcsc.com sind aus der Cloud nicht erreichbar, GitHub schon.
+- `PRUEFBERICHT.md` enthält alle 19 Änderungen, die Prüfung nach TI SLAA902, PCBWay und Analog Devices und die Antwort auf die Rückmeldung vom 17.11. (Eingangsschutz F1/Q2/D2/D3/FB1/C46, Regler TPS54308 statt TPS54302, Startskript mit 768 kHz, 175 kHz Bandbreite, Lautstärke ≤ 0 dB, Hochpass 50 Hz).
 - Bewusst so belassen (vom Nutzer bestätigt):
   - Ausgänge am Pin: die ersten 1,5 mm einlagig, davon 0,55 mm schmaler als 0,76 mm. Grund ist das Pinraster von 0,65 mm, das lässt sich nicht ändern.
   - 3,3 V: zwei kurze Stellen mit 0,35 bis 0,45 mm.
   - SPKB+: 1,5 mm lang nur 0,9 mm breit.
+- Bewusst nicht eingebaut (Entscheidung des Nutzers steht aus): Rückspeiseschutz 5 V gegen USB-C; X7R im Ausgangsfilter bleibt.
+- Netzteil höchstens 22 V (TVS-Diode SMBJ22A).
 - Offen vor der Bestellung (Liste in `PRUEFBERICHT.md`, „Offene Punkte“):
   - bei JLCPCB 4 Lagen wählen; der Preis vom 8.11. galt für 2 Lagen;
-  - Lieferbarkeit von U1 (C478472) und C16772 (C11 bis C14, neu 0402) prüfen;
-  - Drehlagen in der Bestückungsvorschau prüfen.
+  - Lieferbarkeit von U1 (C478472), U2 (C168839), C16772 und den neuen Extended-Teilen prüfen;
+  - Drehlagen in der Bestückungsvorschau prüfen, besonders Q2, D2, D3.
 
 
 

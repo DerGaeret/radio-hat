@@ -231,6 +231,10 @@
       },
       {
         "netclass": "Power",
+        "pattern": "VIN*"
+      },
+      {
+        "netclass": "Power",
         "pattern": "+5V"
       },
       {

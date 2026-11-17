@@ -1,4 +1,4 @@
-# Prüfbericht Radio HAT (Stand 16.11.2026, fünfte Fassung: vier Lagen, Bootstrap-Kondensatoren an den Pins)
+# Prüfbericht Radio HAT (Stand 17.11.2026, sechste Fassung: Eingangsschutz, Regler TPS54308, Startskript)
 
 ## Was gemacht wurde
 
@@ -7,6 +7,8 @@
 3. Drei kleine Korrekturen am Layout, eine an der Bestückungsdatei und eine an der Stückliste (siehe „Änderungen“). Die Fertigungsdaten im Ordner `JLCPCB` sind aus der korrigierten KiCad-Platine neu erzeugt.
 4. Die Platine wurde auf vier Lagen umgestellt, damit sie den Layoutregeln von TI (SLAA902) folgt: zwei Masselagen innen, breitere und doppelt geführte Ausgänge, Stützkondensatoren näher an den Pins (Änderungen 9 bis 12). Die Bauteile, die Stückliste und alle Leiterbahnen der Unterseite sind dabei unverändert geblieben.
 5. In der fünften Fassung wurden die verbliebenen Abweichungen von SLAA902 behoben (Änderungen 13 bis 16): Die vier Bootstrap-Kondensatoren sind jetzt 0402-Bauteile direkt unter ihren Pins, alle Ausgänge sind ab 0,55 mm unter dem Pin mindestens 0,78 mm breit, die inneren Ausgänge laufen zusätzlich auf Innenlage 1, und die 3,3-V-Zuleitung ist breiter. Danach wurde alles erneut geprüft (Abschnitt „Prüfung nach TI SLAA902, PCBWay und Analog Devices“). Der Artikel von Analog Devices liegt jetzt als PDF vor und ist vollständig ausgewertet.
+
+6. In der sechsten Fassung wurde eine Rückmeldung von außen abgearbeitet (Abschnitt „Rückmeldung vom 17.11.2026“): Eingangsschutz an J4 (Änderung 17), 5-V-Regler TPS54308 statt TPS54302 (Änderung 18), Startskript mit fester Schaltfrequenz, Lautstärkegrenze und Hochpass (Änderung 19). Danach wurde alles erneut geprüft.
 
 Nicht gemacht: Es gibt keinen Schaltplan (`.kicad_sch`), nur die Platine mit Netzliste. Ein JLCONE-Projekt wurde nicht angelegt, JLCONE läuft auf dem eigenen Rechner. Die Platine ist weiterhin ungetestet.
 
@@ -33,7 +35,7 @@ Geprüft wurde mit KiCad 7.0.11, weil hier keine neuere Version verfügbar war. 
 | 6 | Lötpaste unter dem Kühlpad von U1 | 3,5 × 1,9 mm (53 % der Padfläche) | 3,65 × 2,6 mm (76 %) | Das Datenblatt verlangt 70 bis 80 % Pastenfläche unter dem Kühlpad. |
 | 7 | Bestückungsdruck | Beschriftungen E1 und E2 ragten über den Platinenrand, E3 und X1 lagen auf Pads, 15 Umrisslinien liefen in Pads hinein (17 DRC-Meldungen) | E1 und E2 stehen jetzt innerhalb ihres Steckerumrisses, E3 rechts neben R35, X1 unterhalb des Steckers; die Umrisslinien enden vor den Pads | Damit ist der DRC ohne Meldung. E1 und E2 werden vom eingelöteten Stecker verdeckt, die Zuordnung steht auch in der README. |
 | 8 | Ausgangsleitungen vom Verstärker zu den Spulen | 0,4 mm am Pin, dann 0,5 bis 0,6 mm | 0,45 mm am Pin (Padbreite), dann 0,6 bis 0,8 mm, die inneren Ausgänge 0,7 mm | TI SLAA902 verlangt für Class-D-Ausgänge mindestens 30 mil (0,76 mm). Am Pin geht wegen des Rasters von 0,65 mm nicht mehr. |
-| 9 | Lagenzahl | 2 Lagen | 4 Lagen. Innenlage 1 und Innenlage 2 sind durchgehende Masseflächen (damals 3.738 und 3.758 mm², nach den Änderungen 13 bis 16 noch 3.712 und 3.747 mm² von rund 4.217 mm², jeweils ein zusammenhängendes Stück) | TI SLAA902 verlangt vier bis sechs Lagen und eine eigene Masselage direkt unter dem Baustein. Damit liegen zwischen den schaltenden Leitungen der Oberseite und den Signalen der Unterseite zwei Masseflächen, und der Schlitz in der Masse der Unterseite spielt keine Rolle mehr. |
+| 9 | Lagenzahl | 2 Lagen | 4 Lagen. Innenlage 1 und Innenlage 2 sind durchgehende Masseflächen (damals 3.738 und 3.758 mm², nach den Änderungen 13 bis 16 noch 3.712 und 3.747 mm², nach Änderung 17 3.710 und 3.745 mm² von rund 4.217 mm², jeweils ein zusammenhängendes Stück) | TI SLAA902 verlangt vier bis sechs Lagen und eine eigene Masselage direkt unter dem Baustein. Damit liegen zwischen den schaltenden Leitungen der Oberseite und den Signalen der Unterseite zwei Masseflächen, und der Schlitz in der Masse der Unterseite spielt keine Rolle mehr. |
 | 10 | Ausgangsleitungen (ersetzt Änderung 8) | 0,45 mm am Pin, dann 0,6 bis 0,8 mm | Jedes Stück so breit, wie 0,2 mm Abstand zum Nachbarkupfer es erlauben, höchstens 1,5 mm. Äußere Ausgänge: 3 mm mit 0,45 bis 0,6 mm zwischen den Pins und an C11/C14 vorbei, dann 0,8 bis 1,5 mm. Innere Ausgänge: 4,9 mm mit 0,45 bis 0,55 mm, 1,2 mm mit 0,75 mm, dann 0,85 bis 1,5 mm. Nach den Spulen bis zu den Klemmen 1,45 bis 1,5 mm (bei SPKB+ 1,5 mm lang 0,9 bis 1,05 mm) | TI SLAA902: mindestens 30 mil (0,76 mm), wirksam 60 mil (1,5 mm) bis zum Lautsprecher. |
 | 11 | Zweite Bahn für die äußeren Ausgänge | nur Oberseite | OUTB+ und OUTA+ laufen zusätzlich auf Innenlage 1: 1,2 mm breit, 7,3 mm und 6,1 mm lang, an beiden Enden mit je zwei Durchkontaktierungen 0,3/0,6 mm an die Oberseite gebunden (8 neue Durchkontaktierungen). Alle bedrahteten Pads und die acht Durchkontaktierungen im Kühlpad von U1 sind jetzt auch an die Innenlagen angebunden. | TI SLAA902: Ausgänge auf zwei Lagen. Innenlage 2 bleibt darunter geschlossene Masse und schirmt die Signale der Unterseite ab. |
 | 12 | Stützkondensatoren der kleinen Versorgungen | C8 (3,3 V) 1,7 mm vom Pin und über zwei Durchkontaktierungen angeschlossen, C10 (VR_DIG) 1,1 mm, C9 (AVDD) 1,8 mm | C8 sitzt jetzt am Platz von R1, 0,65 mm vom Pin, direkt auf der Oberseite angeschlossen, Masse auf kurzem Weg zum Massepin 1. C10 um 0,4 mm an den Pin gerückt (0,73 mm). C9 quer vor Pin 13 gedreht (0,48 mm), mit eigener GND-Durchkontaktierung 0,4 mm neben dem Pad. R1 sitzt am alten Platz von C8. Zwei dadurch überflüssige GND-Durchkontaktierungen bei C8 entfallen. | TI SLAA902: kleinster Stützkondensator höchstens 1 mm vom Pin, auf der Oberseite. In der CPL ändern sich dadurch C8, C9, C10 und R1. |
@@ -41,10 +43,32 @@ Geprüft wurde mit KiCad 7.0.11, weil hier keine neuere Version verfügbar war. 
 | 14 | Ausgänge am Pin (ersetzt Änderung 10 für die ersten Millimeter) | äußere Ausgänge 3 mm, innere 6,1 mm schmaler als 0,76 mm | Nach dem Pinaustritt (0,55 mm lang, außen 0,4 bis 0,45 mm, innen 0,3 mm breit) sind alle vier Ausgänge mindestens 0,78 mm breit, danach wie bisher bis 1,5 mm. Dafür sind die beiden PVDD-Durchkontaktierungen neben den Pins 15/16 und 27/28 um 0,25 mm nach außen gerückt. | TI SLAA902 2.7: mindestens 30 mil. Breiter als das Pad (0,45 mm) kann die Leitung erst unterhalb der Pinreihe werden. |
 | 15 | Zweite Lage ab dem Pin | OUTB- und OUTA- nur auf der Oberseite; OUTB+ und OUTA+ erst 3,7 mm unter dem Pin auf Innenlage 1 | Alle vier Ausgänge haben 1,5 mm unter der Pinkante eine Durchkontaktierung 0,3/0,6 mm zur Innenlage 1. Die inneren Ausgänge laufen dort 0,78 bis 0,8 mm breit 6,4 mm bis zur Spule, mit zwei weiteren Durchkontaktierungen unter dem Kondensator und zwei an der Spule. Die äußeren laufen 0,78 mm bis zur bisherigen Doppelbahn mit 1,2 mm (insgesamt 9,5 und 8,3 mm). Das sind 12 neue Durchkontaktierungen. | TI SLAA902 2.7: Ausgänge auf zwei Lagen. Der Platz ist durch die Verlegung von C12/C13 frei geworden. |
 | 16 | 3,3-V-Zuleitung vom Pi (J1 Pin 17) | 0,25 bis 0,3 mm | Jedes Stück so breit, wie 0,2 mm Abstand es erlauben, höchstens 0,6 mm. Der Lauf am Platinenrand ist 0,15 mm vom Sockel weggerückt, die Oberseite bei C7 0,15 mm von SDA. Zwischen den Pinreihen des Sockels passen nur 0,4 mm; dort läuft die Leitung zusätzlich 0,43 mm breit auf Innenlage 1 (zwei neue Durchkontaktierungen). Das Masse-Via von C7 sitzt jetzt auf der anderen Seite seines Pads. | TI SLAA902: 20 bis 30 mil von der Quelle. Ergebnis siehe Prüftabelle. |
+| 17 | Eingangsschutz an J4 | J4 direkt auf PVDD, ohne Sicherung, Verpolungsschutz und Filter | J4+ → F1 (Sicherung 5 A träge, 63 V, 1206) → Q2 (P-MOSFET AO4407A, SO-8, 11 mΩ) → FB1 (Ferrit BLM31KN121SN1L, 6 A, 120 Ω bei 100 MHz) → PVDD. Hinter Q2 nach Masse: D2 (TVS SMBJ22A) und C46 (10 µF 50 V). Gate von Q2 über R13 (10 kΩ) an Masse, D3 (Z-Diode 15 V) begrenzt die Gate-Source-Spannung. Die Bauteile sitzen in der Ecke zwischen J4, H3 und X1; PVDD geht hinter FB1 über zwei Durchkontaktierungen 0,4/0,8 mm auf die bisherige Leitung der Unterseite. Dafür ist GPIO11 vom Diagonalweg an den Platinenrand verlegt, die Texte „EIN/AUS“ und „+20V“ sind verschoben, vier Masse-Durchkontaktierungen entfallen, drei kommen dazu. Neue Netze: VIN, VIN_F, VIN_P, Q2G (Netzklasse Power). | Rückmeldung Punkt 1 und 5. Verpolung hätte U1, U2, die Elkos und über die 5 V auch den Pi zerstört. |
+| 18 | 5-V-Regler U2 | TPS54302 (C311983), 400 kHz mit Frequenz-Spreizung ±6 % und Eco-Mode | TPS54308 (C168839), gleiches Gehäuse und gleiche Pinbelegung, gleiche Referenzspannung 0,596 V, feste 350 kHz, FCCM (keine Pulsauslassung). Spule und Kondensatoren bleiben: Das Datenblatt des TPS54308 wählt für 5 V selbst 10 µH und 2 × 22 µF. EN-Schwelle 1,21 V steigend, 1,1 V fallend; der Teiler R9/R8 liefert 3,5 V, die Selbsthaltung über D1 etwa 3 V. | Rückmeldung Punkt 4. Mit Spreizung läuft die zweite Oberwelle des TPS54302 über 752 bis 848 kHz und damit durch die 768 kHz des Verstärkers; die Differenz fällt dabei zeitweise in den Hörbereich. Beim TPS54308 liegt das nächste Mischprodukt bei 768 − 2 × 350 = 68 kHz. |
+| 19 | Startskript | Register 0x02 und 0x53 nicht gesetzt, Lautstärke unbegrenzt | 0x02 = 0x00 (768 kHz, BD, BTL), 0x53 = 0x60 (Regelbandbreite 175 kHz), Lautstärke nie über 0 dB (0x4C ≥ 0x30), Hochpass 50 Hz (Butterworth 2. Ordnung) in Biquad 1 beider Kanäle, Rücklesen der Register | Rückmeldung Punkt 2 und 3, tiefe Frequenzen |
 
-Der Vergleich der neuen Gerber-Dateien mit den alten zeigt genau diese Änderungen: im Kupfer zwei Durchkontaktierungen entfernt, drei verschoben, zwei kurze Leiterbahnstücke entfernt, drei neu angeschlossen und 22 Leiterbahnstücke der Ausgänge verbreitert, dazu ein Pastenfeld. In den Bohrdaten sind es entsprechend zwei Bohrungen weniger und drei verschobene. Die Masseflächen hat KiCad 7 neu berechnet, sie sind deckungsgleich mit den alten. Im Bestückungsdruck sind nur die vier verschobenen Beschriftungen und die gekürzten Umrisslinien anders. Lötstopp und Umriss sind unverändert. Dieser Vergleich gilt für die Änderungen 1 bis 8. Für die Änderungen 9 bis 16 wurde stattdessen geprüft: Die Zuordnung aller 293 Pads zu ihren Netzen ist vorher und nachher gleich, der DRC meldet nach erneutem Füllen 0 Verstöße und 0 unverbundene Pads, und die CPL unterscheidet sich nur in den Zeilen C8, C9, C10, R1 und C11 bis C14. In der Stückliste ändert sich nur die Zeile der Bootstrap-Kondensatoren.
+Der Vergleich der neuen Gerber-Dateien mit den alten zeigt genau diese Änderungen: im Kupfer zwei Durchkontaktierungen entfernt, drei verschoben, zwei kurze Leiterbahnstücke entfernt, drei neu angeschlossen und 22 Leiterbahnstücke der Ausgänge verbreitert, dazu ein Pastenfeld. In den Bohrdaten sind es entsprechend zwei Bohrungen weniger und drei verschobene. Die Masseflächen hat KiCad 7 neu berechnet, sie sind deckungsgleich mit den alten. Im Bestückungsdruck sind nur die vier verschobenen Beschriftungen und die gekürzten Umrisslinien anders. Lötstopp und Umriss sind unverändert. Dieser Vergleich gilt für die Änderungen 1 bis 8. Für die Änderungen 9 bis 16 wurde stattdessen geprüft: Die Zuordnung aller 293 Pads zu ihren Netzen ist vorher und nachher gleich, der DRC meldet nach erneutem Füllen 0 Verstöße und 0 unverbundene Pads, und die CPL unterscheidet sich nur in den Zeilen C8, C9, C10, R1 und C11 bis C14. In der Stückliste ändert sich nur die Zeile der Bootstrap-Kondensatoren. Für die Änderungen 17 und 18 gilt: Der Netzlistenvergleich vorher/nachher (`verify.py` mit der alten Platine) zeigt nur die 21 Pads der sieben neuen Bauteile und J4 Pin 1 (jetzt VIN statt PVDD). Alle Messwerte von `verify.py` zu Ausgängen, Stützkondensatoren und 3,3 V sind unverändert. Der DRC meldet nach erneutem Füllen 0 Verstöße und 0 unverbundene Pads. Die CPL hat sieben neue Zeilen, alle alten Zeilen sind gleich. In der Stückliste kommen fünf Zeilen dazu, R13 und C46 stehen in bestehenden Zeilen, U2 hat eine neue LCSC-Nummer.
 
 Die Änderungen 2, 4, 6 und 8 waren nicht ausdrücklich beauftragt; 4 und 8 sind bei der Prüfung nach den Layout-Regeln entstanden, obwohl nur eine Prüfung verlangt war. Sie lassen sich rückgängig machen: C23 in der BOM wieder auf C12891 setzen, das Pastenfeld am Footprint U1 verkleinern, die Leiterbahnbreiten und die beiden Durchkontaktierungen in KiCad zurückstellen. Der Stand davor liegt in der Git-Historie.
+
+## Rückmeldung vom 17.11.2026
+
+Eine zweite Meinung hat die Platine bewertet. Jeder Punkt mit dem, was daraus geworden ist. Die Datenblätter von TI waren aus der Arbeitsumgebung nicht direkt abrufbar; die Werte unten stammen aus Suchauszügen der TI-Seiten (Registerbeschreibung TAS5805M, Datenblätter TPS54302/TPS54308) und sind dort gekennzeichnet, wo nur eine Quelle sie belegt.
+
+| Nr. | Punkt | Bewertung | Ergebnis |
+|---|---|---|---|
+| 1 | Kein Schutz am 20-V-Eingang | stimmt | Änderung 17. Q2 sperrt bei Verpolung, die Sicherung bleibt dabei ganz. F1 ist träge, damit der Ladestrom der Elkos beim Einstecken sie nicht auslöst. Spannungsabfall bei 3 A etwa 0,1 V, Verlust in Q2 etwa 0,1 W. |
+| 2 | 19 W gelten nur ohne Übersteuerung | stimmt | Das Skript begrenzt die Lautstärke auf höchstens 0 dB. Damit erreicht ein voll ausgesteuertes Signal genau die 17,5 V Spitze, aber nicht mehr. Einen DSP-Limiter (DRC) setzt das Skript nicht: Seine Koeffizienten sind nur mit TIs PPC3 sinnvoll zu erzeugen und hier nicht prüfbar. Musik mit 0 dBFS hat einen Scheitelfaktor von mindestens 6 dB, die mittlere Leistung bleibt damit unter 5 W je Kanal. |
+| 3 | Schaltfrequenz und Modulation nicht festgelegt | Der Reset-Wert von 0x02 ist laut Registerbeschreibung 0x00 = 768 kHz, BD. Die Platine lief also schon richtig, aber nur zufällig. | Änderung 19: 0x02 wird ausdrücklich geschrieben, dazu 0x53 = 0x60 (175 kHz; Kodierung 00/01/10/11 = 80/100/120/175 kHz, belegt durch eine Datenblattkopie und den ESPHome-Treiber). Mindestinduktivität bei 768 kHz und BD: 10 µH × 384/768 = 5 µH. Die Spulen haben damit doppelte Reserve, auch wenn sie beim Spitzenstrom 20 bis 30 % verlieren. 384 kHz und 1SPW/Hybrid werden nicht verwendet. |
+| 4 | 5-V-Regler schaltet nahe der Verstärkerfrequenz | stimmt, sogar deutlicher als beschrieben: Wegen der Spreizung des TPS54302 liegt die Differenz bei 768 kHz nicht fest bei 32 kHz, sondern wandert durch 0 | Änderung 18: TPS54308. Rückwirkung: Im FCCM kann der Regler Strom aufnehmen. Wird der Pi zusätzlich über USB-C versorgt, pumpt er Strom zurück in die 20-V-Schiene. Das ist ohnehin verboten (README). |
+| 5 | Kein EMV-Filter am Eingang | stimmt | Änderung 17: FB1 und C46. Der Ferrit wirkt vor allem oberhalb von etwa 10 MHz (UKW-Bereich). Bei 350 und 768 kHz hat er nur wenige Ohm; dort sorgen C46 und die Elkos dafür, dass der Wechselstrom auf der Platine bleibt. Eine echte Drossel für 150 kHz bis 30 MHz würde mit den 940 µF bei einigen Kilohertz schwingen und wurde deshalb nicht eingebaut. Gemessen ist die Störabstrahlung nicht. |
+| 6a | Kein Rückspeiseschutz an 5 V | stimmt | Nicht eingebaut. Ein Schutz für 3 A (Ideal-Dioden-Controller mit MOSFET) braucht Platz an der 5-V-Leitung, den es neben dem Sockel nicht gibt. Der Pi sitzt im Gehäuse, USB-C ist nicht zugänglich. Die Warnung in der README ist verschärft. |
+| 6b | X7R im Ausgangsfilter | stimmt, Wirkung klein | Keine Änderung. 680 nF in C0G gibt es in 1206 nicht, Folie passt nicht auf die Platine. Bei 10 V Gleichspannung verliert der 50-V-Typ einen Teil seiner Kapazität, die Eckfrequenz steigt von 61 auf etwa 70 kHz. Das liegt weit über dem Hörbereich. |
+| 6c | Kein Schaltplan | stimmt | Bleibt so (siehe „Was gemacht wurde“). Die Netzliste der neuen Bauteile steht in Änderung 17 und im Skript `KiCad/werkzeuge/eingangsschutz.py`. |
+| – | Frequenzgang oben | Rechnung nachvollzogen: 10 µH und 680 nF ergeben 61 kHz | keine Änderung nötig |
+| – | Hochpass für die Lautsprecher | sinnvoll | Änderung 19: 50 Hz, nachgerechnet −3,0 dB bei 50 Hz, −16 dB bei 20 Hz, −0,3 dB bei 100 Hz (bei 48 kHz Abtastrate). Biquad-Adressen und Format (5.27, a1/a2 mit umgekehrtem Vorzeichen) aus TI SLOA263 und einem veröffentlichten Treiber; am Gerät nicht getestet. |
+| – | 50/100 Hz Brumm | stimmt | README: nur geregeltes Schaltnetzteil. Hinweis ergänzt, dass kein Lautsprecheranschluss an Masse darf. |
+| – | Hörtest am fertigen Gerät | sinnvoll | In „Erster Test“ der README aufgenommen. |
 
 ## Drehlagen in der Bestückungsdatei
 
@@ -53,11 +77,14 @@ Die Pin-1-Lage jedes Bauteils ist durch die Netznamen in den Gerber-Daten belegt
 | Bauteil | Gehäuse | KiCad | Korrektur | CPL | So muss es in der Vorschau aussehen (Platine wie im Bild, Sockel oben) |
 |---|---|---|---|---|---|
 | U1 TAS5805M | HTSSOP-28 | 270° | +270° | 180° | Pinreihen oben und unten, Pin-1-Punkt oben rechts |
-| U2 TPS54302 | TSOT-23-6 | 270° | +180° | 90° | Pinreihen oben und unten, Pin 1 oben rechts |
+| U2 TPS54308 | TSOT-23-6 | 270° | +180° | 90° | Pinreihen oben und unten, Pin 1 oben rechts |
 | Q1 MMBT3904 | SOT-23 | 0° | +180° | 180° | zwei Pins links, ein Pin rechts |
 | D1 1N5819WS | SOD-323 | 90° | 0° | 90° | Kathodenstrich unten (zur Kante mit den Schraubklemmen hin) |
+| Q2 AO4407A | SOIC-8 | 0° | +270° | 270° | Pinreihen links und rechts, Pin-1-Punkt oben links |
+| D2 SMBJ22A | SMB | 90° | 0° | 90° | Kathodenstrich unten (zu J4 hin) |
+| D3 BZT52C15 | SOD-123 | 0° | 0° | 0° | Kathodenstrich links (zu H3 hin) |
 
-Ein Fehler um 90° fällt in der Vorschau sofort auf, weil das Bauteil quer zu seinen Pads liegt. Ein Fehler um 180° fällt bei U1, U2 und D1 nicht von selbst auf, dort zählt nur die Pin-1-Markierung. Wenn die Vorschau etwas anderes zeigt, dort drehen und nicht bestellen, bevor es passt.
+Ein Fehler um 90° fällt in der Vorschau sofort auf, weil das Bauteil quer zu seinen Pads liegt. Ein Fehler um 180° fällt bei U1, U2, Q2 und den Dioden nicht von selbst auf, dort zählt nur die Pin-1- oder Kathodenmarkierung. Für SOIC-8 und die Dioden-Gehäuse SMB/SOD-123 ist die Korrektur von KiBot übernommen, aber für diese Bauteile nicht bestätigt; ein falsch gedrehter Q2 wäre wirkungslos, eine falsch gedrehte D2 würde das Netzteil kurzschließen. Wenn die Vorschau etwas anderes zeigt, dort drehen und nicht bestellen, bevor es passt.
 
 ## Abgleich mit dem Datenblatt TAS5805M (SLASEH5D)
 
@@ -67,8 +94,8 @@ Ein Fehler um 90° fällt in der Vorschau sofort auf, weil das Bauteil quer zu s
 - **Bootstrap:** 220 nF je Ausgang wie im Datenblatt. Das Datenblatt nennt 50-V-Typen, bestückt sind seit Änderung 13 16-V-Typen in 0402. Am Kondensator liegt nur die Gate-Treiber-Spannung von etwa 5 V an. Bei 5 V Gleichspannung verliert ein 0402-X7R-Kondensator einen Teil seiner Kapazität; für die Ladung eines Schaltzyklus reicht das, ist aber nicht gemessen.
 - **Ausgangsfilter:** 10 µH + 680 nF steht so in den Tabellen des Datenblatts. Der Einschaltstrom liegt bei 24 V und 10 µH je nach Schaltfrequenz bei 1,55 bis 3 A. Die Spule (Sättigung 3,5 A) und die Abschaltschwelle des Verstärkers (5 A) liegen darüber.
 - **Stützkondensatoren:** C3 bis C6 sitzen direkt auf der 20-V-Leiterbahn, etwa 1,5 mm vor den PVDD-Pins. Je Seite steht ein 470-µF-Elko daneben. Das Datenblatt verlangt genau diese Nähe.
-- **Startskript:** Register 0x03 (Zustand HiZ/Play), 0x54 (Analogverstärkung, 0,5 dB je Schritt, 0 dB = 29,5 V Spitze), 0x4C (Lautstärke, 0x30 = 0 dB) und 0x70 bis 0x72 (Fehler) stimmen mit dem Datenblatt überein. 0x09 in Register 0x54 ergibt 17,6 V Spitze, also 19 W an 8 Ω.
-- **Spannung:** empfohlen bis 26,4 V, absolut 30 V. Die Grenze von 26 V in der README passt.
+- **Startskript:** Register 0x03 (Zustand HiZ/Play), 0x02 (Schaltfrequenz und Modulation), 0x53 (Regelbandbreite), 0x54 (Analogverstärkung, 0,5 dB je Schritt, 0 dB = 29,5 V Spitze), 0x4C (Lautstärke, 0x30 = 0 dB) und 0x70 bis 0x72 (Fehler) stimmen mit dem Datenblatt überein. 0x09 in Register 0x54 ergibt 29,5 V × 10^(−4,5/20) = 17,5 V Spitze, also 19,2 W an 8 Ω.
+- **Spannung:** empfohlen bis 26,4 V, absolut 30 V. Seit Änderung 17 begrenzt die TVS-Diode D2 (Sperrspannung 22 V, Durchbruch ab 24,4 V) die erlaubte Eingangsspannung auf 22 V.
 
 ## Leiterbahnbreiten und Abstände
 
@@ -76,7 +103,7 @@ Gerechnet für 35 µm Kupfer nach IPC-2221 (Außenlage, 10 °C Erwärmung): 0,4 
 
 | Pfad | Engste Stelle | Strom | Urteil |
 |---|---|---|---|
-| Netzteil J4 zum Elko C1 (Unterseite) | 1,5 mm, 39 mm lang | etwa 3 A bei Volllast | in Ordnung, Spannungsabfall etwa 40 mV |
+| Netzteil J4 über F1, Q2, FB1 zur Unterseite | Oberseite 1,5 mm, zwei Durchkontaktierungen 0,4/0,8 mm, dann 1,5 mm zu C1 | etwa 3 A bei Volllast | in Ordnung, Spannungsabfall etwa 0,1 V, fast alles in F1, Q2 und FB1 |
 | 20 V zu den Verstärker-Pins Kanal B | 1,0 mm auf der Oberseite, dann 0,6 mm Stich direkt auf die Pins | etwa 1,1 A im Mittel je Kanal | in Ordnung |
 | 20 V zu Kanal A und Elko C2 | 1,2 mm auf der Unterseite, zwei Durchkontaktierungen 0,4/0,8 mm in Reihe | etwa 1,1 A im Mittel | in Ordnung. Die Stromspitzen liefern C2, C5 und C6, die hinter den Durchkontaktierungen sitzen. |
 | Verstärker-Pin zur Spule | 0,3 bis 0,45 mm auf den ersten 0,55 mm unter dem Pin, danach mindestens 0,78 mm bis 1,5 mm; zusätzlich auf Innenlage 1 die äußeren Ausgänge mit 1,2 mm, die inneren mit 0,8 mm | 1,5 A effektiv bei 19 W Sinus | in Ordnung. Zwischen den Pins geht bei 0,65 mm Pinraster nicht mehr |
@@ -84,6 +111,7 @@ Gerechnet für 35 µm Kupfer nach IPC-2221 (Außenlage, 10 °C Erwärmung): 0,4 
 | 5 V vom Regler zum Pi | 1,0 mm, 60 mm lang, ohne Durchkontaktierung | bis 3 A | in Ordnung, Spannungsabfall bis 90 mV, Erwärmung bei 3 A Dauerstrom etwa 17 °C |
 | Schaltknoten des 5-V-Reglers | 0,45 mm auf 3 mm | bis 3 A | kurz gehalten, in Ordnung |
 | 20 V zum Regler U2 | 0,5 mm auf 1,8 mm | unter 1 A | in Ordnung |
+| Gate von Q2, Z-Diode D3 | 0,4 mm | unter 1 mA | in Ordnung |
 
 Abstände: Der kleinste Abstand zwischen verschiedenen Netzen beträgt 0,20 mm (aus den Vektordaten gemessen, die 0,18 mm der ersten Fassung waren ein Rasterfehler). Für 20 bis 26 V verlangt IPC-2221 auf lackierten Außenlagen 0,05 mm, blank 0,1 mm. Kupfer zum Platinenrand 0,5 mm. Kleinste Leiterbahn 0,25 mm. Das liegt alles innerhalb der üblichen Fertigungsgrenzen.
 
@@ -109,7 +137,7 @@ Die Messwerte stammen aus der fertigen Platine (Skript über die KiCad-Daten, na
 
 | Regel | Stand auf der Platine | Urteil |
 |---|---|---|
-| Vier bis sechs Lagen, eigene Masselage | vier Lagen. Innenlage 2 ist durchgehend Masse (3.747 mm², ein Stück). Innenlage 1 ist Masse (3.712 mm², ein Stück) mit den Doppelbahnen der vier Ausgänge und einem Stück 3,3 V am Sockel. Das Kühlpad ist über acht Durchkontaktierungen an beide Innenlagen gebunden | erfüllt |
+| Vier bis sechs Lagen, eigene Masselage | vier Lagen. Innenlage 2 ist durchgehend Masse (3.745 mm², ein Stück). Innenlage 1 ist Masse (3.710 mm², ein Stück) mit den Doppelbahnen der vier Ausgänge und einem Stück 3,3 V am Sockel. Das Kühlpad ist über acht Durchkontaktierungen an beide Innenlagen gebunden | erfüllt |
 | Alle Massepins unter dem Baustein verbinden, mehrere Durchkontaktierungen zur Massefläche | alle fünf Massepins von U1 hängen auf der Oberseite am Kühlpad, darin acht Durchkontaktierungen | erfüllt |
 | Kleinster Stützkondensator höchstens 1 mm vom Pin, auf derselben Lage, kurzer Rückweg | PVDD: 1 µF in 0,7 mm. 3,3 V: C8 in 0,65 mm. VR_DIG: C10 in 0,72 mm. AVDD: C9 in 0,47 mm. Regler U2: 100 nF in 0,8 mm. Alle auf der Oberseite | erfüllt |
 | Mehrere Durchkontaktierungen am Massepad der Stützkondensatoren | C3 bis C6: je Seite zwei Durchkontaktierungen unmittelbar an den Pads | erfüllt |
@@ -149,7 +177,7 @@ Der Wert von 1 nH für die Bootstrap-Schleife ist eine TAS2770-Zahl; er ist nach
 
 | Nr. | Punkt | Was tun |
 |---|---|---|
-| 1 | U1 (C478472): Lagerbestand bei JLCPCB nicht bestätigt | Im BOM-Abgleich von JLCONE zuerst prüfen. |
+| 1 | U1 (C478472) und U2 (TPS54308, C168839): Lagerbestand bei JLCPCB nicht bestätigt | Im BOM-Abgleich von JLCONE zuerst prüfen. Wenn der TPS54308 fehlt, notfalls wieder TPS54302 (C311983) eintragen; dann liegt der Regler wie vorher nahe an der Verstärkerfrequenz (siehe Rückmeldung Punkt 4). |
 | 2 | C377117 (680 nF 50 V 1206) und C23242 (75 kΩ) online nicht bestätigt | Im BOM-Abgleich Wert und Bauform ansehen. Ersatz für C377117: C1881 (FH 1206B684K500NT). |
 | 3 | Drehlagen | In der Bestückungsvorschau nach der Tabelle oben prüfen. |
 | 4 | 5-V-Regler liefert höchstens 3 A, Spule L5 2,45 A Dauerstrom | Mit dem Pi 4 passt das, solange keine stromhungrigen USB-Geräte am Pi hängen. |
@@ -158,7 +186,10 @@ Der Wert von 1 nH für die Bootstrap-Schleife ist eine TAS2770-Zahl; er ist nach
 | 7 | Bootstrap-Kondensatoren C11 bis C14 sind jetzt 0402 mit 16 V | Im BOM-Abgleich C16772 prüfen. Am Gerät nach Volllast die Fehlerregister lesen. |
 | 8 | Bestellung als vierlagige Platine | Bei JLCPCB 4 Lagen wählen, Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu prüfen (Dateien `.g2` und `.g3` in der ZIP). Der Preis vom 8.11. gilt nicht mehr. |
 | 9 | Die 20 Durchkontaktierungen der Doppelbahnen liegen im Schaltknoten | Keine Maßnahme. Sie enden auf der Unterseite als freie Pads mit mindestens 0,2 mm Abstand zu Masse und Signalen. |
-| 10 | Bestückungsdruck von C11 bis C14 entfernt | Für Umrisse ist zwischen den Pins kein Platz. Die Lage zeigen die Bilder und die Bestückungsvorschau. |
+| 10 | Bestückungsdruck von C11 bis C14 entfernt | Für Umrisse ist zwischen den Pins kein Platz. Die Lage zeigen die Bilder und die Bestückungsvorschau. Dasselbe gilt seit Änderung 17 für Q2, F1, FB1, D2, D3, R13 und C46. |
+| 11 | Neue Bauteile aus Änderung 17 und 18 sind bei JLCPCB „Extended“ (Q2, F1, D2, D3, FB1, U2) | Je Extended-Teil verlangt JLCPCB eine Rüstgebühr (zuletzt etwa 3 US-$). Im BOM-Abgleich Bestand prüfen; Ersatz mit gleichen Daten ist möglich (D3: jede BZT52C15 in SOD-123, D2: jede SMBJ22A, F1: 5 A, mindestens 32 V, träge, 1206). |
+| 12 | Startskript: Register 0x53 und die Biquad-Adressen sind nur aus Sekundärquellen belegt | Am Gerät: Das Skript liest 0x02, 0x53, 0x54 und 0x4C zurück. Klingt der Bass nach dem Hochpass falsch oder gar nicht, den Abschnitt mit dem Hochpass im Skript auskommentieren. |
+| 13 | Kein Rückspeiseschutz zwischen USB-C und 5 V | bewusst nicht eingebaut (Rückmeldung 6a). USB-C am Pi nie anstecken, solange die Platine steckt. |
 
 ## Platine in Zahlen
 
@@ -166,10 +197,10 @@ Der Wert von 1 nH für die Bootstrap-Schleife ist eine TAS2770-Zahl; er ist nach
 |---|---|
 | Größe | 65 × 65 mm, Ecken R 3 mm, 4 Lagen (Oberseite, zwei Masselagen, Unterseite) |
 | Kleinste Leiterbahn / kleinster Abstand | 0,25 mm / 0,20 mm |
-| Durchkontaktierungen | 177 × 0,3/0,6 mm, 3 × 0,4/0,8 mm, 8 × 0,3 mm im Kühlpad von U1 |
+| Durchkontaktierungen | 176 × 0,3/0,6 mm, 5 × 0,4/0,8 mm, 8 × 0,3 mm im Kühlpad von U1 |
 | Bauteilbohrungen | 0,95 mm (XH-4), 1,0 mm (Sockel, XH-2, Elkos), 1,4 mm (Klemmen) |
 | Befestigung | 4 × 2,75 mm unbeschichtet, Raster 58 × 49 mm |
-| Bauteile | 86 bestückt (24 Stücklistenzeilen), 16 zum Selbstlöten, 68 Netze |
+| Bauteile | 93 bestückt (29 Stücklistenzeilen), 16 zum Selbstlöten, 72 Netze |
 
 ## LCSC-Nummern
 
@@ -188,8 +219,13 @@ Quelle: Suchmaschinen-Auszüge der Seiten von LCSC und JLCPCB vom 16.11.2026. La
 | C22809 | 15 kΩ 1 % | Uniroyal 0603WAF1502T5E, Basic | passt |
 | C25804 | 10 kΩ 1 % | Uniroyal 0603WAF1002T5E, Basic | passt |
 | C23140 | 33 Ω 1 % | Uniroyal 0603WAF330JT5E, Basic | passt |
-| C311983 | TPS54302DDCR | TI TPS54302DDCR, TSOT-23-6, Extended | passt |
-| C13585 | 10 µF 50 V X5R 1206 (neu, C23) | Samsung CL31A106KBHNNNE, Basic | passt |
+| C168839 | TPS54308DDCR (neu, U2) | TI TPS54308DDCR, SOT-23-6, 350 kHz, Extended | passt |
+| C16072 | AO4407A (neu, Q2) | AOS AO4407A, SOIC-8, P-Kanal 30 V 12 A | passt, JLCPCB-Klasse nicht bestätigt |
+| C553937 | Sicherung 5 A 63 V 1206 träge (neu, F1) | SART S1206-SD-5.0A, als „Slow Blow“ gelistet | passt |
+| C10214 | SMBJ22A (neu, D2) | RUILON SMBJ22A, SMB, 22 V / 24,4 V / 35,5 V | passt |
+| C2104 | BZT52C15 (neu, D3) | JSCJ BZT52C15, SOD-123, Extended | passt |
+| C337884 | BLM31KN121SN1L (neu, FB1) | Murata, 1206, 6 A, 120 Ω bei 100 MHz | passt, JLCPCB-Klasse nicht bestätigt |
+| C13585 | 10 µF 50 V X5R 1206 (C23, neu auch C46) | Samsung CL31A106KBHNNNE, Basic | passt |
 | C12891 | 22 µF 25 V X5R 1206 (C26, C27 an 5 V) | Samsung CL31A226KAHNNNE | passt |
 | C23242 | 75 kΩ 1 % | nicht direkt gefunden (Nachbarnummern derselben Reihe passen) | nicht bestätigt |
 | C14858 | 100 pF 50 V C0G | Samsung CL10C101JB8NNNC, Basic | passt |
@@ -206,5 +242,5 @@ Quelle: Suchmaschinen-Auszüge der Seiten von LCSC und JLCPCB vom 16.11.2026. La
 
 1. `JLCPCB/Gerber_RadioHAT.zip` hochladen. Erkannte Größe 65 × 65 mm, 4 Lagen.
 2. Einstellungen aus der README wählen, dann `BOM_RadioHAT.csv` und `CPL_RadioHAT.csv` hochladen.
-3. Im BOM-Abgleich zuerst prüfen, ob U1 (C478472) lieferbar ist. Dann: 24 Zeilen, alle zugeordnet (C11 bis C14 jetzt C16772 in 0402), C377117 und C23242 auf Wert und Bauform prüfen.
+3. Im BOM-Abgleich zuerst prüfen, ob U1 (C478472) und U2 (C168839) lieferbar sind. Dann: 29 Zeilen, alle zugeordnet (C11 bis C14 jetzt C16772 in 0402), C377117 und C23242 auf Wert und Bauform prüfen.
 4. In der Bestückungsvorschau die Drehlagen nach der Tabelle oben prüfen. Alle Teile müssen deckungsgleich auf ihren Pads sitzen.
