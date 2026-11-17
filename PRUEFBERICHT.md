@@ -202,6 +202,8 @@ Der Wert von 1 nH für die Bootstrap-Schleife ist eine TAS2770-Zahl; er ist nach
 | 11 | Neue Bauteile aus Änderung 17 und 18 sind bei JLCPCB „Extended“ (Q2, F1, D2, D3, FB1, U2) | Je Extended-Teil verlangt JLCPCB eine Rüstgebühr (zuletzt etwa 3 US-$). Im BOM-Abgleich Bestand prüfen; Ersatz mit gleichen Daten ist möglich (D3: jede BZT52C15 in SOD-123, D2: jede SMBJ22A, F1: 5 A, mindestens 32 V, träge, 1206). |
 | 12 | Startskript: Die Adressen des Hochpass-Biquads stehen nicht im Datenblatt (nur Buch 0xAA), sondern in TI SLOA263 | Am Gerät: Das Skript prüft das Fehlerbit „Biquad nicht übernommen“ (0x71 Bit 6). Klingt der Bass falsch oder gar nicht, den Abschnitt mit dem Hochpass im Skript auskommentieren. Alle übrigen Register sind am Datenblatt geprüft. |
 | 13 | Kein Rückspeiseschutz zwischen USB-C und 5 V | bewusst nicht eingebaut (Rückmeldung 6a). USB-C am Pi nie anstecken, solange die Platine steckt. |
+| 14 | C47/C48 (C2932476, 10 µF 50 V 0805): JLCPCB-Klasse und Bestand nicht bestätigt | Im BOM-Abgleich prüfen. Ersatz: jeder 10 µF X5R/X7R mit mindestens 50 V in 0805. |
+| 15 | Werte des TPS54308 nur aus Suchauszügen der TI-Seiten (Datenblatt war nicht erreichbar) | Wenn das PDF vorliegt: Pinbelegung, VREF, EN-Schwellen, Spule und Ausgangskondensatoren für 5 V prüfen. |
 
 ## Platine in Zahlen
 

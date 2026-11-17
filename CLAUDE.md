@@ -1,15 +1,31 @@
 # Projektstand für neue Sessions
 
-Retro-Radio: Holzgehäuse mit Original-Frontplatte und -Lautsprecherabdeckungen eines DDR-Radios, innen Raspberry Pi mit eigener Verstärkerplatine (Radio HAT). Kommunikation mit dem Nutzer auf Deutsch, kurze Antworten, bei Unklarheiten nachfragen. Direkt auf `main` arbeiten und pushen (vom Nutzer so gewünscht).
+Retro-Radio: Holzgehäuse mit Original-Frontplatte und -Lautsprecherabdeckungen eines DDR-Radios, innen Raspberry Pi mit eigener Verstärkerplatine (Radio HAT). Kommunikation mit dem Nutzer auf Deutsch, kurze Antworten, bei Unklarheiten nachfragen. Direkt auf `main` arbeiten und pushen (vom Nutzer so gewünscht). Gibt die Umgebung einen eigenen Session-Branch vor, zusätzlich dorthin pushen.
+
+Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext` als Text auslesen statt Seitenbilder lesen, keine Subagenten ohne Grund, Bilder nur für gezielte Sichtprüfungen.
+
+## Einstieg in eine neue Sitzung
+
+1. Diese Datei lesen.
+2. Für die Platine: `PRUEFBERICHT.md` (alle Änderungen mit Begründung, offene Punkte), `README.md` (Bestellung, Einbau, Pi-Einrichtung, erster Test).
+3. Für den Verstärker-Chip: `Datenblaetter/TAS5805M.md` statt des PDF (Zusammenfassung vorne, Abschnitt 1.11 = Abgleich mit der Platine).
+4. Für das Gehäuse: `Gehaeuse/README.md`, `Gehaeuse/DRUCKTEILE.md`.
 
 ## Was wo liegt
 
 | Pfad | Inhalt |
 |---|---|
-| `README.md` | Radio HAT: Platine, Bestellung JLCPCB, Steckerbelegung, Pi-Einrichtung |
-| `KiCad/`, `JLCPCB/`, `PRUEFBERICHT.md`, `REICHELT.md` | Platine (4 Lagen, 65 × 65 mm, Lochbild wie Pi) |
-| `Datenblaetter/TAS5805M.md` | Datenblatt TAS5805M als Text: Zusammenfassung (Grenzwerte, Register, Ein-/Abschaltfolge, Filter, Layout) und Volltext. Statt PDF lesen. |
-| `radio_hat_start.sh`, `Pi/` | Steuerskript (start/stop/status/clear), systemd-Dienst, ALSA-Einstellung |
+| `README.md` | Radio HAT: Platine, Bestellung JLCPCB, Netzteil, Steckerbelegung, Pi-Einrichtung, erster Test |
+| `PRUEFBERICHT.md` | 22 Änderungen an der Platine mit Grund, Prüfung nach TI SLAA902/PCBWay/Analog Devices, Rückmeldung vom 17.11., Datenblattabgleich, offene Punkte, LCSC-Nummern |
+| `REICHELT.md` | Bestellliste der Teile zum Selbstlöten (Sockel, Elkos, JST) |
+| `Datenblaetter/TAS5805M.md` | Datenblatt TAS5805M (SLASEH5D Rev. D) als Text: deutsche Zusammenfassung (Grenzwerte, Pins, Register, Ein-/Abschaltfolge, Schutz, Filter, Layout, Gehäuse) und Volltext |
+| `KiCad/RadioHAT.kicad_pcb` | Platine, einzige Quelle (kein Schaltplan) |
+| `KiCad/werkzeuge/` | `fertigungsdaten.sh`, `drc.py`, `verify.py`, `bilder.sh`; einmalige Änderungsskripte `eingangsschutz.py` (Änd. 17) und `aenderung_20_21.py` (Änd. 20/21), nicht erneut ausführen |
+| `KiCad/jlc_cpl.py` | Bestückungsdatei mit JLCPCB-Drehwinkeln |
+| `JLCPCB/` | Gerber-ZIP (12 Dateien), BOM (30 Zeilen), CPL (95 Bauteile) |
+| `radio_hat_start.sh` | Steuerskript Verstärker: `start [Lautstärke]`, `stop`, `status`, `clear` |
+| `Pi/radio-hat.service`, `Pi/asound.conf` | systemd-Dienst (start beim Booten, stop vor dem Herunterfahren), ALSA immer 32 Bit je Kanal |
+| `Bilder/` | Renderings der Platine Ober-/Unterseite |
 | `Gehaeuse/README.md` | Gehäuse: Aufbau, Zuschnittliste, Leisten, Zusammenbau, Einkaufsliste |
 | `Gehaeuse/gehaeuse.scad` | Gehäusemodell (OpenSCAD), bindet `traeger.scad` ein |
 | `Gehaeuse/zeichnung.py` | Maßzeichnungen → `zeichnung_gehaeuse.pdf`, `bilder/zeichnung_blatt*.png` |
@@ -17,7 +33,7 @@ Retro-Radio: Holzgehäuse mit Original-Frontplatte und -Lautsprecherabdeckungen 
 | `Gehaeuse/traeger.scad`, `Gehaeuse/stl/` | Druckteile und STL-Exporte |
 | `Gehaeuse/render/render.py` | POV-Ray-Renderings Tag/Nacht (Texturen im selben Ordner) |
 
-## Werkzeuge (in einer frischen Cloud-Session fehlen sie)
+## Werkzeuge Gehäuse (in einer frischen Cloud-Session fehlen sie)
 
 ```bash
 apt-get update && apt-get install -y openscad xvfb povray
@@ -30,27 +46,77 @@ pip install matplotlib numpy scipy pillow
 - Renderings: `cd Gehaeuse/render && python3 render.py 1600 1000 gut` (ca. 1 min)
 - Maße stehen doppelt in `gehaeuse.scad` und `zeichnung.py` (und teils `render.py`) – bei Änderungen alle anpassen.
 
-## Stand Platine (Radio HAT), 17.11.2026 (siebte Fassung)
+## Werkzeuge Platine
 
-- Fertig zum Bestellen, aber ungetestet. 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads.
-- `KiCad/RadioHAT.kicad_pcb` ist die Quelle. Es gibt keinen Schaltplan; die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen. Änderungen direkt in der Platine machen (KiCad-Python: Objekte erst sammeln, dann entfernen, sonst stürzt `pcbnew` ab).
-- Fertigungsdaten neu erzeugen: `bash KiCad/werkzeuge/fertigungsdaten.sh` (DRC, Gerber-ZIP mit 12 Dateien, CPL). Vorher die Platine mit neu gefüllten Flächen speichern (`drc.py … refill` legt eine gefüllte Kopie an). Stückliste von Hand pflegen. Bilder: `KiCad/werkzeuge/bilder.sh`. Messwerte: `python3 KiCad/werkzeuge/verify.py KiCad/RadioHAT.kicad_pcb`.
-- Werkzeuge in einer frischen Cloud-Session: `apt-get install -y kicad zip` (KiCad 7 mit `kicad-cli` und Python-Modul `pcbnew`), `pip install shapely`; für die Bilder Node.js, `pcb-stackup@4.2.8` und Playwright. ti.com, mouser.com und lcsc.com sind aus der Cloud nicht erreichbar, GitHub schon.
-- `PRUEFBERICHT.md` enthält alle 22 Änderungen, die Prüfung nach TI SLAA902, PCBWay und Analog Devices, die Antwort auf die Rückmeldung vom 17.11. (Eingangsschutz F1/Q2/D2/D3/FB1/C46, Regler TPS54308 statt TPS54302, Startskript mit 768 kHz, 175 kHz Bandbreite, Lautstärke ≤ 0 dB, Hochpass 50 Hz) und den Abgleich mit dem vollständigen Datenblatt (C47/C48 10 µF an PVDD, Pastenraster 75 % unter dem Kühlpad, Abschaltfolge per systemd, Fehlerauswertung).
-- Das Datenblatt des TAS5805M ist vollständig geprüft; die Biquad-Adressen (Buch 0xAA, Seite 0x24, ab 0x18) stammen aus TI SLOA263, nicht aus dem Datenblatt. TPS54308-Werte nur aus Suchauszügen.
-- Bewusst so belassen (vom Nutzer bestätigt):
-  - Ausgänge am Pin: die ersten 1,5 mm einlagig, davon 0,55 mm schmaler als 0,76 mm. Grund ist das Pinraster von 0,65 mm, das lässt sich nicht ändern.
-  - 3,3 V: zwei kurze Stellen mit 0,35 bis 0,45 mm.
-  - SPKB+: 1,5 mm lang nur 0,9 mm breit.
-- Bewusst nicht eingebaut (Entscheidung des Nutzers steht aus): Rückspeiseschutz 5 V gegen USB-C; X7R im Ausgangsfilter bleibt.
-- Netzteil höchstens 22 V (TVS-Diode SMBJ22A).
-- Offen vor der Bestellung (Liste in `PRUEFBERICHT.md`, „Offene Punkte“):
-  - bei JLCPCB 4 Lagen wählen; der Preis vom 8.11. galt für 2 Lagen;
-  - Lieferbarkeit von U1 (C478472), U2 (C168839), C16772 und den neuen Extended-Teilen prüfen;
-  - Drehlagen in der Bestückungsvorschau prüfen, besonders Q2, D2, D3.
-  - Am Gerät: `radio_hat_start.sh status`, Hochpass hörbar, Hörtest auf Pfeifen.
+```bash
+apt-get update && apt-get install -y kicad zip
+pip install shapely
+```
 
+KiCad 7.0.11 mit `kicad-cli` und Python-Modul `pcbnew` (mit `/usr/bin/python3` aufrufen). `pdftotext` ist vorhanden. Für `bilder.sh`: Node.js und Playwright sind vorinstalliert, Aufruf mit `NODE_PATH=$(npm root -g) bash KiCad/werkzeuge/bilder.sh GERBER-ORDNER`.
 
+Ablauf nach einer Änderung:
+
+1. Änderung per Python-Skript an `KiCad/RadioHAT.kicad_pcb` (vorher Kopie sichern).
+2. `python3 KiCad/werkzeuge/drc.py KiCad/RadioHAT.kicad_pcb /tmp/drc refill` → muss 0 Verstöße, 0 unverbundene Pads melden. Die gefüllte Kopie `/tmp/drc/RadioHAT.kicad_pcb` zurück nach `KiCad/` kopieren (der Gerber-Export füllt Flächen nicht neu).
+3. `bash KiCad/werkzeuge/fertigungsdaten.sh` (DRC, Gerber-ZIP, CPL). BOM von Hand nachtragen, dann BOM- und CPL-Bezeichner abgleichen.
+4. `python3 KiCad/werkzeuge/verify.py KiCad/RadioHAT.kicad_pcb ALTE_KOPIE.kicad_pcb` → Messwerte und Netzlistenvergleich (nur gewollte Unterschiede).
+5. Bilder neu (`bilder.sh` mit dem Gerber-Ordner, den `fertigungsdaten.sh` ausgibt), `KiCad/RadioHAT.kicad_prl` löschen.
+6. `PRUEFBERICHT.md` (Änderungstabelle, Zahlen, LCSC-Tabelle, offene Punkte) und `README.md` nachziehen.
+
+Fallstricke mit `pcbnew` (KiCad 7):
+
+- Nie Objekte entfernen, während über `B.Tracks()`, `B.GetDrawings()` oder `fp.GraphicalItems()` iteriert wird, und danach nicht erneut iterieren: erst alles sammeln, dann in einem Rutsch entfernen, sonst Absturz oder `SwigPyObject`-Fehler.
+- Neues Pad in einem Bauteil: nach `fp.Add(pad)` die Bauteilkoordinate mit `pad.SetPos0(...)` setzen und `pad.SetDrawCoord()` aufrufen; `SetPosition` allein speichert (0,0). Bei U1 (Drehung −90°) gilt x_lokal = dy, y_lokal = −dx.
+- Ausgegebene Koordinaten sind gerundet; beim Suchen von Leiterbahnen 0,01 mm Toleranz nehmen.
+- Lagenname des Bestückungsdrucks ist `F.Silkscreen`. Bestückungsdruck der Platine besteht aus Einzellinien (keine Texte); neue Texte als `PCB_TEXT`.
+- Sichtprüfung: `kicad-cli pcb export svg -l F.Cu,F.SilkS,Edge.Cuts,F.Fab --page-size-mode 2 --exclude-drawing-sheet …` und mit Playwright als PNG fotografieren (1300 px = 65 mm, Platinenursprung links oben bei x 100, y 85 mm).
+- `jlc_cpl.py` Drehkorrekturen: SOT-23/TSOT-23 +180°, HTSSOP/SOIC +270°, sonst 0°. Für SMB und SOD-123 (D2, D3) ist 0° nicht bestätigt → in der Bestückungsvorschau prüfen.
+
+## Stand Platine (Radio HAT), 17.11.2026, siebte Fassung
+
+Fertig zum Bestellen, aber ungetestet. 65 × 65 mm, 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads. 95 SMD-Bauteile von JLCPCB, 16 zum Selbstlöten. Die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen; es gibt keinen Schaltplan.
+
+Wichtigste Auslegung:
+
+- Verstärker U1 TAS5805M, I²C-Adresse 0x2D (R1 15 kΩ), PDN an GPIO9 mit 10 kΩ nach GND, I²S vom Pi. Alle 28 Pins gegen Datenblatt Tabelle 5-1 geprüft.
+- Netzteil 20 V, höchstens 22 V. Eingang: J4+ → F1 (5 A träge) → Q2 AO4407A (Verpolungsschutz, Gate über R13 10 kΩ an GND, Z-Diode D3 15 V) → FB1 (Ferrit 6 A) → PVDD; hinter Q2 TVS D2 SMBJ22A und C46 10 µF.
+- 5-V-Regler U2 TPS54308 (350 kHz, FCCM, ersetzt TPS54302 wegen dessen Frequenzspreizung um 400 kHz), L5 10 µH, 2 × 22 µF, Teiler 75 k/10 k → 5,07 V, höchstens 3 A. Ein/Aus über X1, Selbsthaltung über GPIO4, Abschalt-Erkennung GPIO10.
+- PVDD je Seite: 470 µF Elko, 10 µF 50 V 0805 (C47/C48), 1 µF, 100 nF an den Pins.
+- Ausgangsfilter 10 µH (Isat 3,5 A) + 680 nF X7R 1206, dazu 1 nF nach Masse. Bootstrap 220 nF 16 V 0402 direkt unter den Pins.
+- Lötpaste unter dem Kühlpad von U1: 2 × 2 Öffnungen, 75 %. Acht Durchkontaktierungen im Kühlpad, unten mit Lötstopp abgedeckt.
+
+Bewusst so belassen (vom Nutzer bestätigt):
+
+- Ausgänge am Pin: die ersten 1,5 mm einlagig, davon 0,55 mm schmaler als 0,76 mm (Pinraster 0,65 mm).
+- 3,3 V: zwei kurze Stellen mit 0,35 bis 0,45 mm.
+- SPKB+: 1,5 mm lang nur 0,9 mm breit.
+
+Bewusst nicht geändert (begründet in `PRUEFBERICHT.md`, Rückmeldung vom 17.11.):
+
+- X7R im Ausgangsfilter (C0G in 680 nF/1206 gibt es nicht, Wirkung nur oberhalb des Hörbereichs).
+- Kein DSP-Limiter (DRC); die Lautstärkegrenze 0 dB im Skript verhindert die Übersteuerung.
+- Kein Rückspeiseschutz 5 V gegen USB-C: Entscheidung des Nutzers steht aus (siehe Fragen unten).
+
+Offen vor der Bestellung (Details in `PRUEFBERICHT.md`, „Offene Punkte“):
+
+- bei JLCPCB 4 Lagen wählen, Lagenfolge prüfen; „Via Covering“ nicht auf „Untented“; der Preis vom 8.11. galt für 2 Lagen;
+- Lieferbarkeit von U1 (C478472), U2 (C168839), C16772, C2932476 und den Extended-Teilen Q2, F1, D2, D3, FB1 prüfen;
+- Drehlagen in der Bestückungsvorschau nach der Tabelle in README/Prüfbericht, besonders Q2, D2, D3.
+
+Am fertigen Gerät zu prüfen (Ablauf in README, „Erster Test“): 5 V am Sockel ohne Pi, `radio_hat_start.sh status` (Play, 48 kHz, 64 Bittakte, keine Fehler), Hörtest auf Pfeifen/Zirpen, Hochpass hörbar, Fehlerregister nach Volllast.
+
+Quellenlage: TAS5805M vollständig am PDF geprüft (vom Nutzer hochgeladen, nicht im Repo; Text in `Datenblaetter/TAS5805M.md`). Die Biquad-Adressen (Buch 0xAA, Seite 0x24, ab 0x18, Format 5.27, a1/a2 negiert) stammen aus TI SLOA263 und dem Treiber mariosgit/TAS58xx, nicht aus dem Datenblatt. TPS54308-Werte (Pinbelegung wie TPS54302, VREF 0,596 V, EN 1,21/1,1 V, 10 µH und 2 × 22 µF für 5 V) nur aus Suchauszügen der TI-Seiten.
+
+## Software auf dem Pi
+
+- `radio_hat_start.sh start` folgt Datenblatt 7.5.3.1: PDN high, Stille abspielen für die I²S-Takte, Hi-Z + DSP an, dann 0x02 = 0x00 (768 kHz, BD), 0x53 = 0x60 (175 kHz), 0x54 = 0x09 (17,5 V Spitze = 19 W an 8 Ω), 0x76 = 0x10 (Rückkehr nach Übertemperatur), 0x4C = Lautstärke (Standard 0x60 = −24 dB, nie unter 0x30 = 0 dB), Hochpass 50 Hz in Biquad 1 links (rechts nutzt dieselben Koeffizienten, 0x66 Bit 3 = 0), Fehler löschen (0x78 = 0x80), Play.
+- `stop` folgt 7.5.3.2: Mute-Rampe (wenn Takt da), Hi-Z, PDN low. Der Dienst `Pi/radio-hat.service` ruft es vor dem Herunterfahren auf.
+- `status` und `clear` zeigen bzw. löschen Fehler (0x70–0x73) im Klartext.
+- Einrichtung (README, „Pi einrichten“): `config.txt` mit `dtoverlay=hifiberry-dac`, `gpio-shutdown` (GPIO10), `gpio-poweroff` (GPIO4), I²C und I²S an, SPI aus; Skript nach `/usr/local/bin/`, Dienst nach `/etc/systemd/system/`, `Pi/asound.conf` nach `/etc/asound.conf`.
+- Das Skript ist nur mit nachgebauten I²C-Befehlen getestet, nicht am Gerät.
+
+## Festgelegte Entscheidungen (Gehäuse)
 
 - Außen 672 × 138 × 190 mm + 4 Chromfüße Ø 25 × 20. Platte 8 mm Dekor „Nuss Sizilia“ (holzzuschnitt-shop.de), alle Ecken innen mit Kiefernleisten 15 × 15 verleimt.
 - Frontplatte 300 × 114 × 3 zwischen zwei Abdeckungen 178 × 112 × 7, Abdeckungen stoßen an die Seitenwände. Holz steht 3 mm vor den Abdeckungen; Frontplatte hinten bündig mit den Abdeckungen (vorne 4 mm tiefer).
@@ -74,13 +140,20 @@ Entwurf v1 fertig (siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt. Annahme
 
 ## Offene Fragen an den Nutzer (Antworten stehen noch aus)
 
+Gehäuse:
+
 1. Bohrung der Originalknöpfe (Ø, Tiefe, rund/abgeflacht/Feder) → danach Knopfadapter entwerfen.
 2. Welches Bauteil an A/E (Platz bisher 12 × 12 wie Drehgeber; Alternative Poti mit Schalter)?
 3. Wellenlänge der STEC11B (angenommen 20 mm; Parameter `enc_welle`).
 4. LED-Skalenbeleuchtung mit Senderzeiger (WS2812B + RP2040-Zero per USB) oder nur warmweiß über GPIO20?
 5. Druckbettgröße (Teile sind auf ≤ 200 mm ausgelegt).
 
+Platine:
+
+6. Rückspeiseschutz 5 V gegen USB-C einbauen (Ideal-Dioden-Schaltung an der 5-V-Leitung, Platz neben dem Sockel knapp) oder bei der Regel „USB-C nie anstecken“ bleiben?
+7. Kann der Nutzer das Datenblatt des TPS54308 als PDF hochladen? Dann die Reglerwerte (Spule, Kondensatoren, EN-Schwellen) daran prüfen.
+
 ## Hinweise
 
-- Shop-Seiten (amazon.de, holzzuschnitt-shop.de, ebay.de) sind aus der Cloud-Umgebung nicht erreichbar.
+- Aus der Cloud nicht erreichbar: amazon.de, holzzuschnitt-shop.de, ebay.de, ti.com, mouser.com, lcsc.com, jlcpcb.com. Erreichbar: GitHub (auch raw.githubusercontent.com). Die Websuche liefert LCSC-Nummern und Datenblattauszüge.
 - Belegte GPIOs siehe `README.md`; frei sind nur GPIO14, 15, 20.
