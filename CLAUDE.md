@@ -21,7 +21,7 @@ Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext -layout` als Text ausl
 | `Datenblaetter/TAS5805M.md` | Datenblatt TAS5805M (SLASEH5D Rev. D) als Text: deutsche Zusammenfassung (Grenzwerte, Pins, Register, Ein-/Abschaltfolge, Schutz, Filter, Layout, Gehäuse, Abgleich), Bildinhalte, Volltext |
 | `Datenblaetter/TPS54308.md` | Datenblatt TPS54308 (SLUSCV2B Rev. B) als Text: Zusammenfassung mit allen Formeln und Tabelle 7-2, Abgleich mit U2, Bildinhalte, Volltext |
 | `KiCad/RadioHAT.kicad_pcb` | Platine, einzige Quelle (kein Schaltplan) |
-| `KiCad/werkzeuge/` | `fertigungsdaten.sh`, `drc.py`, `verify.py`, `bilder.sh`; einmalige Änderungsskripte `eingangsschutz.py` (Änd. 17), `aenderung_20_21.py` (Änd. 20/21) und `aenderung_23.py` (Änd. 23), nicht erneut ausführen; als Vorlage für neue Änderungen brauchbar |
+| `KiCad/werkzeuge/` | `fertigungsdaten.sh`, `drc.py`, `verify.py`, `bilder.sh`; einmalige Änderungsskripte `eingangsschutz.py` (Änd. 17), `aenderung_20_21.py` (Änd. 20/21), `aenderung_23.py` (Änd. 23) und `aenderung_24.py` (Änd. 24, Kühlfläche), nicht erneut ausführen; als Vorlage für neue Änderungen brauchbar. `router.py`: A*-Wegsucher für eine Kupferlage (Raster 0,05 mm, Sperrbereiche), von `aenderung_24.py` benutzt |
 | `KiCad/jlc_cpl.py` | Bestückungsdatei mit JLCPCB-Drehwinkeln |
 | `JLCPCB/` | Gerber-ZIP (12 Dateien), BOM (31 Zeilen), CPL (96 Bauteile) |
 | `radio_hat_start.sh` | Steuerskript Verstärker: `start [Lautstärke]`, `stop`, `status`, `clear` |
@@ -73,8 +73,10 @@ Fallstricke mit `pcbnew` (KiCad 7):
 - Lagenname des Bestückungsdrucks ist `F.Silkscreen`. Bestückungsdruck der Platine besteht aus Einzellinien (keine Texte); neue Texte als `PCB_TEXT`.
 - Sichtprüfung: `kicad-cli pcb export svg -l F.Cu,F.SilkS,Edge.Cuts,F.Fab --page-size-mode 2 --exclude-drawing-sheet …` und mit Playwright als PNG fotografieren (1300 px = 65 mm, Platinenursprung links oben bei x 100, y 85 mm).
 - `jlc_cpl.py` Drehkorrekturen: SOT-23/TSOT-23 +180°, HTSSOP/SOIC +270°, sonst 0°. Für SMB und SOD-123 (D2, D3) ist 0° nicht bestätigt → in der Bestückungsvorschau prüfen.
+- `pcbnew.SaveBoard` legt neben einer Kopie ohne `.kicad_pro` eine Standard-Projektdatei an. Vor `drc.py` auf einer Kopie die echte `KiCad/RadioHAT.kicad_pro` daneben kopieren, sonst meldet der DRC 116 `lib_footprint_issues` und andere Netzklassen.
+- Neue Leitungen auf Innenlage 1 nicht unter I²S/I²C-Leitungen der Oberseite legen (In1 ist deren Bezugsfläche), nicht unter Endstufe und 5-V-Regler; Vorlage mit Sperrbereichen in `aenderung_24.py`.
 
-## Stand Platine (Radio HAT), 17.11.2026, achte Fassung
+## Stand Platine (Radio HAT), 17.11.2026, neunte Fassung
 
 Fertig zum Bestellen, aber ungetestet. 65 × 65 mm, 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads. 96 SMD-Bauteile von JLCPCB, 16 zum Selbstlöten. Die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen; es gibt keinen Schaltplan.
 
@@ -85,12 +87,13 @@ Wichtigste Auslegung:
 - 5-V-Regler U2 TPS54308 (350 kHz, FCCM, ersetzt TPS54302 wegen dessen Frequenzspreizung um 400 kHz), L5 10 µH (TI empfiehlt 15 µH, 10 µH zulässig), 2 × 22 µF, Teiler 75 k/10 k → 5,07 V, Vorkopplung C28 100 pF mit R14 2 k in Reihe. Dauerlast etwa 2,4 A (Grenze ist die Spule L5, nicht der Regler). Ein/Aus über X1, Start ab etwa 7,4 V PVDD, Selbsthaltung über GPIO4, Abschalt-Erkennung GPIO10.
 - PVDD je Seite: 470 µF Elko, 10 µF 50 V 0805 (C47/C48), 1 µF, 100 nF an den Pins.
 - Ausgangsfilter 10 µH (Isat 3,5 A) + 680 nF X7R 1206, dazu 1 nF nach Masse. Bootstrap 220 nF 16 V 0402 direkt unter den Pins.
-- Lötpaste unter dem Kühlpad von U1: 2 × 2 Öffnungen, 75 %. Acht Durchkontaktierungen im Kühlpad, unten mit Lötstopp abgedeckt.
+- Kühlfläche unter U1 wie im TI-Land-Pattern (Änderung 24): Kupfer 3,4 × 9,7 mm, davon 3,1 × 4,05 mm frei, 24 Vias 0,3/0,6 mm im Raster 1,2 mm, an alle Lagen ohne Wärmefallen. Unter U1 liegt auf keiner Lage eine Signalleitung. Lötpaste 2 × 2 Öffnungen, 75 %; 12 Vias liegen unter der Paste.
+- Innenlage 1: Masse mit den Doppelbahnen der Ausgänge, 3,3 V am Sockel und HOLD (39 mm vom Sockelpin 7 bis D1, nicht unter I²S/I²C). Innenlage 2: durchgehend Masse.
 
 Bewusst so belassen (vom Nutzer bestätigt):
 
 - Ausgänge am Pin: die ersten 1,5 mm einlagig, davon 0,55 mm schmaler als 0,76 mm (Pinraster 0,65 mm).
-- 3,3 V: zwei kurze Stellen mit 0,35 bis 0,45 mm.
+- 3,3 V: Pinaustritt an U1 mit 0,4 bis 0,45 mm auf 1,2 mm (der Umweg bei GPIO24 ist seit Änderung 24 0,5 mm breit).
 - SPKB+: 1,5 mm lang nur 0,9 mm breit.
 
 Bewusst nicht geändert (begründet in `PRUEFBERICHT.md`, Rückmeldung vom 17.11.):
@@ -99,11 +102,12 @@ Bewusst nicht geändert (begründet in `PRUEFBERICHT.md`, Rückmeldung vom 17.11
 - Kein DSP-Limiter (DRC); die Lautstärkegrenze 0 dB im Skript verhindert die Übersteuerung.
 - Kein Rückspeiseschutz 5 V gegen USB-C: vom Nutzer entschieden (17.11.2026), am Pi wird nie ein USB-Netzteil angesteckt.
 - PDN mit 10 kΩ nach Masse (TI: Pull-up nach DVDD), damit der Verstärker aus bleibt, bis der Pi ihn startet.
-- Kühlfläche unter U1 kleiner als im TI-Land-Pattern (8 statt 24 Vias, HOLD und GPIO12 laufen unter dem IC): bei Musik unkritisch, bei Dauer-Sinus mit Vollaussteuerung regelt der Chip früher zurück. Nur ändern, wenn der Nutzer das will.
+- Platine bleibt 65 × 65 mm (Nutzer: „falls es Sinn macht“, 17.11.2026). Bei Musik unter 1 W Verlust; nur Dauer-Sinus mit Vollaussteuerung (etwa 5 W) führt zum Zurückregeln, das verschiebt auch eine größere Platine nur. Größer hieße neuer Pi-Halter und neue Gehäuseplanung.
+- Analogverstärkung 0x54 = 0x09 bleibt (Nutzer, 17.11.2026).
 
 Offen vor der Bestellung (Details in `PRUEFBERICHT.md`, „Offene Punkte“):
 
-- bei JLCPCB 4 Lagen wählen, Lagenfolge prüfen; „Via Covering“ nicht auf „Untented“; der Preis vom 8.11. galt für 2 Lagen;
+- bei JLCPCB 4 Lagen wählen, Lagenfolge prüfen; „Via Covering“ auf „Tented“ (nie „Untented“), besser „Epoxy Filled & Capped“ gegen Aufpreis; der Preis vom 8.11. galt für 2 Lagen;
 - Lieferbarkeit von U1 (C478472), U2 (C168839), C16772, C2932476 und den Extended-Teilen Q2, F1, D2, D3, FB1 prüfen;
 - Drehlagen in der Bestückungsvorschau nach der Tabelle in README/Prüfbericht, besonders Q2, D2, D3.
 

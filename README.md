@@ -26,7 +26,7 @@ Die Platine ist neu entworfen und ungetestet. Beim ersten Einschalten keine Laut
 
 Dateien im Ordner `JLCPCB`: `Gerber_RadioHAT.zip`, `BOM_RadioHAT.csv`, `CPL_RadioHAT.csv`.
 
-Einstellungen: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm, PCB Qty 5, HASL (with lead). „Via Covering“ nicht auf „Untented“ stellen: Die acht Durchkontaktierungen im Kühlpad von U1 sind auf der Unterseite mit Lötstopp abgedeckt, damit beim Löten kein Zinn durchläuft (Datenblatt, Gehäuseanhang Anm. 10). Wenn das Angebot „Epoxy Filled & Capped“ anbietet, ist das noch besser. PCB Assembly: Top Side, PCBA Qty 2, Economic, falls das Angebot das für vier Lagen anbietet (nicht geprüft), sonst Standard. Sonst alles auf Standard lassen.
+Einstellungen: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm, PCB Qty 5, HASL (with lead). „Via Covering“ auf „Tented“ lassen, nie „Untented“. Unter U1 liegen 24 Durchkontaktierungen (TI-Land-Pattern), 12 davon im freien Kühlpad unter der Lötpaste. Mit „Tented“ sind sie auf der Unterseite mit Lötstopp abgedeckt, damit beim Löten kein Zinn durchläuft (Datenblatt, Gehäuseanhang Anm. 10). Noch besser ist „Epoxy Filled & Capped“ (gefüllt und überkupfert). Das kostet bei 4 Lagen Aufpreis (laut JLCPCB nur ab 6 Lagen kostenlos), den Preis im Angebot prüfen. PCB Assembly: Top Side, PCBA Qty 2, Economic, falls das Angebot das für vier Lagen anbietet (nicht geprüft), sonst Standard. Sonst alles auf Standard lassen.
 
 Web-Preis am 8.11.2026: 32,66 € für 5 Platinen, davon 2 mit allen SMD-Teilen bestückt, ohne Versand. Für die Platine zeigte das Angebot einen Desktop-Preis von 1,79 € statt 3,58 €.
 
