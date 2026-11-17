@@ -1,4 +1,4 @@
-# Bestellung bei JLCPCB (Stand 17.11.2026, Platine Rev. 1.0, zehnte Fassung)
+# Bestellung bei JLCPCB (Stand 17.11.2026, Platine Rev. 1.1, elfte Fassung)
 
 Die Feldnamen stammen aus dem Bestellformular von JLCPCB bzw. JLCONE. JLCPCB benennt Felder gelegentlich um. Steht ein Feld nicht da oder heißt es anders, die Auswahl mit der gleichen Bedeutung nehmen. Was nicht in der Liste steht, auf dem Standardwert lassen.
 
@@ -12,13 +12,13 @@ Hochzuladen sind drei Dateien aus dem Ordner `JLCPCB`:
 
 ## Schritt 1: Platine
 
-`Gerber_RadioHAT.zip` hochladen. JLCPCB muss danach **4 Lagen** und **65 × 65 mm** anzeigen. Wenn nicht: abbrechen, die ZIP ist dann nicht die aus diesem Stand.
+`Gerber_RadioHAT.zip` hochladen. JLCPCB muss danach **4 Lagen** und **65 × 70 mm** anzeigen (Breite × Höhe; manche Ansichten zeigen 70 × 65). Wenn nicht: abbrechen, die ZIP ist dann nicht die aus diesem Stand.
 
 | Feld | Auswahl | Warum |
 |---|---|---|
 | Base Material | FR-4 | |
 | Layers | 4 | aus der ZIP erkannt |
-| Dimensions | 65 × 65 mm | aus der ZIP erkannt |
+| Dimensions | 65 × 70 mm | aus der ZIP erkannt |
 | PCB Qty | 5 | kleinste Menge; davon werden 2 bestückt |
 | Product Type | Industrial/Consumer electronics | |
 | Different Design | 1 | |
@@ -27,7 +27,7 @@ Hochzuladen sind drei Dateien aus dem Ordner `JLCPCB`:
 | PCB Color | Green | Bei 4 Lagen bietet die Economic-Bestückung nur Grün an |
 | Silkscreen | White | |
 | Material Type | Standardwert (FR4 TG 135–140 oder TG155) | |
-| Surface Finish | **ENIG**, Gold Thickness 1 U" | Bleifrei (RoHS) und eben. Die ebene Fläche hilft beim Verstärker U1 (Pinraster 0,65 mm, Kühlpad). Billiger, aber ebenfalls bleifrei: **LeadFree HASL**. Nicht „HASL (with lead)“: bleihaltig, ein Gerät damit darf in der EU nicht verkauft werden |
+| Surface Finish | **ENIG**, Gold Thickness 1 U" | Eben; das hilft beim Verstärker U1 (Pinraster 0,65 mm, Kühlpad). Billiger und ebenfalls möglich: **HASL (with lead)** oder **LeadFree HASL**. Blei ist erlaubt, weil das Gerät nicht verkauft wird |
 | Outer Copper Weight | 1 oz | |
 | Inner Copper Weight | 0.5 oz | Innenlagen sind Masse; 1 oz kostet nur mehr |
 | Layer Stackup / Specify Stackup | Standard **JLC04161H-7628** | Masselage etwa 0,2 mm unter der Oberseite, so ist die Platine ausgelegt |
@@ -37,7 +37,7 @@ Hochzuladen sind drei Dateien aus dem Ordner `JLCPCB`:
 | Min via hole size/diameter | 0.3 mm/(0.4/0.45 mm) (Standard) | kleinste Bohrung ist 0,3 mm |
 | Board Outline Tolerance | ±0.2 mm (Standard) | |
 | Confirm Production file | **Yes** | JLCPCB zeigt die aufbereiteten Daten vor der Fertigung; dort kontrollieren, dass keine zusätzlichen Löcher oder Randstreifen eingefügt wurden |
-| Mark on PCB / Order Number | Remove bzw. keine Nummer, falls das Feld noch erscheint | Laut JLCPCB druckt es seit Mai 2026 ohnehin keine Bestellnummer mehr. Die Platine trägt selbst „Rev. 1.0 11/2026“ |
+| Mark on PCB / Order Number | Remove bzw. keine Nummer, falls das Feld noch erscheint | Laut JLCPCB druckt es seit Mai 2026 ohnehin keine Bestellnummer mehr. Die Platine trägt selbst „Rev. 1.1 11/2026“ |
 | Electrical Test | Flying Probe Fully Test (Standard) | |
 | Gold Fingers, Castellated Holes, Edge Plating, Press-fit, UL Marking | No | |
 
@@ -100,7 +100,7 @@ Außerdem prüfen: Die drei kleinen Passbohrungen und die vier Befestigungslöch
 
 Vor dem Bezahlen in der Zusammenfassung nachsehen:
 
-- 4 Lagen, 1,6 mm, Grün, ENIG (oder LeadFree HASL), Via Covering wie gewählt
+- 4 Lagen, 65 × 70 mm, 1,6 mm, Grün, Oberfläche und Via Covering wie gewählt
 - PCBA: Economic, Top Side, 2 Stück, Tooling holes „Added by Customer“
 - keine Randstreifen (Edge Rails) und kein Nutzen (Panel)
 - Stückliste vollständig, keine fehlenden Teile
@@ -109,6 +109,6 @@ Bei „Product Description“ für den Zoll passt „Audio and Video Appliance /
 
 ## Danach
 
-- **Durchsteckteile selbst löten** (README, „Selbst zu löten“, Teile in `REICHELT.md`). Für ein Gerät, das verkauft wird, bleifreies Lot verwenden. Die Massepads haben Wärmefallen; ein Lötkolben mit etwa 60 W und mittlerer Spitze reicht.
+- **Durchsteckteile selbst löten** (README, „Selbst zu löten“, Teile in `REICHELT.md`). Bleihaltiges Lot ist erlaubt (das Gerät wird nicht verkauft) und lässt sich leichter verarbeiten. Die Massepads haben Wärmefallen; ein Lötkolben mit etwa 60 W und mittlerer Spitze reicht.
 - **Erster Test** nach README, erst ohne Pi, dann ohne Lautsprecher.
-- **Vor einer Serie:** Muster vollständig testen (Hörtest, Volllast, Fehlerregister), dann dieselben Dateien mit größerer Menge bestellen. Für den Verkauf in der EU braucht das fertige Gerät außerdem CE (EMV-Messung; der Pi funkt, damit gilt die Funkanlagenrichtlinie), RoHS-Konformität, WEEE-Registrierung und ein CE-gekennzeichnetes Netzteil. Das betrifft das Gerät, nicht die Platinenbestellung.
+- **Vor weiteren Bestellungen:** Muster vollständig testen (Hörtest, Volllast, Fehlerregister), dann dieselben Dateien mit größerer Menge bestellen.

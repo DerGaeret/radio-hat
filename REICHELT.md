@@ -22,5 +22,5 @@ Die Mengen gelten für eine Platine. Für beide bestückten Platinen alles verdo
 - **Stiftleiste 4-polig:** Die Artikelseite 185075 zeigt die Herstellernummer B4B-XH-A. Dass die Bestellnummer dort `JST XH4P ST` lautet, ist aus der Benennung der anderen Polzahlen geschlossen.
 - **Crimpkontakte:** Alternative für sehr dünne Litze (30–26 AWG, 0,05–0,13 mm²) ist `JST XH2 CKS`. Zum Crimpen braucht es eine Zange für JST-Kontakte. Wer keine hat, nimmt statt Gehäusen und Kontakten fertig konfektionierte XH-Kabel (2-polig und 4-polig).
 - **Abstandshalter:** Das Set enthält 10-mm-Bolzen. Der fehlende Millimeter wird laut README mit Unterlegscheiben ausgeglichen; ob Scheiben im Set liegen, auf der Artikelseite prüfen. Seit der zehnten Fassung (Änderung 25) liegt um die Löcher in 6 mm Durchmesser nur Massefläche; Scheiben und Bolzen aus Metall sind in Ordnung.
-- **Lötzinn:** Für ein Gerät, das verkauft wird, bleifreies Lot (zum Beispiel Sn99,3Cu0,7 oder SAC305 mit Flussmittelseele) verwenden; bleihaltiges Lot verstößt gegen RoHS.
+- **Lötzinn:** Bleihaltiges Lot mit Flussmittelseele (Sn60Pb40 oder Sn63Pb37, 0,5 bis 1 mm) ist erlaubt, weil das Gerät nicht verkauft wird, und lässt sich am leichtesten verarbeiten.
 - **Nicht geprüft:** Schaltlitze, Lötzinn und ein Gehäuse stehen nicht auf der Liste.

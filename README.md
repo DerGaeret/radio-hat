@@ -28,7 +28,7 @@ Die Platine ist neu entworfen und ungetestet. Beim ersten Einschalten keine Laut
 Die vollständige Anleitung mit jedem Feld des Bestellformulars steht in **`BESTELLUNG.md`**. Kurzfassung:
 
 - Dateien im Ordner `JLCPCB`: `Gerber_RadioHAT.zip`, `BOM_RadioHAT.csv`, `CPL_RadioHAT.csv`.
-- Platine: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu, Aufbau JLC04161H-7628), 1,6 mm, grün, 5 Stück. Oberfläche **ENIG** oder **LeadFree HASL**, nicht „HASL (with lead)“ (bleihaltig, für ein verkauftes Gerät nicht zulässig). Via Covering „Epoxy Filled & Capped“, sonst „Plugged“, sonst „Tented“, nie „Untented“ (unter U1 liegen 12 Vias in der Lötpaste).
+- Platine: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu, Aufbau JLC04161H-7628), 1,6 mm, grün, 5 Stück. Oberfläche **ENIG** (eben, am besten für U1), billiger **HASL** mit oder ohne Blei (das Gerät wird nicht verkauft, Blei ist erlaubt). Via Covering „Epoxy Filled & Capped“, sonst „Plugged“, sonst „Tented“, nie „Untented“ (unter U1 liegen 12 Vias in der Lötpaste).
 - Bestückung: Economic, Top Side, 2 Stück, Tooling holes „Added by Customer“ (die Platine hat drei Passbohrungen 1,152 mm), Confirm Parts Placement „Yes“.
 - Vor dem Bezahlen: Lagerbestand von U1 (C478472) und U2 (C168839) und die Drehlage von sieben Bauteilen in der Bestückungsvorschau prüfen (Tabelle in `BESTELLUNG.md`, Schritt 4).
 
@@ -41,9 +41,9 @@ JLCPCB liefert nur die SMD-Teile. Alle Durchsteckteile lötest du selbst ein:
 - **Sockel J1:** von der Unterseite einstecken, auf der Oberseite verlöten (40 Lötstellen). Pin 1 liegt rechts oben, weil die Platine um 180° gedreht auf dem Pi sitzt.
 - **Elkos C1, C2 (470 µF, mindestens 35 V, 10 mm Durchmesser, 5 mm Raster):** Der Minus-Streifen des Elkos gehört auf die weiß gefüllte Hälfte des Aufdrucks, das lange Bein (+) ins Loch neben dem „+“.
 - **JST-Stecker S1–S6, X1, E1–E3:** Die Gehäuse passen genau in die weißen Umrisse.
-- **Schraubklemmen J2, J3, J4:** deine eigenen, Raster 5,0 oder 5,08 mm. Die Kabeleinführung zum Platinenrand drehen. Bei J4 darf das Klemmengehäuse vom Lötstift aus höchstens 4 mm zur Platinenmitte reichen (Aufdruck-Umriss), sonst sitzt es auf der Sicherung F1. Übliche Klemmen mit 7 bis 8 mm Tiefe und mittigen Stiften passen.
+- **Schraubklemmen J2, J3, J4:** deine eigenen, Raster 5,0 oder 5,08 mm. Die Kabeleinführung zum Platinenrand drehen. Klemmen bis 11 mm Tiefe passen: Die Lötstifte liegen 4 mm vom Rand, von dort sind 7,5 mm zur Platinenmitte frei (Aufdruck-Umriss; die Sicherung F1 sitzt 8,85 mm vom Stift). Das Gehäuse darf über den Platinenrand hinausragen.
 
-Die Massepads der Durchsteckteile haben Wärmefallen (Stege zur Massefläche). Ein Lötkolben mit etwa 60 W und mittlerer Meißelspitze reicht; jede Lötstelle muss rundum glänzend durchfließen, auch die Massepins am Sockel. Für ein Gerät, das verkauft wird, bleifreies Lot verwenden (RoHS).
+Die Massepads der Durchsteckteile haben Wärmefallen (Stege zur Massefläche). Ein Lötkolben mit etwa 60 W und mittlerer Meißelspitze reicht; jede Lötstelle muss rundum glänzend durchfließen, auch die Massepins am Sockel. Bleihaltiges Lot (Sn60Pb40 oder Sn63Pb37, etwa 320 °C) ist erlaubt, weil das Gerät nicht verkauft wird.
 
 ## Einbau neben dem Pi
 

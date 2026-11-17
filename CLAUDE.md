@@ -17,12 +17,12 @@ Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext -layout` als Text ausl
 |---|---|
 | `README.md` | Radio HAT: Platine, Bestellung JLCPCB, Netzteil, Steckerbelegung, Pi-Einrichtung, erster Test |
 | `BESTELLUNG.md` | Bestellanleitung JLCPCB/JLCONE: alle Felder mit Auswahl und Grund, BOM-Abgleich mit Ersatzteilen, Drehlagen-Tabelle für die Vorschau |
-| `PRUEFBERICHT.md` | 26 Änderungen an der Platine mit Grund, Prüfung zur Bestellreife (zehnte Fassung), Prüfung nach TI SLAA902/PCBWay/Analog Devices, Rückmeldung vom 17.11., Datenblattabgleich, offene Punkte, LCSC-Nummern |
+| `PRUEFBERICHT.md` | 28 Änderungen an der Platine mit Grund, Prüfung zur Bestellreife (zehnte Fassung), Prüfung nach TI SLAA902/PCBWay/Analog Devices, Rückmeldung vom 17.11., Datenblattabgleich, offene Punkte, LCSC-Nummern |
 | `REICHELT.md` | Bestellliste der Teile zum Selbstlöten (Sockel, Elkos, JST) |
 | `Datenblaetter/TAS5805M.md` | Datenblatt TAS5805M (SLASEH5D Rev. D) als Text: deutsche Zusammenfassung (Grenzwerte, Pins, Register, Ein-/Abschaltfolge, Schutz, Filter, Layout, Gehäuse, Abgleich), Bildinhalte, Volltext |
 | `Datenblaetter/TPS54308.md` | Datenblatt TPS54308 (SLUSCV2B Rev. B) als Text: Zusammenfassung mit allen Formeln und Tabelle 7-2, Abgleich mit U2, Bildinhalte, Volltext |
 | `KiCad/RadioHAT.kicad_pcb` | Platine, einzige Quelle (kein Schaltplan); dazu `RadioHAT.kicad_pro` (Regeln) und `RadioHAT.kicad_dru` (Zusatzregel: auf B.Cu reicht ein Steg der Wärmefalle) |
-| `KiCad/werkzeuge/` | `fertigungsdaten.sh`, `drc.py`, `verify.py`, `bilder.sh`; einmalige Änderungsskripte `eingangsschutz.py` (Änd. 17), `aenderung_20_21.py` (Änd. 20/21), `aenderung_23.py` (Änd. 23), `aenderung_24.py` (Änd. 24, Kühlfläche) und `aenderung_25.py` (Änd. 25, Bestellreife; arbeitet in Prüfbericht-Koordinaten x/y ab links unten), nicht erneut ausführen; als Vorlage für neue Änderungen brauchbar. `router.py`: A*-Wegsucher für eine Kupferlage (Raster 0,05 mm, Sperrbereiche), von `aenderung_24.py` benutzt |
+| `KiCad/werkzeuge/` | `fertigungsdaten.sh`, `drc.py`, `verify.py`, `bilder.sh`; einmalige Änderungsskripte `eingangsschutz.py` (Änd. 17), `aenderung_20_21.py` (Änd. 20/21), `aenderung_23.py` (Änd. 23), `aenderung_24.py` (Änd. 24, Kühlfläche), `aenderung_25.py` (Änd. 25, Bestellreife; arbeitet in Prüfbericht-Koordinaten x/y ab der alten Ecke links unten), `aenderung_27.py` (Änd. 27, Platine 5 mm länger, Klemmen) und `aenderung_28.py` (Änd. 28, alle Bahnen 0/45/90°; fasst Stücke zusammen und begradigt schräge Folgen mit Abstandsprüfung), nicht erneut ausführen; als Vorlage für neue Änderungen brauchbar. `router.py`: A*-Wegsucher für eine Kupferlage (Raster 0,05 mm, Sperrbereiche), von `aenderung_24.py` benutzt |
 | `KiCad/jlc_cpl.py` | Bestückungsdatei mit JLCPCB-Drehwinkeln |
 | `JLCPCB/` | Gerber-ZIP (12 Dateien), BOM (31 Zeilen), CPL (96 Bauteile; Passbohrungen und Befestigungslöcher nicht enthalten) |
 | `radio_hat_start.sh` | Steuerskript Verstärker: `start [Lautstärke]`, `stop`, `status`, `clear` |
@@ -78,11 +78,13 @@ Fallstricke mit `pcbnew` (KiCad 7):
 - Neue Leitungen auf Innenlage 1 nicht unter I²S/I²C-Leitungen der Oberseite legen (In1 ist deren Bezugsfläche), nicht unter Endstufe und 5-V-Regler; Vorlage mit Sperrbereichen in `aenderung_24.py`.
 - Um H1–H4 liegen Sperrflächen (Regelbereiche) mit 6 mm Durchmesser: keine Leiterbahnen, keine Vias. Neue Teile nicht auf die Passbohrungen TH1–TH3 (1,152 mm) setzen.
 - Masseflächen: Pad-Anbindung „THT thermal“; die gebohrten Pads 29 von U1 haben eine eigene Einstellung „voll“. Neue bedrahtete Massepads bekommen damit Wärmefallen.
+- Koordinaten: Der Prüfbericht rechnet bis Änderung 27 ab der alten Ecke links unten (KiCad x 100, y 150). Seit Änderung 27 liegt der Platinenrand und der Ursprung der Fertigungsdaten 5 mm tiefer (KiCad y 155); neue Platine 65 × 70 mm, KiCad x 100–165, y 85–155.
+- Neue Leiterbahnen nur mit 0°, 45° oder 90° verlegen (Wunsch des Nutzers, Änderung 28).
 - Rule Areas in KiCad 7: `ZONE.SetIsRuleArea(True)`, Umriss über `z.Outline().Append(...)`; `PAD.SetZoneConnection(...)` für die Anbindung je Pad; `.kicad_dru`-Regel `(constraint min_resolved_spokes 1)` (Zahl ohne `(min …)`).
 
-## Stand Platine (Radio HAT), 17.11.2026, zehnte Fassung (Rev. 1.0)
+## Stand Platine (Radio HAT), 17.11.2026, elfte Fassung (Rev. 1.1)
 
-Fertig zum Bestellen und für den Einbau in ein Gerät zum Verkauf durchgeprüft (Prüfbericht, „Prüfung zur Bestellreife“), aber ungetestet. 65 × 65 mm, 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads. 96 SMD-Bauteile von JLCPCB, 16 zum Selbstlöten. Die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen; es gibt keinen Schaltplan.
+Fertig zum Bestellen und durchgeprüft (Prüfbericht, „Prüfung zur Bestellreife“), aber ungetestet. Das Gerät wird nicht verkauft (Nutzer, 17.11.2026): Blei erlaubt, kein CE/RoHS/WEEE. 65 × 70 mm (seit Änderung 27), 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads. 96 SMD-Bauteile von JLCPCB, 16 zum Selbstlöten. Die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen; es gibt keinen Schaltplan.
 
 Wichtigste Auslegung:
 
@@ -94,6 +96,7 @@ Wichtigste Auslegung:
 - Kühlfläche unter U1 wie im TI-Land-Pattern (Änderung 24): Kupfer 3,4 × 9,7 mm, davon 3,1 × 4,05 mm frei, 24 Vias 0,3/0,6 mm im Raster 1,2 mm, an alle Lagen ohne Wärmefallen. Unter U1 liegt auf keiner Lage eine Signalleitung. Lötpaste 2 × 2 Öffnungen, 75 %; 12 Vias liegen unter der Paste.
 - Innenlage 1: Masse mit den Doppelbahnen der Ausgänge, 3,3 V am Sockel und HOLD (39 mm vom Sockelpin 7 bis D1, nicht unter I²S/I²C). Innenlage 2: durchgehend Masse.
 - Änderung 25 (zehnte Fassung): Sperrflächen 6 mm um H1–H4 (GPIO11 an H3 über B.Cu innen vorbei, GPIO11 an H1 und VENC an H2 um 0,15 mm abgerückt), Wärmefallen an bedrahteten Massepads, Passbohrungen TH1–TH3 1,152 mm für JLCPCB Economic, Bestückungsdruck 0,16 mm / Text 1 mm, „Rev. 1.0 11/2026“. Änderung 26: C15–C18 jetzt C1881 (C377117 war nicht auffindbar). Alle 31 LCSC-Nummern am 17.11. bestätigt.
+- Änderung 27 (elfte Fassung): Platine unten 5 mm länger, J2–J4 5 mm nach unten (Stifte 4 mm vom Rand, 7,5 mm nach innen frei, F1 bei 8,85 mm): Schraubklemmen bis 11 mm Tiefe. GPIO11 unter den Klemmen jetzt auf B.Cu. Änderung 28: alle Leiterbahnen nur 0/45/90° (70 schräge Abschnitte ersetzt), „Rev. 1.1 11/2026“.
 
 Bewusst so belassen (vom Nutzer bestätigt):
 
@@ -107,12 +110,12 @@ Bewusst nicht geändert (begründet in `PRUEFBERICHT.md`, Rückmeldung vom 17.11
 - Kein DSP-Limiter (DRC); die Lautstärkegrenze 0 dB im Skript verhindert die Übersteuerung.
 - Kein Rückspeiseschutz 5 V gegen USB-C: vom Nutzer entschieden (17.11.2026), am Pi wird nie ein USB-Netzteil angesteckt.
 - PDN mit 10 kΩ nach Masse (TI: Pull-up nach DVDD), damit der Verstärker aus bleibt, bis der Pi ihn startet.
-- Platine bleibt 65 × 65 mm (Nutzer: „falls es Sinn macht“, 17.11.2026). Bei Musik unter 1 W Verlust; nur Dauer-Sinus mit Vollaussteuerung (etwa 5 W) führt zum Zurückregeln, das verschiebt auch eine größere Platine nur. Größer hieße neuer Pi-Halter und neue Gehäuseplanung.
+- Platine wegen der Wärme nicht vergrößert (Nutzer, 17.11.2026); 5 mm länger nur für die Klemmen (Änderung 27). Pi-Halter im Gehäuse dafür noch anpassen (Hinweis in `Gehaeuse/DRUCKTEILE.md`, auf Wunsch des Nutzers noch nicht umgesetzt).
 - Analogverstärkung 0x54 = 0x09 bleibt (Nutzer, 17.11.2026).
 
 Offen vor der Bestellung (Details in `BESTELLUNG.md` und `PRUEFBERICHT.md`, „Offene Punkte“):
 
-- in JLCONE: 4 Lagen, JLC04161H-7628, ENIG oder LeadFree HASL (nicht bleihaltig, RoHS), Via Covering „Epoxy Filled & Capped“ > „Plugged“ > „Tented“ (nie „Untented“), PCBA Economic, Tooling holes „Added by Customer“, Confirm Parts Placement „Yes“;
+- in JLCONE: 4 Lagen, 65 × 70 mm, JLC04161H-7628, ENIG (HASL mit oder ohne Blei möglich), Via Covering „Epoxy Filled & Capped“ > „Plugged“ > „Tented“ (nie „Untented“), PCBA Economic, Tooling holes „Added by Customer“, Confirm Parts Placement „Yes“;
 - Lieferbarkeit von U1 (C478472) und U2 (C168839) prüfen, Ersatztabelle für die übrigen Teile in `BESTELLUNG.md`;
 - Drehlagen in der Bestückungsvorschau nach der Tabelle in `BESTELLUNG.md`, Schritt 4.
 
@@ -160,13 +163,14 @@ Gehäuse:
 4. LED-Skalenbeleuchtung mit Senderzeiger (WS2812B + RP2040-Zero per USB) oder nur warmweiß über GPIO20?
 5. Druckbettgröße (Teile sind auf ≤ 200 mm ausgelegt).
 
-Platine: keine offenen Fragen (17.11.2026 entschieden: kein Rückspeiseschutz; Kühlfläche nach TI umgesetzt; Platine bleibt 65 × 65 mm; Analogverstärkung bleibt 0x09; Bestellreife geprüft, Rev. 1.0).
+Platine: keine offenen Fragen (17.11.2026 entschieden: kein Rückspeiseschutz; Kühlfläche nach TI umgesetzt; Analogverstärkung bleibt 0x09; Bestellreife geprüft; Klemmen bis 11 mm, Bahnen 0/45/90°, Rev. 1.1; Gerät wird nicht verkauft).
 
 ## Nächste Schritte (Stand Ende der Sitzung vom 17.11.2026)
 
-- Letzte Sitzung (17.11.2026, abends): vollständige Prüfung zur Bestellreife für ein verkaufbares Gerät (Prüfbericht, zehnte Fassung), Änderungen 25 und 26, Bestellanleitung `BESTELLUNG.md`. Geprüft und ohne Änderung: Encoder-Ströme (ALPS EC11-Reihe: Drehgeber ≤ 10 mA, Taster 0,5–100 mA), BOOT-Schleife des 5-V-Reglers (etwa 8 mm, unkritisch). Alles ist auf `main` gepusht.
+- Letzte Sitzung (17.11.2026, spätabends): Änderungen 27 (65 × 70 mm, Klemmen bis 11 mm) und 28 (Bahnen 0/45/90°), Rev. 1.1, Blei erlaubt. Pi-Halter (3D-Druck) noch nicht angepasst, nur Hinweis in `Gehaeuse/DRUCKTEILE.md`.
+- Davor (17.11.2026, abends): vollständige Prüfung zur Bestellreife für ein verkaufbares Gerät (Prüfbericht, zehnte Fassung), Änderungen 25 und 26, Bestellanleitung `BESTELLUNG.md`. Geprüft und ohne Änderung: Encoder-Ströme (ALPS EC11-Reihe: Drehgeber ≤ 10 mA, Taster 0,5–100 mA), BOOT-Schleife des 5-V-Reglers (etwa 8 mm, unkritisch). Alles ist auf `main` gepusht.
 - Platine: bestellfertig. Der Nutzer bestellt selbst in JLCONE nach `BESTELLUNG.md`. Danach „Erster Test“ nach README und Rückmeldung der Messwerte.
-- Gehäuse: Antworten auf die offenen Fragen 1 bis 5 abwarten, dann Knopfadapter und Druckteile v2.
+- Gehäuse: Antworten auf die offenen Fragen 1 bis 5 abwarten, dann Knopfadapter und Druckteile v2 (dabei Pi-Halter auf 65 × 70 mm).
 - Ohne neue Angaben vom Nutzer gibt es an der Platine nichts zu tun. Nicht von sich aus weiter umbauen.
 
 ## Hinweise
