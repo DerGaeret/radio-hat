@@ -1,6 +1,6 @@
 // Radio-Gehäuse aus 8-mm-Spanplatte Dekor Nussbaum – alle Maße in mm
 // Achsen: x = Breite (links -> rechts), y = Tiefe (vorne 0 -> hinten), z = Höhe (Unterkante Boden = 0)
-// Ansicht: "zusammen" | "explosion" | "ohne_deckel"
+// Ansicht: "zusammen" | "explosion" | "ohne_deckel" | "hinten_offen"
 ansicht = "zusammen";
 
 /* ---------- Eingaben ---------- */
@@ -14,8 +14,9 @@ ls_korb  = 110;  ls_lochabst = 84;  ls_ring = 100;  ls_tiefe = 47;
 ls_loch  = 100;    // Ausschnitt im Frontbrett
 // Gestaltung
 rueck    = 3;      // Abdeckungen sitzen so weit hinter der Holzvorderkante
-chrom_h  = 4;      // sichtbare Höhe der Chromleiste oben und unten
-tiefe    = 210;    // Außentiefe inkl. Rückwand -> ca. 3,3 l netto je Lautsprecher
+chrom_h  = 4;      // Chromleiste: Alu-Vierkantstange 4 x 4, oben und unten
+tiefe    = 190;    // Außentiefe inkl. Rückwand -> ca. 3,0 l netto je Lautsprecher
+ueberlapp = 25;    // so weit ragt jedes Frontbrett hinter die Frontplatte
 fuss_d   = 25;  fuss_h = 20;   // Chromfüße
 // Magnete für abnehmbare Abdeckungen: je 4 pro Abdeckung, im Frontbrett eingelassen
 mag_d    = 10;  mag_h = 3;     // Neodym-Scheibenmagnet 10 x 3
@@ -28,17 +29,22 @@ innen_b  = 2*abd_b + platte_b;          // 656
 innen_h  = platte_h + 2*chrom_h;        // 122
 B = innen_b + 2*t;                      // 672
 H = innen_h + 2*t;                      // 138
-korpus_t = tiefe - t;                   // 202: Tiefe von Deckel, Boden, Seiten
-y_front  = rueck + abd_t;               // 17: Vorderseite Frontbrett = Rückseite Abdeckungen und Frontplatte
-y_wand   = y_front + t;                 // 25: Rückseite Frontbrett
+korpus_t = tiefe - t;                   // 182: Tiefe von Deckel, Boden, Seiten
+y_front  = rueck + abd_t;               // 10: Vorderseite Frontbrett = Rückseite Abdeckungen und Frontplatte
+y_wand   = y_front + t;                 // 18: Rückseite Frontbrett
 kammer_b = abd_b - t;                   // 170: Zwischenwand steht hinter der Fuge Abdeckung/Frontplatte
-kammer_t = korpus_t - y_wand;           // 177
+kammer_t = korpus_t - y_wand;           // 164
+front_b  = abd_b + ueberlapp;           // 203: Breite eines Frontbretts
+rueck_b  = t + kammer_b + t;            // 186: Breite der festen Rückwandteile hinter den Kammern
+mitte_b  = B - 2*rueck_b;               // 300: abnehmbarer Rückwanddeckel hinter dem Technikfach
 ls_x     = abd_b/2;                     // Lautsprecher mittig hinter der Abdeckung
 xw       = [t+kammer_b, B-t-abd_b];     // linke Kante der Zwischenwände
 
 echo(str("Außenmaß B x H x T = ", B, " x ", H, " x ", tiefe, "  (+ ", fuss_h, " Füße)"));
+// netto: abzüglich Leisten in der Kammer (ca. 4 längs, 4 kurz hinten) und ca. 0,15 l Lautsprecher
+netto = (kammer_b*innen_h*kammer_t - 4*leiste*leiste*kammer_t - (2*(kammer_b-2*leiste) + 2*(innen_h-2*leiste))*leiste*leiste - 150000)/1e6;
 echo(str("Kammer innen ", kammer_b, " x ", innen_h, " x ", kammer_t, " = ",
-         kammer_b*innen_h*kammer_t/1e6, " l brutto"));
+         kammer_b*innen_h*kammer_t/1e6, " l brutto, ", netto, " l netto"));
 
 ex = ansicht == "explosion" ? 1 : 0;
 NUSS = [0.42,0.27,0.16]; NUSS2 = [0.50,0.33,0.20]; KIEFER = [0.93,0.82,0.6];
@@ -50,13 +56,16 @@ module korpus() {
   if (ansicht != "ohne_deckel") brett([0,0,H-t+60*ex], [B, korpus_t, t]); // Deckel
   brett([-60*ex,0,t], [t, korpus_t, innen_h], NUSS2);                      // Seiten
   brett([B-t+60*ex,0,t], [t, korpus_t, innen_h], NUSS2);
-  if (ansicht != "ohne_deckel") brett([0,tiefe-t+80*ex,0], [B, t, H]);    // Rückwand
+  if (ansicht != "ohne_deckel") {                                         // Rückwand
+    for (x=[0, B-rueck_b]) brett([x, tiefe-t+40*ex, 0], [rueck_b, t, H]);   // fest verleimt (Kammern)
+    brett([rueck_b, tiefe-t+120*ex+(ansicht=="hinten_offen" ? 90 : 0), 0], [mitte_b, t, H], NUSS2);           // abnehmbar (Technikfach)
+  }
   for (x=xw) brett([x, y_wand+40*ex, t], [t, kammer_t, innen_h], NUSS2);  // Zwischenwände
 }
 
 module frontbrett() {
   color(NUSS2) difference() {
-    translate([t, y_front-40*ex, t]) cube([innen_b, t, innen_h]);
+    for (x=[t, B-t-front_b]) translate([x, y_front-40*ex, t]) cube([front_b, t, innen_h]);
     for (lx=[t+ls_x, B-t-ls_x]) translate([lx, y_front-1-40*ex, H/2]) rotate([-90,0,0]) {
       cylinder(d=ls_loch, h=t+2, $fn=96);
       for (dx=[-1,1], dz=[-1,1]) translate([dx*ls_lochabst/2, dz*ls_lochabst/2, 0]) cylinder(d=4.5, h=t+2, $fn=16);
@@ -75,8 +84,8 @@ module leisten() {   // Kiefer 15x15, innen verleimt
     for (x=[t, B-t-L], z=[t, H-t-L]) translate([x, y_wand, z]) cube([L, kammer_t, L]);
     // längs an den Zwischenwänden (Kammerseite), oben und unten
     for (x=[xw[0]-L, xw[1]+t], z=[t, H-t-L]) translate([x, y_wand, z]) cube([L, kammer_t-L, L]);
-    // hinten senkrecht an Seiten und Zwischenwänden (Rückwand wird hier verschraubt)
-    for (x=[t, B-t-L, xw[0]-L, xw[1]+t]) translate([x, korpus_t-L, t+L]) cube([L, L, innen_h-2*L]);
+    // hinten senkrecht an Seiten und Zwischenwänden, beidseits der Zwischenwände
+    for (x=[t, B-t-L, xw[0]-L, xw[1]+t, xw[0]+t, xw[1]-L]) translate([x, korpus_t-L, t+L]) cube([L, L, innen_h-2*L]);
     // hinten waagerecht, oben und unten (Kammern und Technikfach)
     for (z=[t, H-t-L]) {
       translate([xw[0]+t, korpus_t-L, z]) cube([xw[1]-xw[0]-t, L, L]);
@@ -107,9 +116,9 @@ module front() {
     color("Silver") cube([platte_b, platte_t, platte_h]);
     color([0.1,0.1,0.1]) translate([12,-0.1,8]) cube([platte_b-24, 0.2, platte_h-16]);
   }
-  // Chromleisten 4 x 7, Vorderseite bündig mit den Abdeckungen
+  // Chromleisten: Alu-Vierkant 4 x 4, Vorderseite bündig mit den Abdeckungen
   for (z=[t, H-t-chrom_h])
-    color("WhiteSmoke") translate([t, rueck-200*ex, z]) cube([innen_b, abd_t, chrom_h]);
+    color("WhiteSmoke") translate([t, rueck-200*ex, z]) cube([innen_b, chrom_h, chrom_h]);
 }
 
 module fuesse() {
