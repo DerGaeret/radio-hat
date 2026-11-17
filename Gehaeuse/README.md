@@ -15,11 +15,12 @@ Gehäuse aus 8-mm-Spanplatte Dekor Nussbaum. Vom Originalradio bleiben die Front
 
 ## Aufbau
 
-- **Front:** Die Abdeckungen sitzen 10 mm hinter der Holzvorderkante. Die Frontplatte ist hinten bündig mit den Abdeckungen und liegt deshalb 4 mm tiefer (7 mm Abdeckung − 3 mm Platte). Abdeckungen und Frontplatte liegen beide flach auf dem Frontbrett.
+- **Front:** Das Holz steht 3 mm vor den Abdeckungen. Die Frontplatte ist hinten bündig mit den Abdeckungen und liegt deshalb 4 mm tiefer (7 mm Abdeckung − 3 mm Platte). Abdeckungen und Frontplatte liegen beide flach auf dem Frontbrett.
 - **Frontbrett:** ein durchgehendes Brett 656 × 122 mm direkt hinter Abdeckungen und Frontplatte. Es trägt die beiden Lautsprecher. Im mittleren Teil kommen später die Löcher für Tasten und Drehgeber dazu, passend zum 3D-gedruckten Träger.
 - **Chromleisten:** oben und unten je eine 4 mm hohe Leiste über die ganze Breite (656 mm). Sie füllt den Spalt zwischen Holz und Frontplatte. Aufbau: Trägerleiste 4 × 7 mm, vorne bündig mit den Abdeckungen, darauf eine selbstklebende Chromzierleiste 4 mm.
-- **Lautsprecherkammern:** geschlossen, innen 170 × 122 × 177 mm. Das sind 3,7 l brutto und etwa 3,3 l nach Abzug von Lautsprecher und Leisten, also das gleiche Volumen wie vorher. Der Lautsprecher sitzt mittig hinter der Abdeckung.
-- **Technikfach:** 300 × 122 mm innen, 177 mm tief, hinten belüftet.
+- **Lautsprecherkammern:** geschlossen, innen 170 × 122 × 184 mm. Das sind 3,8 l brutto und etwa 3,4 l nach Abzug von Lautsprecher und Leisten. Der Lautsprecher sitzt mittig hinter der Abdeckung.
+- **Technikfach:** 300 × 122 mm innen, 184 mm tief, hinten belüftet.
+- **Abdeckungen abnehmbar:** Je Abdeckung sitzen vier Neodym-Magnete 10 × 3 mm bündig in 4 mm tiefen Bohrungen (Ø 12 mm) im Frontbrett. Auf die Rückseite der Abdeckung kommen an denselben Stellen vier Stahlplättchen Ø 10 × 1 mm. Sie tauchen in die Bohrungen ein, so liegt die Abdeckung trotzdem flach auf. Die Magnetmitten liegen 15 mm von der Außenkante der Abdeckung und 15 mm von der Ober- bzw. Unterkante des Frontbretts. Zum Abnehmen mit dem Fingernagel an der Kante zur Frontplatte ansetzen, dort steht die Abdeckung 4 mm vor.
 - **Verbindungen:** In 8 mm Spanplatte halten weder Dübel noch Schrauben in der Kante. Deshalb sind alle Ecken innen mit Kiefern-Vierkantleisten 15 × 15 mm verleimt. Die Rückwand wird in diese Leisten geschraubt.
 - **Füße:** 4 Chromfüße Ø 25 mm, 20 mm hoch, 60 mm von der Seite und 55 mm von vorne bzw. hinten. Innen sitzt unter jedem Fuß ein verleimtes Holzklötzchen, damit die Schraube Halt hat.
 
@@ -45,7 +46,7 @@ Es geht, liegt aber an der unteren Grenze.
 | Boden | 1 | 672 × 202 | vorne, links, rechts |
 | Seitenwand | 2 | 202 × 122 | vorne |
 | Frontbrett | 1 | 656 × 122 | – (ganz verdeckt) |
-| Zwischenwand | 2 | 177 × 122 | – |
+| Zwischenwand | 2 | 184 × 122 | – |
 | Rückwand | 1 | 672 × 138 | rundum |
 
 Bei Deckel, Boden, Frontbrett und Rückwand ist die erste Zahl die Breite, bei Seiten- und Zwischenwand die Tiefe. Die Fläche beträgt zusammen etwa 0,54 m². Kantenumleimer Nussbaum braucht es etwa 4,5 m.
@@ -54,8 +55,8 @@ Bei Deckel, Boden, Frontbrett und Rückwand ist die erste Zahl die Breite, bei S
 
 | Lage | Anzahl | Länge (mm) |
 |---|---|---|
-| längs in den Ecken Seite/Deckel und Seite/Boden | 4 | 177 |
-| längs an den Zwischenwänden oben und unten (Kammerseite) | 4 | 162 |
+| längs in den Ecken Seite/Deckel und Seite/Boden | 4 | 184 |
+| längs an den Zwischenwänden oben und unten (Kammerseite) | 4 | 169 |
 | hinten senkrecht an Seiten und Zwischenwänden | 4 | 92 |
 | hinten waagerecht im Technikfach | 2 | 300 |
 | hinten waagerecht in den Kammern | 4 | 140 |
@@ -70,22 +71,22 @@ Bei Deckel, Boden, Frontbrett und Rückwand ist die erste Zahl die Breite, bei S
 
 ## Warum 210 mm tief
 
-Der Lautsprecher braucht eine geschlossene Kammer von etwa 3 bis 4 l. Für das Sharp-Chassis gibt es keine Datenblattwerte, für 10-cm-Breitbänder ist das der übliche Bereich. Mit 8 mm Wänden ist die Kammer innen breiter, deshalb reichen jetzt 210 mm statt 240 mm für dasselbe Volumen. Jede Kammer locker zu etwa zwei Dritteln mit Polyesterwatte füllen und alle Fugen dicht verleimen.
+Der Lautsprecher braucht eine geschlossene Kammer von etwa 3 bis 4 l. Für das Sharp-Chassis gibt es keine Datenblattwerte, für 10-cm-Breitbänder ist das der übliche Bereich. Mit 8 mm Wänden ist die Kammer innen breiter, deshalb reichen 210 mm. Jede Kammer locker zu etwa zwei Dritteln mit Polyesterwatte füllen und alle Fugen dicht verleimen.
 
 ## Zusammenbau
 
 1. Sichtkanten mit Umleimer bekleben, bündig abschneiden und schleifen.
 2. Frontbrett: Lautsprecherlöcher und Schraublöcher bohren und ansenken.
 3. Leisten zuschneiden.
-4. Kasten: Seitenwände zwischen Deckel und Boden stellen und die Eckleisten längs innen einleimen. Die Leisten beginnen 25 mm hinter der Vorderkante (10 mm Rücksprung + 7 mm Abdeckung + 8 mm Frontbrett) und enden hinten bündig. Mit Zwingen pressen und die Diagonalen prüfen.
-5. Frontbrett 17 mm hinter der Vorderkante einleimen. Es liegt hinten an den Stirnseiten der Leisten an. Ein 17 mm breites Holzstück als Abstandslehre hilft.
+4. Kasten: Seitenwände zwischen Deckel und Boden stellen und die Eckleisten längs innen einleimen. Die Leisten beginnen 18 mm hinter der Vorderkante (3 mm Überstand + 7 mm Abdeckung + 8 mm Frontbrett) und enden hinten bündig. Mit Zwingen pressen und die Diagonalen prüfen.
+5. Frontbrett 10 mm hinter der Vorderkante einleimen. Es liegt hinten an den Stirnseiten der Leisten an. Ein 10 mm breites Holzstück als Abstandslehre hilft. Vorher die 8 Magnetbohrungen Ø 12 × 4 mm bohren (Forstnerbohrer mit Tiefenanschlag, nicht durchbohren).
 6. Zwischenwände einleimen: 170 mm von der Seitenwand-Innenseite, vorne stumpf an das Frontbrett. Die Leisten an den Zwischenwänden halten sie an Deckel und Boden.
 7. Hintere Leisten einleimen, hinten bündig mit den Kanten. Auf diese wird die Rückwand geschraubt.
 8. Klötzchen für die Füße innen auf den Boden leimen.
 9. Fugen in den Kammern mit Acryl abdichten. In jede Zwischenwand ein Loch Ø 6 mm für das Lautsprecherkabel, nach dem Durchführen mit Heißkleber verschließen.
 10. Lautsprecher anschrauben, Kammern mit Dämmwolle füllen.
-11. Trägerleisten für die Chromleiste oben und unten in den Rücksprung kleben, Vorderseite 10 mm hinter der Holzkante. Chromzierleiste aufkleben.
-12. Abdeckungen und Frontplatte auf das Frontbrett setzen. Die Abdeckungen mit doppelseitigem Montageband aufkleben. Die Frontplatte wird später vom 3D-Träger gehalten.
+11. Trägerleisten für die Chromleiste oben und unten in den Rücksprung kleben, Vorderseite 3 mm hinter der Holzkante. Chromzierleiste aufkleben.
+12. Magnete mit Zweikomponentenkleber in die Bohrungen kleben. Die Stahlplättchen auf die Magnete legen, Kleber auf die Plättchen geben und die Abdeckung genau positioniert aufdrücken. So sitzen die Plättchen automatisch an der richtigen Stelle. Nach dem Aushärten abnehmen. Die Frontplatte wird später vom 3D-Träger gehalten.
 13. Rückwand: Lüftungslöcher und Loch für die Netzteilbuchse bohren, Dichtband auf die hinteren Leisten der Kammern kleben. Dann mit Spax 3,5 × 20 in die Leisten schrauben.
 14. Füße mit Spax 3,5 × 16 durch den Boden in die Klötzchen schrauben.
 
@@ -102,6 +103,6 @@ Der Lautsprecher braucht eine geschlossene Kammer von etwa 3 bis 4 l. Für das S
 - Holzleim, Zwingen, Lochsäge Ø 100 mm, Kegelsenker
 - Dichtband 9 × 3 mm, ca. 2 m
 - Polyesterwatte, ca. 100 g
-- doppelseitiges Montageband
+- 8 Neodym-Scheibenmagnete 10 × 3 mm, 8 Stahlplättchen Ø 10 × 1 mm, Zweikomponentenkleber, Forstnerbohrer 12 mm
 
 Bilder neu erzeugen: `openscad -o bilder/ansicht_vorne.png gehaeuse.scad` und `python3 zeichnung.py`.

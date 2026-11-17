@@ -13,10 +13,14 @@ abd_b    = 178;  abd_h    = 112;  abd_t    = 7;    // Lautsprecherabdeckung (2 m
 ls_korb  = 110;  ls_lochabst = 84;  ls_ring = 100;  ls_tiefe = 47;
 ls_loch  = 100;    // Ausschnitt im Frontbrett
 // Gestaltung
-rueck    = 10;     // Abdeckungen sitzen so weit hinter der Holzvorderkante
+rueck    = 3;      // Abdeckungen sitzen so weit hinter der Holzvorderkante
 chrom_h  = 4;      // sichtbare Höhe der Chromleiste oben und unten
 tiefe    = 210;    // Außentiefe inkl. Rückwand -> ca. 3,3 l netto je Lautsprecher
 fuss_d   = 25;  fuss_h = 20;   // Chromfüße
+// Magnete für abnehmbare Abdeckungen: je 4 pro Abdeckung, im Frontbrett eingelassen
+mag_d    = 10;  mag_h = 3;     // Neodym-Scheibenmagnet 10 x 3
+mag_tasche = 12;  mag_tiefe = 4;   // Bohrung im Frontbrett (Forstner 12 mm, 4 tief)
+mag_rand = 15;                 // Magnetmitte ab Außenkante der Abdeckung bzw. Frontbrett-Kante oben/unten
 fuss_x   = 60;  fuss_y = 55;   // Abstand Fußmitte von Seite bzw. Vorder-/Hinterkante
 
 /* ---------- abgeleitete Maße ---------- */
@@ -57,8 +61,12 @@ module frontbrett() {
       cylinder(d=ls_loch, h=t+2, $fn=96);
       for (dx=[-1,1], dz=[-1,1]) translate([dx*ls_lochabst/2, dz*ls_lochabst/2, 0]) cylinder(d=4.5, h=t+2, $fn=16);
     }
+    for (p=mag_pos()) translate([p[0], y_front-1-40*ex, p[1]]) rotate([-90,0,0]) cylinder(d=mag_tasche, h=mag_tiefe+1, $fn=32);
   }
+  for (p=mag_pos()) color("SlateGray") translate([p[0], y_front+mag_tiefe-mag_h-40*ex, p[1]]) rotate([-90,0,0]) cylinder(d=mag_d, h=mag_h, $fn=32);
 }
+
+function mag_pos() = [ for (x0=[t, B-t-abd_b], dx=[mag_rand, abd_b-mag_rand], z=[t+mag_rand, H-t-mag_rand]) [x0+dx, z] ];
 
 module leisten() {   // Kiefer 15x15, innen verleimt
   L = leiste;

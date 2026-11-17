@@ -9,7 +9,8 @@ t, L = 8, 15
 platte_b, platte_h, platte_t = 300, 114, 3
 abd_b, abd_h, abd_t = 178, 112, 7
 ls_korb, ls_lochabst, ls_loch, ls_tiefe = 110, 84, 100, 47
-rueck, chrom_h, tiefe = 10, 4, 210
+rueck, chrom_h, tiefe = 3, 4, 210
+mag_rand, mag_tasche = 15, 12
 fuss_d, fuss_h, fuss_x, fuss_y = 25, 20, 60, 55
 innen_b, innen_h = 2 * abd_b + platte_b, platte_h + 2 * chrom_h
 B, H = innen_b + 2 * t, innen_h + 2 * t
@@ -73,7 +74,7 @@ mass(ax, oy, oy + H, -12, vert=True)
 mass(ax, oy + t, oy + H - t, -32, f"{innen_h} innen", vert=True)
 mass(ax, oy - fuss_h, oy, -12, f"{fuss_h}", vert=True)
 ax.text(B + 10, oy + H - t, f"Chromleiste {chrom_h} mm hoch,\noben und unten je {innen_b} lang", fontsize=8, va="top")
-ax.text(B + 10, oy + 55, f"Abdeckungen {rueck} mm hinter\nder Holzvorderkante,\nFrontplatte 4 mm dahinter\n(hinten bündig)", fontsize=8)
+ax.text(B + 10, oy + 55, f"Holz steht {rueck} mm vor\nden Abdeckungen,\nFrontplatte 4 mm dahinter\n(hinten bündig)", fontsize=8)
 ax.text(B + 10, oy - 15, f"4 Chromfüße Ø{fuss_d}, {fuss_h} hoch", fontsize=8)
 ax.text(0, oy + H + 50, "Vorderansicht", fontsize=10, weight="bold")
 
@@ -150,13 +151,18 @@ for lx in (ls_x, innen_b - ls_x):
     for dx in (-ls_lochabst / 2, ls_lochabst / 2):
         for dz in (-ls_lochabst / 2, ls_lochabst / 2):
             ax.add_patch(Circle((fx + (lx + dx) * s, (innen_h / 2 + dz) * s), 1.0, fc="k"))
+for x0 in (0, innen_b - abd_b):
+    for dx in (mag_rand, abd_b - mag_rand):
+        for z in (mag_rand, innen_h - mag_rand):
+            ax.add_patch(Circle((fx + (x0 + dx) * s, z * s), mag_tasche / 2 * s, fc="#9aa", ec="k", lw=0.5))
 ax.add_patch(Rectangle((fx + (abd_b + 15) * s, 15 * s), (platte_b - 30) * s, (innen_h - 30) * s, fill=False, ls=":", ec="b"))
 ax.text(fx + innen_b / 2 * s, innen_h / 2 * s, "Ausschnitte für Tasten\nund Drehgeber folgen\nmit dem 3D-Träger", ha="center", va="center", fontsize=7, color="b")
 mass(ax, fx, fx + innen_b * s, -12, f"{innen_b}")
 mass(ax, fx, fx + ls_x * s, innen_h * s + 6, f"{ls_x:g}")
 mass(ax, 0, innen_h * s, fx - 6, f"{innen_h}", vert=True)
 ax.text(fx, innen_h * s + 22, f"Frontbrett {innen_b} × {innen_h} (1:2)\nLöcher Ø {ls_loch}, mittig in der Höhe\n"
-        f"Schrauben: Quadrat {ls_lochabst} mm, Ø 4,5 mit Senkung vorne (M4 Senkkopf)", fontsize=8, va="bottom")
+        f"Schrauben: Quadrat {ls_lochabst} mm, Ø 4,5 mit Senkung vorne (M4 Senkkopf)\n"
+        f"Magnete (grau): Ø {mag_tasche} × 4 tief, {mag_rand} mm von Außenkante Abdeckung und Brettkante", fontsize=8, va="bottom")
 
 # Rückwand
 rx = fx + innen_b * s + 30
