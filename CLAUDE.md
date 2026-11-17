@@ -2,13 +2,13 @@
 
 Retro-Radio: Holzgehäuse mit Original-Frontplatte und -Lautsprecherabdeckungen eines DDR-Radios, innen Raspberry Pi mit eigener Verstärkerplatine (Radio HAT). Kommunikation mit dem Nutzer auf Deutsch, kurze Antworten, bei Unklarheiten nachfragen. Direkt auf `main` arbeiten und pushen (vom Nutzer so gewünscht). Gibt die Umgebung einen eigenen Session-Branch vor, zusätzlich dorthin pushen.
 
-Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext` als Text auslesen statt Seitenbilder lesen, keine Subagenten ohne Grund, Bilder nur für gezielte Sichtprüfungen.
+Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext -layout` als Text auslesen; Bilder (Kennlinien, Schaltbilder, Formeln) nur von den Seiten lesen, die welche enthalten (`pdftoppm -r 110 -f N -l N -png`, Kopf/Fuß abschneiden, dann als PNG lesen). Keine Subagenten ohne Grund. Neue Datenblätter muss der Nutzer hochladen (ti.com, mouser.com, lcsc.com sind gesperrt).
 
 ## Einstieg in eine neue Sitzung
 
 1. Diese Datei lesen.
 2. Für die Platine: `PRUEFBERICHT.md` (alle Änderungen mit Begründung, offene Punkte), `README.md` (Bestellung, Einbau, Pi-Einrichtung, erster Test).
-3. Für den Verstärker-Chip: `Datenblaetter/TAS5805M.md` statt des PDF (Zusammenfassung vorne, Abschnitt 1.11 = Abgleich mit der Platine).
+3. Für die Chips: `Datenblaetter/TAS5805M.md` (Verstärker; 1.11 Abgleich, 1.12 Bildinhalte) und `Datenblaetter/TPS54308.md` (5-V-Regler; 1.4 Formeln, 1.7 Abgleich, 2 Bildinhalte) statt der PDFs. Beide Datenblätter sind vollständig gelesen, einschließlich aller Bilder.
 4. Für das Gehäuse: `Gehaeuse/README.md`, `Gehaeuse/DRUCKTEILE.md`.
 
 ## Was wo liegt
@@ -16,13 +16,14 @@ Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext` als Text auslesen sta
 | Pfad | Inhalt |
 |---|---|
 | `README.md` | Radio HAT: Platine, Bestellung JLCPCB, Netzteil, Steckerbelegung, Pi-Einrichtung, erster Test |
-| `PRUEFBERICHT.md` | 22 Änderungen an der Platine mit Grund, Prüfung nach TI SLAA902/PCBWay/Analog Devices, Rückmeldung vom 17.11., Datenblattabgleich, offene Punkte, LCSC-Nummern |
+| `PRUEFBERICHT.md` | 23 Änderungen an der Platine mit Grund, Prüfung nach TI SLAA902/PCBWay/Analog Devices, Rückmeldung vom 17.11., Datenblattabgleich, offene Punkte, LCSC-Nummern |
 | `REICHELT.md` | Bestellliste der Teile zum Selbstlöten (Sockel, Elkos, JST) |
-| `Datenblaetter/TAS5805M.md` | Datenblatt TAS5805M (SLASEH5D Rev. D) als Text: deutsche Zusammenfassung (Grenzwerte, Pins, Register, Ein-/Abschaltfolge, Schutz, Filter, Layout, Gehäuse) und Volltext |
+| `Datenblaetter/TAS5805M.md` | Datenblatt TAS5805M (SLASEH5D Rev. D) als Text: deutsche Zusammenfassung (Grenzwerte, Pins, Register, Ein-/Abschaltfolge, Schutz, Filter, Layout, Gehäuse, Abgleich), Bildinhalte, Volltext |
+| `Datenblaetter/TPS54308.md` | Datenblatt TPS54308 (SLUSCV2B Rev. B) als Text: Zusammenfassung mit allen Formeln und Tabelle 7-2, Abgleich mit U2, Bildinhalte, Volltext |
 | `KiCad/RadioHAT.kicad_pcb` | Platine, einzige Quelle (kein Schaltplan) |
-| `KiCad/werkzeuge/` | `fertigungsdaten.sh`, `drc.py`, `verify.py`, `bilder.sh`; einmalige Änderungsskripte `eingangsschutz.py` (Änd. 17) und `aenderung_20_21.py` (Änd. 20/21), nicht erneut ausführen |
+| `KiCad/werkzeuge/` | `fertigungsdaten.sh`, `drc.py`, `verify.py`, `bilder.sh`; einmalige Änderungsskripte `eingangsschutz.py` (Änd. 17), `aenderung_20_21.py` (Änd. 20/21) und `aenderung_23.py` (Änd. 23), nicht erneut ausführen; als Vorlage für neue Änderungen brauchbar |
 | `KiCad/jlc_cpl.py` | Bestückungsdatei mit JLCPCB-Drehwinkeln |
-| `JLCPCB/` | Gerber-ZIP (12 Dateien), BOM (30 Zeilen), CPL (95 Bauteile) |
+| `JLCPCB/` | Gerber-ZIP (12 Dateien), BOM (31 Zeilen), CPL (96 Bauteile) |
 | `radio_hat_start.sh` | Steuerskript Verstärker: `start [Lautstärke]`, `stop`, `status`, `clear` |
 | `Pi/radio-hat.service`, `Pi/asound.conf` | systemd-Dienst (start beim Booten, stop vor dem Herunterfahren), ALSA immer 32 Bit je Kanal |
 | `Bilder/` | Renderings der Platine Ober-/Unterseite |
@@ -73,15 +74,15 @@ Fallstricke mit `pcbnew` (KiCad 7):
 - Sichtprüfung: `kicad-cli pcb export svg -l F.Cu,F.SilkS,Edge.Cuts,F.Fab --page-size-mode 2 --exclude-drawing-sheet …` und mit Playwright als PNG fotografieren (1300 px = 65 mm, Platinenursprung links oben bei x 100, y 85 mm).
 - `jlc_cpl.py` Drehkorrekturen: SOT-23/TSOT-23 +180°, HTSSOP/SOIC +270°, sonst 0°. Für SMB und SOD-123 (D2, D3) ist 0° nicht bestätigt → in der Bestückungsvorschau prüfen.
 
-## Stand Platine (Radio HAT), 17.11.2026, siebte Fassung
+## Stand Platine (Radio HAT), 17.11.2026, achte Fassung
 
-Fertig zum Bestellen, aber ungetestet. 65 × 65 mm, 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads. 95 SMD-Bauteile von JLCPCB, 16 zum Selbstlöten. Die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen; es gibt keinen Schaltplan.
+Fertig zum Bestellen, aber ungetestet. 65 × 65 mm, 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads. 96 SMD-Bauteile von JLCPCB, 16 zum Selbstlöten. Die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen; es gibt keinen Schaltplan.
 
 Wichtigste Auslegung:
 
 - Verstärker U1 TAS5805M, I²C-Adresse 0x2D (R1 15 kΩ), PDN an GPIO9 mit 10 kΩ nach GND, I²S vom Pi. Alle 28 Pins gegen Datenblatt Tabelle 5-1 geprüft.
 - Netzteil 20 V, höchstens 22 V. Eingang: J4+ → F1 (5 A träge) → Q2 AO4407A (Verpolungsschutz, Gate über R13 10 kΩ an GND, Z-Diode D3 15 V) → FB1 (Ferrit 6 A) → PVDD; hinter Q2 TVS D2 SMBJ22A und C46 10 µF.
-- 5-V-Regler U2 TPS54308 (350 kHz, FCCM, ersetzt TPS54302 wegen dessen Frequenzspreizung um 400 kHz), L5 10 µH, 2 × 22 µF, Teiler 75 k/10 k → 5,07 V, höchstens 3 A. Ein/Aus über X1, Selbsthaltung über GPIO4, Abschalt-Erkennung GPIO10.
+- 5-V-Regler U2 TPS54308 (350 kHz, FCCM, ersetzt TPS54302 wegen dessen Frequenzspreizung um 400 kHz), L5 10 µH (TI empfiehlt 15 µH, 10 µH zulässig), 2 × 22 µF, Teiler 75 k/10 k → 5,07 V, Vorkopplung C28 100 pF mit R14 2 k in Reihe. Dauerlast etwa 2,4 A (Grenze ist die Spule L5, nicht der Regler). Ein/Aus über X1, Start ab etwa 7,4 V PVDD, Selbsthaltung über GPIO4, Abschalt-Erkennung GPIO10.
 - PVDD je Seite: 470 µF Elko, 10 µF 50 V 0805 (C47/C48), 1 µF, 100 nF an den Pins.
 - Ausgangsfilter 10 µH (Isat 3,5 A) + 680 nF X7R 1206, dazu 1 nF nach Masse. Bootstrap 220 nF 16 V 0402 direkt unter den Pins.
 - Lötpaste unter dem Kühlpad von U1: 2 × 2 Öffnungen, 75 %. Acht Durchkontaktierungen im Kühlpad, unten mit Lötstopp abgedeckt.
@@ -96,7 +97,9 @@ Bewusst nicht geändert (begründet in `PRUEFBERICHT.md`, Rückmeldung vom 17.11
 
 - X7R im Ausgangsfilter (C0G in 680 nF/1206 gibt es nicht, Wirkung nur oberhalb des Hörbereichs).
 - Kein DSP-Limiter (DRC); die Lautstärkegrenze 0 dB im Skript verhindert die Übersteuerung.
-- Kein Rückspeiseschutz 5 V gegen USB-C: Entscheidung des Nutzers steht aus (siehe Fragen unten).
+- Kein Rückspeiseschutz 5 V gegen USB-C: vom Nutzer entschieden (17.11.2026), am Pi wird nie ein USB-Netzteil angesteckt.
+- PDN mit 10 kΩ nach Masse (TI: Pull-up nach DVDD), damit der Verstärker aus bleibt, bis der Pi ihn startet.
+- Kühlfläche unter U1 kleiner als im TI-Land-Pattern (8 statt 24 Vias, HOLD und GPIO12 laufen unter dem IC): bei Musik unkritisch, bei Dauer-Sinus mit Vollaussteuerung regelt der Chip früher zurück. Nur ändern, wenn der Nutzer das will.
 
 Offen vor der Bestellung (Details in `PRUEFBERICHT.md`, „Offene Punkte“):
 
@@ -106,7 +109,7 @@ Offen vor der Bestellung (Details in `PRUEFBERICHT.md`, „Offene Punkte“):
 
 Am fertigen Gerät zu prüfen (Ablauf in README, „Erster Test“): 5 V am Sockel ohne Pi, `radio_hat_start.sh status` (Play, 48 kHz, 64 Bittakte, keine Fehler), Hörtest auf Pfeifen/Zirpen, Hochpass hörbar, Fehlerregister nach Volllast.
 
-Quellenlage: TAS5805M vollständig am PDF geprüft (vom Nutzer hochgeladen, nicht im Repo; Text in `Datenblaetter/TAS5805M.md`). Die Biquad-Adressen (Buch 0xAA, Seite 0x24, ab 0x18, Format 5.27, a1/a2 negiert) stammen aus TI SLOA263 und dem Treiber mariosgit/TAS58xx, nicht aus dem Datenblatt. TPS54308-Werte (Pinbelegung wie TPS54302, VREF 0,596 V, EN 1,21/1,1 V, 10 µH und 2 × 22 µF für 5 V) nur aus Suchauszügen der TI-Seiten.
+Quellenlage: TAS5805M und TPS54308 vollständig an den PDFs geprüft, Text und Bilder (vom Nutzer hochgeladen, nicht im Repo; Inhalt in `Datenblaetter/`). Die Biquad-Adressen (Buch 0xAA, Seite 0x24, ab 0x18, Format 5.27, a1/a2 negiert) stammen aus TI SLOA263 und dem Treiber mariosgit/TAS58xx, nicht aus dem Datenblatt. Die Frequenzspreizung des alten TPS54302 (±6 %) ist nur aus Suchauszügen belegt.
 
 ## Software auf dem Pi
 
@@ -148,10 +151,7 @@ Gehäuse:
 4. LED-Skalenbeleuchtung mit Senderzeiger (WS2812B + RP2040-Zero per USB) oder nur warmweiß über GPIO20?
 5. Druckbettgröße (Teile sind auf ≤ 200 mm ausgelegt).
 
-Platine:
-
-6. Rückspeiseschutz 5 V gegen USB-C einbauen (Ideal-Dioden-Schaltung an der 5-V-Leitung, Platz neben dem Sockel knapp) oder bei der Regel „USB-C nie anstecken“ bleiben?
-7. Kann der Nutzer das Datenblatt des TPS54308 als PDF hochladen? Dann die Reglerwerte (Spule, Kondensatoren, EN-Schwellen) daran prüfen.
+Platine: keine offenen Fragen (Rückspeiseschutz am 17.11.2026 entschieden: keiner; TPS54308-Datenblatt geprüft).
 
 ## Hinweise
 

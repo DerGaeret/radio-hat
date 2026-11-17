@@ -9,7 +9,7 @@ Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω)
 | `JLCPCB/CPL_RadioHAT.csv` | Bauteilpositionen für die SMD-Bestückung |
 | `radio_hat_start.sh` | Steuerskript für den Verstärker auf dem Pi (start, stop, status, clear) |
 | `Pi/` | systemd-Dienst und ALSA-Einstellung für den Pi |
-| `Datenblaetter/TAS5805M.md` | Datenblatt des Verstärkers als Text, mit Zusammenfassung und Abgleich |
+| `Datenblaetter/TAS5805M.md`, `Datenblaetter/TPS54308.md` | Datenblätter von Verstärker und 5-V-Regler als Text, mit Zusammenfassung, Bildinhalten und Abgleich |
 | `KiCad/` | Platine als KiCad-Projekt zum Ändern, dazu das Skript für die Bestückungsdatei |
 | `PRUEFBERICHT.md` | Was geprüft und geändert wurde, offene Punkte |
 | `REICHELT.md` | Bestellliste für die Teile zum Selbstlöten |
@@ -76,9 +76,9 @@ Pin 1 ist an jedem Stecker das eckige Lötpad. Beim Encoder-Kabel die Reihenfolg
 - Eingangsschutz: Sicherung F1 (5 A träge), P-MOSFET Q2 gegen Verpolung, TVS-Diode D2 (SMBJ22A) gegen Spannungsspitzen, Ferrit FB1 mit C46 gegen Störungen auf dem Netzteilkabel. Bei falscher Polung bleibt die Platine aus, es geht nichts kaputt und die Sicherung bleibt ganz.
 - Am besten erst das Netzteil an die Platine stecken und dann in die Steckdose. Beim Einstecken in ein schon laufendes Netzteil fließt ein kurzer hoher Ladestrom in die Elkos.
 - Rechnung: Verstärker höchstens 2 × 20 W / 0,88 ≈ 45,5 W, 5-V-Regler für den Pi bis etwa 17 W (3 A am Ausgang), zusammen etwa 62 W.
-- Der 5-V-Regler liefert höchstens 3 A. Für einen Pi 4 reicht das, solange keine stromhungrigen USB-Geräte am Pi hängen. Für einen Pi 5 unter Last reicht es nicht.
+- Die 5-V-Schiene liefert dauerhaft etwa 2,4 A; mehr lässt die Spule L5 nicht zu (der Regler selbst könnte 3 A). Für einen Pi 4 reicht das, solange keine stromhungrigen USB-Geräte am Pi hängen. Für einen Pi 5 unter Last reicht es nicht.
 - Nicht mehr als 22 V anschließen. Darüber beginnt die TVS-Diode D2 zu leiten (Durchbruch ab 24,4 V); der Verstärker selbst verträgt 26,4 V. Die Elkos C1 und C2 müssen mindestens 35 V vertragen.
-- Den Pi nie gleichzeitig über USB-C versorgen, er bekommt seine 5 V von der Platine. Die Platine hat keinen Rückspeiseschutz; zwei Netzteile würden gegeneinander arbeiten, und der 5-V-Regler würde Strom aus USB-C zurück in die 20-V-Schiene pumpen.
+- Den Pi nie gleichzeitig über USB-C versorgen, er bekommt seine 5 V von der Platine. Die Platine hat bewusst keinen Rückspeiseschutz (Entscheidung vom 17.11.2026: es wird kein USB-Netzteil angesteckt). Zwei Netzteile würden gegeneinander arbeiten, und der 5-V-Regler würde Strom aus USB-C zurück in die 20-V-Schiene pumpen.
 - Die Lautsprecher haben 8 Ω. Das Datenblatt verlangt im Stereobetrieb mindestens 6 Ω (Überstromgrenze 5 A je Ausgang).
 - Kein Lautsprecheranschluss darf mit Masse verbunden werden, auch nicht über einen Umschalter oder einen Subwoofer-Verstärker mit gemeinsamer Masse. Beide Klemmen führen Signal (Brückenschaltung), eine Verbindung nach Masse schließt den Ausgang kurz.
 
