@@ -16,7 +16,9 @@ ls_loch  = 100;    // Ausschnitt im Frontbrett
 rueck    = 3;      // Abdeckungen sitzen so weit hinter der Holzvorderkante
 chrom_h  = 4;      // Chromleiste: Alu-Vierkantstange 4 x 4, oben und unten
 tiefe    = 190;    // Außentiefe inkl. Rückwand -> ca. 3,0 l netto je Lautsprecher
-ueberlapp = 25;    // so weit ragt jedes Frontbrett hinter die Frontplatte
+ueberlapp = 22;    // so weit ragt jedes Frontbrett hinter die Frontplatte (A/E-Loch liegt bei 29,5 mm)
+spiel    = 0.5;    // Luft rundum am abnehmbaren Rückwanddeckel
+griff_d  = 25;     // Griffloch im Rückwanddeckel
 fuss_d   = 25;  fuss_h = 20;   // Chromfüße
 // Magnete für abnehmbare Abdeckungen: je 4 pro Abdeckung, im Frontbrett eingelassen
 mag_d    = 10;  mag_h = 3;     // Neodym-Scheibenmagnet 10 x 3
@@ -29,14 +31,15 @@ innen_b  = 2*abd_b + platte_b;          // 656
 innen_h  = platte_h + 2*chrom_h;        // 122
 B = innen_b + 2*t;                      // 672
 H = innen_h + 2*t;                      // 138
-korpus_t = tiefe - t;                   // 182: Tiefe von Deckel, Boden, Seiten
+korpus_t = tiefe;                       // 190: Deckel, Boden, Seiten gehen bis hinten durch
+y_hinten = tiefe - t;                   // 182: Innenseite der eingesetzten Rückwand
 y_front  = rueck + abd_t;               // 10: Vorderseite Frontbrett = Rückseite Abdeckungen und Frontplatte
 y_wand   = y_front + t;                 // 18: Rückseite Frontbrett
 kammer_b = abd_b - t;                   // 170: Zwischenwand steht hinter der Fuge Abdeckung/Frontplatte
-kammer_t = korpus_t - y_wand;           // 164
-front_b  = abd_b + ueberlapp;           // 203: Breite eines Frontbretts
-rueck_b  = t + kammer_b + t;            // 186: Breite der festen Rückwandteile hinter den Kammern
-mitte_b  = B - 2*rueck_b;               // 300: abnehmbarer Rückwanddeckel hinter dem Technikfach
+kammer_t = y_hinten - y_wand;           // 164
+front_b  = abd_b + ueberlapp;           // 200: Breite eines Frontbretts
+mitte_b  = xw_mitte();                   // 300: Öffnung für den abnehmbaren Rückwanddeckel
+function xw_mitte() = (B-t-abd_b) - (t+kammer_b+t);
 ls_x     = abd_b/2;                     // Lautsprecher mittig hinter der Abdeckung
 xw       = [t+kammer_b, B-t-abd_b];     // linke Kante der Zwischenwände
 
@@ -57,10 +60,16 @@ module korpus() {
   brett([-60*ex,0,t], [t, korpus_t, innen_h], NUSS2);                      // Seiten
   brett([B-t+60*ex,0,t], [t, korpus_t, innen_h], NUSS2);
   if (ansicht != "ohne_deckel") {                                         // Rückwand
-    for (x=[0, B-rueck_b]) brett([x, tiefe-t+40*ex, 0], [rueck_b, t, H]);   // fest verleimt (Kammern)
-    brett([rueck_b, tiefe-t+120*ex+(ansicht=="hinten_offen" ? 90 : 0), 0], [mitte_b, t, H], NUSS2);           // abnehmbar (Technikfach)
+    for (x=[t, B-t-kammer_b]) brett([x, y_hinten+40*ex, t], [kammer_b, t, innen_h]);  // eingeleimt (Kammern)
+    color(NUSS2) difference() {                                           // Deckel Technikfach, magnetisch
+      translate([xw[0]+t+spiel, y_hinten+120*ex+(ansicht=="hinten_offen" ? 90 : 0), t+spiel])
+        cube([mitte_b-2*spiel, t, innen_h-2*spiel]);
+      translate([B/2, y_hinten-1+120*ex+(ansicht=="hinten_offen" ? 90 : 0), H-t-28]) rotate([-90,0,0]) cylinder(d=griff_d, h=t+2, $fn=48);
+      for (i=[0:6], j=[0:2]) translate([B/2-90+i*30, y_hinten-1+120*ex+(ansicht=="hinten_offen" ? 90 : 0), t+22+j*20]) rotate([-90,0,0]) cylinder(d=10, h=t+2, $fn=24);
+      translate([B/2+125, y_hinten-1+120*ex+(ansicht=="hinten_offen" ? 90 : 0), H-t-28]) rotate([-90,0,0]) cylinder(d=8, h=t+2, $fn=24);  // DC-Buchse (Ø nach Buchse)
+    }
   }
-  for (x=xw) brett([x, y_wand+40*ex, t], [t, kammer_t, innen_h], NUSS2);  // Zwischenwände
+  for (x=xw) brett([x, y_wand+40*ex, t], [t, korpus_t-y_wand, innen_h], NUSS2);  // Zwischenwände
 }
 
 module frontbrett() {
@@ -77,6 +86,8 @@ module frontbrett() {
 
 function mag_pos() = [ for (x0=[t, B-t-abd_b], dx=[mag_rand, abd_b-mag_rand], z=[t+mag_rand, H-t-mag_rand]) [x0+dx, z] ];
 
+rmag_x = [B/2-100, B/2+100];   // Magnete für den Rückwanddeckel, in den Leisten oben und unten
+
 module leisten() {   // Kiefer 15x15, innen verleimt
   L = leiste;
   color(KIEFER) translate([0, 20*ex, 0]) {
@@ -85,11 +96,14 @@ module leisten() {   // Kiefer 15x15, innen verleimt
     // längs an den Zwischenwänden (Kammerseite), oben und unten
     for (x=[xw[0]-L, xw[1]+t], z=[t, H-t-L]) translate([x, y_wand, z]) cube([L, kammer_t-L, L]);
     // hinten senkrecht an Seiten und Zwischenwänden, beidseits der Zwischenwände
-    for (x=[t, B-t-L, xw[0]-L, xw[1]+t, xw[0]+t, xw[1]-L]) translate([x, korpus_t-L, t+L]) cube([L, L, innen_h-2*L]);
+    for (x=[t, B-t-L, xw[0]-L, xw[1]+t, xw[0]+t, xw[1]-L]) translate([x, y_hinten-L, t+L]) cube([L, L, innen_h-2*L]);
     // hinten waagerecht, oben und unten (Kammern und Technikfach)
     for (z=[t, H-t-L]) {
-      translate([xw[0]+t, korpus_t-L, z]) cube([xw[1]-xw[0]-t, L, L]);
-      for (x=[t+L, xw[1]+t+L]) translate([x, korpus_t-L, z]) cube([kammer_b-2*L, L, L]);
+      difference() {
+        translate([xw[0]+t, y_hinten-L, z]) cube([xw[1]-xw[0]-t, L, L]);
+        for (x=rmag_x) translate([x, y_hinten-mag_tiefe, z+L/2]) rotate([-90,0,0]) cylinder(d=mag_tasche, h=mag_tiefe+1, $fn=32);
+      }
+      for (x=[t+L, xw[1]+t+L]) translate([x, y_hinten-L, z]) cube([kammer_b-2*L, L, L]);
     }
     // Klötze für die Fußschrauben
     for (x=[fuss_x, B-fuss_x], y=[fuss_y, tiefe-fuss_y]) translate([x-15, y-15, t]) cube([30, 30, 10]);
@@ -132,5 +146,6 @@ module technik_platzhalter() {
 }
 
 korpus(); frontbrett(); leisten();
+for (x=rmag_x, z=[t+leiste/2, H-t-leiste/2]) color("SlateGray") translate([x, y_hinten-mag_tiefe+20*ex, z]) rotate([-90,0,0]) cylinder(d=mag_d, h=mag_h, $fn=32);
 lautsprecher(true); lautsprecher(false);
 front(); fuesse(); technik_platzhalter();

@@ -10,21 +10,22 @@ platte_b, platte_h, platte_t = 300, 114, 3
 abd_b, abd_h, abd_t = 178, 112, 7
 ls_korb, ls_lochabst, ls_loch, ls_tiefe = 110, 84, 100, 47
 rueck, chrom_h, tiefe = 3, 4, 190
-ueberlapp = 25
+ueberlapp = 22
+spiel, griff_d = 0.5, 25
 mag_rand, mag_tasche = 15, 12
 fuss_d, fuss_h, fuss_x, fuss_y = 25, 20, 60, 55
 innen_b, innen_h = 2 * abd_b + platte_b, platte_h + 2 * chrom_h
 B, H = innen_b + 2 * t, innen_h + 2 * t
-korpus_t = tiefe - t
+korpus_t = tiefe
+y_hinten = tiefe - t
 y_front, y_wand = rueck + abd_t, rueck + abd_t + t
-kammer_b, kammer_t = abd_b - t, korpus_t - (rueck + abd_t + t)
+kammer_b, kammer_t = abd_b - t, y_hinten - (rueck + abd_t + t)
 ls_x = abd_b / 2
 xw = [t + kammer_b, B - t - abd_b]
 vol = kammer_b * innen_h * kammer_t / 1e6
 netto = (kammer_b * innen_h * kammer_t - 4 * L * L * kammer_t - (2 * (kammer_b - 2 * L) + 2 * (innen_h - 2 * L)) * L * L - 150000) / 1e6
 front_b = abd_b + ueberlapp
-rueck_b = t + kammer_b + t
-mitte_b = B - 2 * rueck_b
+mitte_b = platte_b
 
 NUSS, NUSS2, KIEFER, KANTE = "#8a5a3a", "#a87850", "#f0d9a8", "#3b2414"
 
@@ -87,9 +88,9 @@ oy2 = 230
 def r2(x, y, w, d, **kw):
     rect(ax, x, oy2 - y - d, w, d, **kw)
 r2(0, 0, t, korpus_t, fc=NUSS2); r2(B - t, 0, t, korpus_t, fc=NUSS2)
-for x in (0, B - rueck_b):
-    r2(x, korpus_t, rueck_b, t)
-r2(rueck_b, korpus_t, mitte_b, t, fc="#c49a6c")
+for x in (t, B - t - kammer_b):
+    r2(x, y_hinten, kammer_b, t)
+r2(xw[0] + t + spiel, y_hinten, mitte_b - 2 * spiel, t, fc="#c49a6c")
 for x in (t, B - t - front_b):
     r2(x, y_front, front_b, t, fc=NUSS2)
 for x in xw:
@@ -99,9 +100,9 @@ for x in (t, B - t - abd_b):
 r2(t + abd_b, y_front - platte_t, platte_b, platte_t, fc="#c0c0c0", ec="k")
 for x in (t, B - t - L, xw[0] - L, xw[1] + t):     # Leisten (Schnitt zeigt die Längsleisten am Boden)
     r2(x, y_wand, L, kammer_t - (0 if x in (t, B - t - L) else L), fc=KIEFER, ec="#b09060", lw=0.5, alpha=0.6)
-r2(xw[0] + t, korpus_t - L, xw[1] - xw[0] - t, L, fc=KIEFER, ec="#b09060", lw=0.5, alpha=0.6)
+r2(xw[0] + t, y_hinten - L, xw[1] - xw[0] - t, L, fc=KIEFER, ec="#b09060", lw=0.5, alpha=0.6)
 for x in (t + L, xw[1] + t + L):
-    r2(x, korpus_t - L, kammer_b - 2 * L, L, fc=KIEFER, ec="#b09060", lw=0.5, alpha=0.6)
+    r2(x, y_hinten - L, kammer_b - 2 * L, L, fc=KIEFER, ec="#b09060", lw=0.5, alpha=0.6)
 for lx in (t + ls_x, B - t - ls_x):
     r2(lx - ls_loch / 2, y_front - 0.5, ls_loch, t + 1, fc="white", ec="#d08000", ls="--")
     r2(lx - ls_korb / 2, y_wand, ls_korb, 2, fc="#c8a000", ec="k")
@@ -115,7 +116,7 @@ ax.text(B / 2, oy2 - 110, f"Technikfach {platte_b} × {innen_h} innen\n(3D-gedru
 for x in (t + kammer_b / 2, B - t - kammer_b / 2):
     ax.text(x, oy2 - 150, f"LS-Kammer\n{kammer_b}×{innen_h}×{kammer_t}\n{vol:.1f} l brutto\n≈ {netto:.1f} l netto", ha="center", fontsize=7)
 mass(ax, oy2, oy2 - tiefe, -12, f"{tiefe}", vert=True)
-mass(ax, oy2, oy2 - korpus_t, -32, f"{korpus_t}", vert=True)
+mass(ax, oy2 - y_hinten, oy2 - tiefe, -32, f"{t}", vert=True)
 mass(ax, oy2, oy2 - rueck, B + 22, f"{rueck}", vert=True)
 mass(ax, oy2 - rueck, oy2 - y_front, B + 40, f"{abd_t}", vert=True)
 mass(ax, oy2 - y_front, oy2 - y_wand, B + 22, f"{t}", vert=True)
@@ -129,7 +130,7 @@ blaetter = [fig]
 # ---------- Blatt 2 ----------
 fig, ax = blatt("Radiogehäuse – Schnitt B–B, Frontbrett, Rückwand", h=5.5)
 rect(ax, 0, 0, korpus_t, t); rect(ax, 0, H - t, korpus_t, t)
-rect(ax, korpus_t, 0, t, H)
+rect(ax, y_hinten, t, t, innen_h)
 rect(ax, y_front, t, t, innen_h, fc=NUSS2)
 rect(ax, rueck, t + (innen_h - abd_h) / 2, abd_t, abd_h, fc="#333", ec="k")
 for z in (t, H - t - chrom_h):
@@ -139,14 +140,14 @@ rect(ax, y_wand + ls_tiefe - 18, H / 2 - 39, 18, 78, fc="#555", ec="k")
 ax.plot([y_wand + 2, y_wand + ls_tiefe - 18, y_wand + ls_tiefe - 18, y_wand + 2],
         [H / 2 + ls_loch / 2, H / 2 + 39, H / 2 - 39, H / 2 - ls_loch / 2], color="#8a6d00")
 rect(ax, y_front - 0.5, H / 2 - ls_loch / 2, t + 1, ls_loch, fc="white", ec="#d08000", ls="--")
-rect(ax, korpus_t - L, t + L, L, innen_h - 2 * L, fc=KIEFER, ec="#b09060", lw=0.5)
+rect(ax, y_hinten - L, t + L, L, innen_h - 2 * L, fc=KIEFER, ec="#b09060", lw=0.5)
 rect(ax, fuss_y - 15, t, 30, 10, fc=KIEFER, ec="#b09060", lw=0.5)
 rect(ax, tiefe - fuss_y - 15, t, 30, 10, fc=KIEFER, ec="#b09060", lw=0.5)
 for y in (fuss_y, tiefe - fuss_y):
     fuss_seite(ax, y, 0)
 mass(ax, 0, tiefe, -fuss_h - 14)
 mass(ax, y_wand, y_wand + ls_tiefe, H + 10, f"LS {ls_tiefe}")
-mass(ax, y_wand + ls_tiefe, korpus_t, H + 10, f"{kammer_t - ls_tiefe} frei")
+mass(ax, y_wand + ls_tiefe, y_hinten, H + 10, f"{kammer_t - ls_tiefe} frei")
 mass(ax, 0, fuss_y, -fuss_h - 32, f"{fuss_y}")
 mass(ax, 0, H, -12, vert=True)
 ax.text(0, H + 30, "Schnitt B–B (Seitenansicht, vorne = links)", fontsize=10, weight="bold")
@@ -176,21 +177,24 @@ ax.text(fx, innen_h * s + 22, f"Frontbrett 2 × {front_b} × {innen_h} (1:2), je
 
 # Rückwand
 rx = fx + innen_b * s + 30
-for x in (0, B - rueck_b):
-    rect(ax, rx + x * s, 0, rueck_b * s, H * s)
-rect(ax, rx + rueck_b * s, 0, mitte_b * s, H * s, fc="#c49a6c")
+rect(ax, rx, 0, B * s, t * s); rect(ax, rx, (H - t) * s, B * s, t * s)        # Deckel, Boden (Kanten)
+for x in (0, B - t, xw[0], xw[1]):
+    rect(ax, rx + x * s, t * s, t * s, innen_h * s, fc=NUSS2)              # Seiten, Zwischenwände (Kanten)
+for x in (t, B - t - kammer_b):
+    rect(ax, rx + x * s, t * s, kammer_b * s, innen_h * s)                  # eingeleimt
+rect(ax, rx + (xw[0] + t + spiel) * s, (t + spiel) * s, (mitte_b - 2 * spiel) * s, (innen_h - 2 * spiel) * s, fc="#c49a6c")
 for i in range(7):
     for j in range(3):
-        ax.add_patch(Circle((rx + (t + abd_b + 60 + i * 30) * s, (35 + j * 25) * s), 5 * s, fc="white", ec="k", lw=0.5))
-ax.add_patch(Circle((rx + (t + abd_b + platte_b - 30) * s, (H - 40) * s), 5 * s, fc="white", ec="r", lw=0.6))
-for x in (xw[0] + t + L / 2, xw[1] - L / 2):
-    for z in (t + L + 15, H - t - L - 15):
-        ax.add_patch(Circle((rx + x * s, z * s), 0.9, fc="k"))
-for x in (xw[0] + t + 50, B / 2, xw[1] - 50):
+        ax.add_patch(Circle((rx + (B / 2 - 90 + i * 30) * s, (t + 22 + j * 20) * s), 5 * s, fc="white", ec="k", lw=0.5))
+ax.add_patch(Circle((rx + B / 2 * s, (H - t - 28) * s), griff_d / 2 * s, fc="white", ec="k", lw=0.6))
+ax.add_patch(Circle((rx + (B / 2 + 125) * s, (H - t - 28) * s), 4 * s, fc="white", ec="r", lw=0.6))
+for x in (B / 2 - 100, B / 2 + 100):
     for z in (t + L / 2, H - t - L / 2):
-        ax.add_patch(Circle((rx + x * s, z * s), 0.9, fc="k"))
-ax.text(rx, H * s + 6, f"Rückwand (1:2, Blick von hinten): außen 2 × {rueck_b} × {H} fest verleimt,\n"
-        f"Mitte {mitte_b} × {H} abnehmbar  ● Spax 3,5×20 in die Kiefernleisten\n○ Lüftung 21 × Ø10 nur im Technikfach\n○ rot: DC-Buchse", fontsize=8, va="bottom")
+        ax.add_patch(Circle((rx + x * s, z * s), 5 * s, fc="#9aa", ec="k", lw=0.5))
+ax.text(rx, H * s + 6, f"Rückseite (1:2): Rückwände sitzen innen, hinten bündig.\n"
+        f"außen 2 × {kammer_b} × {innen_h} eingeleimt, Mitte {mitte_b - 1:g} × {innen_h - 1:g} magnetisch\n"
+        f"grau: 4 Magnete in den Leisten (Plättchen am Deckel), Griffloch Ø{griff_d}\n"
+        "○ Lüftung 21 × Ø10   ○ rot: DC-Buchse", fontsize=8, va="bottom")
 ax.set_xlim(-60, rx + B * s + 10); ax.set_ylim(-fuss_h - 45, H + 45)
 blaetter.append(fig)
 
