@@ -308,7 +308,7 @@ Quelle: Suchmaschinen-Auszüge der Seiten von LCSC und JLCPCB vom 16.11.2026, al
 | C553937 | Sicherung 5 A 63 V 1206 träge (neu, F1) | SART S1206-SD-5.0A, als „Slow Blow“ gelistet, 63 V, Abschaltvermögen 50 A | passt |
 | C10214 | SMBJ22A (neu, D2) | RUILON SMBJ22A, SMB, 22 V / 24,4 V / 35,5 V | passt |
 | C2104 | BZT52C15 (neu, D3) | JSCJ BZT52C15, SOD-123, Extended | passt |
-| C337884 | BLM31KN121SN1L (neu, FB1) | Murata, 1206, 6 A, 9 mΩ, 120 Ω bei 100 MHz | passt |
+| C6751041 | BBUP00321611121Y00 (FB1, seit 17.11. statt C337884 BLM31KN121SN1L, der bei JLCPCB fehlte) | Chilisin, 1206, 6 A, 12 mΩ, 120 Ω bei 100 MHz | passt |
 | C22975 | 2 kΩ 1 % 0603 (neu, R14) | UNI-ROYAL 0603WAF2001T5E, Basic | passt |
 | C2932476 | 10 µF 50 V X5R 0805 (neu, C47, C48) | Samsung CL21A106KBYQNNE, rund 525.000 auf Lager | passt |
 | C13585 | 10 µF 50 V X5R 1206 (C23, neu auch C46) | Samsung CL31A106KBHNNNE, Basic | passt |

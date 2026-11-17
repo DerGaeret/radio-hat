@@ -74,7 +74,7 @@ JLCPCB ordnet jede Zeile über die LCSC-Nummer einem Bauteil zu. Kontrollieren:
    | F1 | C553937 | 5 A träge, ≥ 32 V, 1206 |
    | D2 | C10214 | SMBJ22A, unidirektional, SMB |
    | D3 | C2104 | Z-Diode 15 V, SOD-123 |
-   | FB1 | C337884 | Ferrit 1206, ≥ 6 A, etwa 120 Ω bei 100 MHz |
+   | FB1 | C6751041 (vorher C337884) | Ferrit 1206, ≥ 6 A, etwa 120 Ω bei 100 MHz |
 
 4. **Extended-Teile** kosten je Teileart eine einmalige Rüstgebühr (zuletzt etwa 3 US-$). Das ist normal; ein Ersatz durch ein Basic-Teil lohnt nur, wenn die Daten gleich sind.
 
