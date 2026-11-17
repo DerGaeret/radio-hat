@@ -11,6 +11,7 @@ Raspberry-Pi-Aufsteckplatine mit Stereo-Verstärker TAS5805M (2 × 19 W an 8 Ω)
 | `Pi/` | systemd-Dienst und ALSA-Einstellung für den Pi |
 | `Datenblaetter/TAS5805M.md`, `Datenblaetter/TPS54308.md` | Datenblätter von Verstärker und 5-V-Regler als Text, mit Zusammenfassung, Bildinhalten und Abgleich |
 | `KiCad/` | Platine als KiCad-Projekt zum Ändern, dazu das Skript für die Bestückungsdatei |
+| `BESTELLUNG.md` | Schritt-für-Schritt-Anleitung für die Bestellung bei JLCPCB |
 | `PRUEFBERICHT.md` | Was geprüft und geändert wurde, offene Punkte |
 | `REICHELT.md` | Bestellliste für die Teile zum Selbstlöten |
 | `Bilder/` | Ober- und Unterseite der Platine als Lötvorlage |
@@ -24,29 +25,14 @@ Die Platine ist neu entworfen und ungetestet. Beim ersten Einschalten keine Laut
 
 ## Bestellen bei JLCPCB
 
-Dateien im Ordner `JLCPCB`: `Gerber_RadioHAT.zip`, `BOM_RadioHAT.csv`, `CPL_RadioHAT.csv`.
+Die vollständige Anleitung mit jedem Feld des Bestellformulars steht in **`BESTELLUNG.md`**. Kurzfassung:
 
-Einstellungen: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm, PCB Qty 5, HASL (with lead). „Via Covering“ auf „Tented“ lassen, nie „Untented“. Unter U1 liegen 24 Durchkontaktierungen (TI-Land-Pattern), 12 davon im freien Kühlpad unter der Lötpaste. Mit „Tented“ sind sie auf der Unterseite mit Lötstopp abgedeckt, damit beim Löten kein Zinn durchläuft (Datenblatt, Gehäuseanhang Anm. 10). Noch besser ist „Epoxy Filled & Capped“ (gefüllt und überkupfert). Das kostet bei 4 Lagen Aufpreis (laut JLCPCB nur ab 6 Lagen kostenlos), den Preis im Angebot prüfen. PCB Assembly: Top Side, PCBA Qty 2, Economic, falls das Angebot das für vier Lagen anbietet (nicht geprüft), sonst Standard. Sonst alles auf Standard lassen.
+- Dateien im Ordner `JLCPCB`: `Gerber_RadioHAT.zip`, `BOM_RadioHAT.csv`, `CPL_RadioHAT.csv`.
+- Platine: FR-4, 4 Lagen (Lagenfolge F.Cu, In1.Cu, In2.Cu, B.Cu, Aufbau JLC04161H-7628), 1,6 mm, grün, 5 Stück. Oberfläche **ENIG** oder **LeadFree HASL**, nicht „HASL (with lead)“ (bleihaltig, für ein verkauftes Gerät nicht zulässig). Via Covering „Epoxy Filled & Capped“, sonst „Plugged“, sonst „Tented“, nie „Untented“ (unter U1 liegen 12 Vias in der Lötpaste).
+- Bestückung: Economic, Top Side, 2 Stück, Tooling holes „Added by Customer“ (die Platine hat drei Passbohrungen 1,152 mm), Confirm Parts Placement „Yes“.
+- Vor dem Bezahlen: Lagerbestand von U1 (C478472) und U2 (C168839) und die Drehlage von sieben Bauteilen in der Bestückungsvorschau prüfen (Tabelle in `BESTELLUNG.md`, Schritt 4).
 
-Web-Preis am 8.11.2026: 32,66 € für 5 Platinen, davon 2 mit allen SMD-Teilen bestückt, ohne Versand. Für die Platine zeigte das Angebot einen Desktop-Preis von 1,79 € statt 3,58 €.
-
-In JLCONE: Neues Angebot für Standard PCB/PCBA öffnen, `Gerber_RadioHAT.zip` hochladen, die Einstellungen oben wählen, dann bei der Bestückung `BOM_RadioHAT.csv` und `CPL_RadioHAT.csv` hochladen. Bei „Product Description“ passt „Audio and Video Appliance / Audio Amplifiers“.
-
-Seit dem 16.11.2026 ist die Platine vierlagig (siehe `PRUEFBERICHT.md`). Der Preis oben gilt für den alten zweilagigen Stand; eine vierlagige Platine kostet mehr, den aktuellen Preis zeigt das Angebot.
-
-Vor dem Bezahlen in der Bestückungsvorschau die Drehlage von sieben Bauteilen prüfen. Die Platine liegt dabei wie im Bild oben, der 40-polige Sockel oben:
-
-| Bauteil | So muss es aussehen |
-|---|---|
-| U1 (Verstärker, Mitte) | Pinreihen oben und unten, Pin-1-Punkt oben rechts |
-| U2 (5-V-Regler, links) | Pinreihen oben und unten, Pin 1 oben rechts |
-| Q1 (Transistor, links) | zwei Pins links, ein Pin rechts |
-| D1 (Diode, links) | Kathodenstrich unten |
-| Q2 (Verpolungsschutz, links unten) | Pinreihen links und rechts, Pin-1-Punkt oben links |
-| D2 (TVS-Diode, links unten) | Kathodenstrich unten |
-| D3 (Z-Diode, über J4) | Kathodenstrich links |
-
-Liegt ein Bauteil anders, in der Vorschau drehen. Außerdem im BOM-Abgleich prüfen, ob der Verstärker U1 (C478472) und der Regler U2 (TPS54308, C168839) lieferbar sind.
+Der Web-Preis vom 8.11.2026 (32,66 € für 5 Platinen, 2 davon bestückt) galt für den alten zweilagigen Stand; den aktuellen Preis zeigt das Angebot.
 
 ## Selbst zu löten
 
@@ -55,7 +41,9 @@ JLCPCB liefert nur die SMD-Teile. Alle Durchsteckteile lötest du selbst ein:
 - **Sockel J1:** von der Unterseite einstecken, auf der Oberseite verlöten (40 Lötstellen). Pin 1 liegt rechts oben, weil die Platine um 180° gedreht auf dem Pi sitzt.
 - **Elkos C1, C2 (470 µF, mindestens 35 V, 10 mm Durchmesser, 5 mm Raster):** Der Minus-Streifen des Elkos gehört auf die weiß gefüllte Hälfte des Aufdrucks, das lange Bein (+) ins Loch neben dem „+“.
 - **JST-Stecker S1–S6, X1, E1–E3:** Die Gehäuse passen genau in die weißen Umrisse.
-- **Schraubklemmen J2, J3, J4:** deine eigenen, Raster 5,0 oder 5,08 mm. Die Kabeleinführung zum Platinenrand drehen.
+- **Schraubklemmen J2, J3, J4:** deine eigenen, Raster 5,0 oder 5,08 mm. Die Kabeleinführung zum Platinenrand drehen. Bei J4 darf das Klemmengehäuse vom Lötstift aus höchstens 4 mm zur Platinenmitte reichen (Aufdruck-Umriss), sonst sitzt es auf der Sicherung F1. Übliche Klemmen mit 7 bis 8 mm Tiefe und mittigen Stiften passen.
+
+Die Massepads der Durchsteckteile haben Wärmefallen (Stege zur Massefläche). Ein Lötkolben mit etwa 60 W und mittlerer Meißelspitze reicht; jede Lötstelle muss rundum glänzend durchfließen, auch die Massepins am Sockel. Für ein Gerät, das verkauft wird, bleifreies Lot verwenden (RoHS).
 
 ## Einbau neben dem Pi
 
@@ -63,6 +51,8 @@ Die Platine steckt auf dem GPIO-Stecker und zeigt vom Pi weg. Sie überdeckt nur
 
 - Die beiden oberen Löcher der Platine liegen genau über den zwei Pi-Löchern an der GPIO-Seite. Dort mit M2,5-Abstandshaltern verschrauben. Der Abstand beträgt 11 mm, bei 10-mm-Bolzen also etwa 1 mm mit Unterlegscheiben ausgleichen.
 - Die beiden unteren Löcher hängen frei. Dort die Platine im Gehäuse mit eigenen Abstandshaltern stützen, sonst hebelt sie am GPIO-Stecker.
+- Um jedes Loch liegt in 6 mm Durchmesser nur Massefläche unter Lötstopp, keine Leiterbahn. Schraubenköpfe, Muttern, Unterlegscheiben und Bolzen bis 6 mm Durchmesser (M2,5-Sechskant mit 5 mm Schlüsselweite) dürfen aus Metall sein.
+- Die drei kleinen Löcher (1,152 mm) sind Passbohrungen für die Bestückung bei JLCPCB und bleiben frei.
 
 ## Vor dem ersten Anstecken der Kabel
 
@@ -105,7 +95,7 @@ Alle Taster und Encoder schalten gegen GND. Bei S1 bis S6 kommen die Pull-ups vo
 ## Deine Bauteile
 
 - **Cherry MX Blue (S1 bis S6):** Die zwei Kontakte sind beliebig tauschbar. In der Software 20 ms entprellen.
-- **Ein/Aus-Schalter (X1):** Ein rastender Schalter passt. Über ihn fließen nur etwa 2 mA, er liegt nicht im Hauptstromkreis.
+- **Ein/Aus-Schalter (X1):** Ein rastender Schalter passt. Über ihn fließen etwa 0,2 mA bei 18 V (höchstens 2 mA, falls das Kabel kurzschließt; R10 begrenzt), er liegt nicht im Hauptstromkreis.
 - **ALPS STEC11B (E1 bis E3):** A, C, B liegen in einer Reihe, C in der Mitte. Die beiden Tasterkontakte liegen gegenüber. Pin C und ein Tasterkontakt gehen zusammen auf GND (Pin 4), der andere Tasterkontakt auf Pin 3.
 
 Der Encoder verlangt laut Datenblatt mindestens 1 mA an A/B und 10 mA am Taster. Die Platine liefert deshalb 1,2 mA über 2,7 kΩ und 12 mA über 270 Ω aus dem 3,3-V-Pin 1 des Pi.
@@ -201,14 +191,15 @@ Am echten Gerät noch zu prüfen: ob der Hochpass hörbar wirkt (Bass leiser unt
 
 ## KiCad-Projekt
 
-Im Ordner `KiCad` liegt die Platine als `RadioHAT.kicad_pcb` mit Design-Regeln in `RadioHAT.kicad_pro`. Sie wurde aus den Fertigungsdaten vom 8.11.2026 zurückgewonnen, mit allen Netznamen, Bauteilen und Pin-Nummern. Die Dateien im Ordner `JLCPCB` sind aus genau dieser Platine erzeugt.
+Im Ordner `KiCad` liegt die Platine als `RadioHAT.kicad_pcb` mit Design-Regeln in `RadioHAT.kicad_pro` und einer Zusatzregel in `RadioHAT.kicad_dru` (Wärmefallen auf der Unterseite, siehe Prüfbericht Änderung 25). Sie wurde aus den Fertigungsdaten vom 8.11.2026 zurückgewonnen, mit allen Netznamen, Bauteilen und Pin-Nummern. Die Dateien im Ordner `JLCPCB` sind aus genau dieser Platine erzeugt.
 
 - Einen Schaltplan gibt es nicht. Änderungen macht man direkt im Platineneditor. „Platine aus Schaltplan aktualisieren“ nicht verwenden.
 - Die Datei ist im Format von KiCad 7 gespeichert. KiCad 10 öffnet sie und speichert sie im neuen Format. Nach dem ersten Öffnen einmal die Flächen neu füllen (Taste B) und den DRC starten.
 - Der DRC läuft in KiCad 7.0.11 ohne Meldung. Im DRC-Dialog den Abgleich mit dem Schaltplan abgeschaltet lassen. Die Prüfung gegen die Footprint-Bibliothek ist im Projekt abgeschaltet, weil es keine Bibliothek gibt.
 - Der Bestückungsdruck besteht aus einzelnen Linien, die Texte sind nicht als Text bearbeitbar. Die Bauteilbezeichner stehen zusätzlich als Text auf der Lage F.Fab.
-- Vier Kupferlagen: Oberseite, zwei Masselagen innen (In1.Cu, In2.Cu), Unterseite. In2.Cu ist durchgehend Masse. Auf In1.Cu liegen außer Masse die Doppelbahnen der vier Verstärkerausgänge und ein 4,7 mm langes Stück der 3,3-V-Leitung zwischen den Pins des Sockels.
-- Die vier Masseflächen: Abstand 0,2 mm, Mindestbreite 0,15 mm, Pads voll angebunden, Inseln entfernen.
+- Vier Kupferlagen: Oberseite, zwei Masselagen innen (In1.Cu, In2.Cu), Unterseite. In2.Cu ist durchgehend Masse. Auf In1.Cu liegen außer Masse die Doppelbahnen der vier Verstärkerausgänge, ein 4,7 mm langes Stück der 3,3-V-Leitung zwischen den Pins des Sockels und die Leitung HOLD.
+- Die vier Masseflächen: Abstand 0,2 mm, Mindestbreite 0,15 mm, SMD-Pads voll angebunden, bedrahtete Pads mit Wärmefallen (Stege 0,5 mm, Spalt 0,3 mm), die 24 Vias im Kühlpad von U1 voll angebunden, Inseln entfernen.
+- Um die Befestigungslöcher H1–H4 liegen Sperrflächen mit 6 mm Durchmesser (keine Leiterbahnen, keine Vias; Massefläche erlaubt). TH1–TH3 sind Passbohrungen 1,152 mm für die Bestückung bei JLCPCB.
 - Ursprung für Gerber, Bohrdaten und Bestückungsdatei ist die linke untere Platinenecke („Bohr-/Platzierungsursprung verwenden“).
 
 Neue Fertigungsdaten nach einer Änderung:
@@ -239,4 +230,5 @@ Weitere Werkzeuge in `KiCad/werkzeuge`:
 | `verify.py` | misst die Werte aus dem Prüfbericht: Leiterbahnbreiten an den Ausgängen, Abstände der Kondensatoren zu den Pins, 3,3-V-Breite, Vergleich der Netzliste mit einer zweiten Platine. Braucht zusätzlich `shapely`. |
 | `drc.py` | DRC auf einer Kopie, mit neu gefüllten Flächen |
 | `eingangsschutz.py` | hat am 17.11.2026 den Eingangsschutz (Änderung 17) in die Platine eingebaut; nur zur Nachvollziehbarkeit, nicht erneut ausführen |
+| `aenderung_20_21.py`, `aenderung_23.py`, `aenderung_24.py`, `aenderung_25.py` | Änderungen 20 bis 25, ebenso nur zur Nachvollziehbarkeit |
 | `bilder.sh` | rendert `Bilder/render_top.png` und `render_bottom.png` aus einem Gerber-Ordner. Braucht Node.js, das npm-Paket `pcb-stackup` und Playwright. |

@@ -3,7 +3,8 @@
 import sys, shutil, os, re, collections, pcbnew
 src, work, refill = sys.argv[1], sys.argv[2], sys.argv[3]=='refill'
 os.makedirs(work, exist_ok=True)
-for ext in ('.kicad_pcb','.kicad_pro'): shutil.copy(src.replace('.kicad_pcb',ext), work)
+for ext in ('.kicad_pcb','.kicad_pro','.kicad_dru'):
+    if os.path.exists(src.replace('.kicad_pcb',ext)): shutil.copy(src.replace('.kicad_pcb',ext), work)
 path=os.path.join(work, os.path.basename(src)); b=pcbnew.LoadBoard(path)
 if refill:
     f=pcbnew.ZONE_FILLER(b); f.Fill(b.Zones()); pcbnew.SaveBoard(path, b)
