@@ -28,7 +28,23 @@ pip install matplotlib numpy scipy pillow
 - Renderings: `cd Gehaeuse/render && python3 render.py 1600 1000 gut` (ca. 1 min)
 - Maße stehen doppelt in `gehaeuse.scad` und `zeichnung.py` (und teils `render.py`) – bei Änderungen alle anpassen.
 
-## Festgelegte Entscheidungen (Gehäuse)
+## Stand Platine (Radio HAT), 17.11.2026
+
+- Fertig zum Bestellen, aber ungetestet. 4 Lagen (F.Cu, In1.Cu, In2.Cu, B.Cu), 1,6 mm. DRC in KiCad 7.0.11: 0 Verstöße, 0 unverbundene Pads.
+- `KiCad/RadioHAT.kicad_pcb` ist die Quelle. Es gibt keinen Schaltplan; die Platine wurde aus den Gerber-Daten vom 8.11. zurückgewonnen. Änderungen direkt in der Platine machen.
+- Fertigungsdaten neu erzeugen: `bash KiCad/werkzeuge/fertigungsdaten.sh` (DRC, Gerber-ZIP mit 12 Dateien, CPL). Stückliste von Hand pflegen. Bilder: `KiCad/werkzeuge/bilder.sh`. Messwerte: `python3 KiCad/werkzeuge/verify.py KiCad/RadioHAT.kicad_pcb`.
+- Werkzeuge in einer frischen Cloud-Session: `apt-get install -y kicad zip` (KiCad 7 mit `kicad-cli` und Python-Modul `pcbnew`), `pip install shapely`; für die Bilder Node.js, `pcb-stackup@4.2.8` und Playwright.
+- `PRUEFBERICHT.md` enthält alle 16 Änderungen und die Prüfung nach TI SLAA902, PCBWay und Analog Devices mit Messwerten.
+- Bewusst so belassen (vom Nutzer bestätigt):
+  - Ausgänge am Pin: die ersten 1,5 mm einlagig, davon 0,55 mm schmaler als 0,76 mm. Grund ist das Pinraster von 0,65 mm, das lässt sich nicht ändern.
+  - 3,3 V: zwei kurze Stellen mit 0,35 bis 0,45 mm.
+  - SPKB+: 1,5 mm lang nur 0,9 mm breit.
+- Offen vor der Bestellung (Liste in `PRUEFBERICHT.md`, „Offene Punkte“):
+  - bei JLCPCB 4 Lagen wählen; der Preis vom 8.11. galt für 2 Lagen;
+  - Lieferbarkeit von U1 (C478472) und C16772 (C11 bis C14, neu 0402) prüfen;
+  - Drehlagen in der Bestückungsvorschau prüfen.
+
+
 
 - Außen 672 × 138 × 190 mm + 4 Chromfüße Ø 25 × 20. Platte 8 mm Dekor „Nuss Sizilia“ (holzzuschnitt-shop.de), alle Ecken innen mit Kiefernleisten 15 × 15 verleimt.
 - Frontplatte 300 × 114 × 3 zwischen zwei Abdeckungen 178 × 112 × 7, Abdeckungen stoßen an die Seitenwände. Holz steht 3 mm vor den Abdeckungen; Frontplatte hinten bündig mit den Abdeckungen (vorne 4 mm tiefer).

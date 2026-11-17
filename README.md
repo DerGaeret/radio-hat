@@ -178,3 +178,17 @@ python3 KiCad/jlc_cpl.py pos.csv JLCPCB/CPL_RadioHAT.csv
 ```
 
 3. Geänderte Bauteilwerte von Hand in `JLCPCB/BOM_RadioHAT.csv` nachtragen.
+
+Schritte 1 und 2 erledigt auch ein Skript, das vorher den DRC mit neu gefüllten Flächen laufen lässt (braucht KiCad 7 mit Python-Anbindung):
+
+```bash
+bash KiCad/werkzeuge/fertigungsdaten.sh
+```
+
+Weitere Werkzeuge in `KiCad/werkzeuge`:
+
+| Datei | Zweck |
+|---|---|
+| `verify.py` | misst die Werte aus dem Prüfbericht: Leiterbahnbreiten an den Ausgängen, Abstände der Kondensatoren zu den Pins, 3,3-V-Breite, Vergleich der Netzliste mit einer zweiten Platine. Braucht zusätzlich `shapely`. |
+| `drc.py` | DRC auf einer Kopie, mit neu gefüllten Flächen |
+| `bilder.sh` | rendert `Bilder/render_top.png` und `render_bottom.png` aus einem Gerber-Ordner. Braucht Node.js, das npm-Paket `pcb-stackup` und Playwright. |
