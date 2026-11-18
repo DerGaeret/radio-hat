@@ -48,7 +48,7 @@ def blatt1():
 
     # Netzteil und Einbaubuchse
     nt = ic(d, (1, 5), 'Netzteil 19–20 V / 4,74 A\n(Universal 90 W, Stecker 5,5 × 2,5)', rechts=[('+', 'P'), ('−', 'M')], w=3)
-    j1 = ic(d, (6, 5), 'J1 Einbaubuchse 5,5 × 2,5\nDelock 65690 (Rückwand)', links=[('Mitte', 'P1'), ('Hülse', 'M1')],
+    j1 = ic(d, (6, 5), 'J1 Einbaubuchse 5,5 × 2,5\nDelock 90188, 9 A (Rückwand)', links=[('Mitte', 'P1'), ('Hülse', 'M1')],
             rechts=[('+', 'P2'), ('−', 'M2')], w=2.6)
     d.add(elm.Wire('-').at(nt.P).to(j1.P1).label('Hohlstecker', fontsize=7))
     d.add(elm.Wire('-').at(nt.M).to(j1.M1))

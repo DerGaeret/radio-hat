@@ -83,7 +83,7 @@ Sitzt im Technikfach rechts neben dem Pi auf dem Druckteil `steuer_halter`. Baut
 
 | Teil | Anschluss | Verbindung |
 |---|---|---|
-| Schraubklemme EIN (2-polig, RM 5,08) | + / − | Einbaubuchse hinten (Delock 65690, Mittelstift +), 0,75 mm² |
+| Schraubklemme EIN (2-polig, RM 5,08) | + / − | Einbaubuchse hinten (Delock 90188, 9 A, Mittelstift +), 0,75 mm² |
 | Pololu Big MOSFET Slide Switch MP | VIN, GND | Klemme EIN |
 | | VOUT, GND | Klemme VERST (zum DigiAMP+) und, falls Beleuchtung, VIN des 5-V-Wandlers |
 | | SW | Anode der ersten BAT85; Kathode an Punkt X |

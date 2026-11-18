@@ -25,7 +25,7 @@ Verglichen wurde Reichelt mit Eckstein: Die Pololu-Module und die Lochrasterplat
 | Anz. | Teil | Wofür | Preis | Link |
 |---|---|---|---|---|
 | 1 | Raspberry Pi DigiAMP+ | Verstärker | 32,40 € | [RPI IQ DIGIAMP+](https://www.reichelt.de/de/de/shop/produkt/raspberry_pi_shield_-_iqaudio_digiamp_-295715) |
-| 1 | Einbaubuchse DC 5,5 × 2,5, M12, Lötanschluss | Rückwanddeckel (Loch Ø 12) | 2,30 € | [DELOCK 65690](https://www.reichelt.de/de/de/shop/produkt/einbaubuchse_dc_2_5_x_5_5_mm_loetversion-371059) |
+| 1 | Einbaubuchse DC 5,5 × 2,5, **9 A**, Metall, M8 × 0,75, Lötanschluss | Rückwanddeckel (Loch Ø 8) | 5,75 € | [DELOCK 90188](https://www.reichelt.de/de/de/shop/produkt/steckverbinder_dc_5_5_x_2_5_mm_buchse_zum_einbau_loetversion-371067) |
 | 1 | Hohlstecker 5,5 × 2,5 mit Knickschutz | Kabel zum DigiAMP+ | 1,25 € | [LUM 1634-02](https://www.reichelt.de/de/de/shop/produkt/hohlstecker_knickschutz_aussen_5_5_mm_innen_2_5_mm-139689) |
 | 1 | Silikonkabel 0,75 mm², 2 m, rot/schwarz | 19-V-Leitungen | 3,20 € | [SIK 275 2](https://www.reichelt.de/de/de/shop/produkt/silikonkabel_0_75_mm_2_m_schwarz_rot-149542) |
 | 2 | Schottky-Diode BAT 85 | A/E-Erkennung | 2 × 0,08 € | [BAT 85](https://www.reichelt.de/de/de/shop/produkt/schottkydiode_30_v_0_2_a_do-35-4857) |
@@ -55,7 +55,7 @@ Netzteil-Alternative (Markengerät): Mean Well GST90A19-P1M, 19 V / 4,74 A, Reic
 
 Die Frontplatte wird mit den Originalschrauben und -muttern durch die Frontbretter geschraubt; dafür ist nichts zu kaufen.
 
-Summe Grundausstattung (Eckstein + Reichelt) ohne Sonstiges und Versand: etwa 65 €, dazu das Netzteil von Amazon.
+Summe Grundausstattung (Eckstein + Reichelt) ohne Sonstiges und Versand: etwa 69 €, dazu das Netzteil von Amazon.
 
 ## Optional: Skalenbeleuchtung
 
