@@ -8,6 +8,7 @@ Bis zum 17.11.2026 war hier eine eigene Verstärkerplatine (Radio HAT, TAS5805M)
 |---|---|
 | `Pi/asound.conf` | ALSA-Einstellung: Hochpass 50 Hz vor dem DigiAMP+ |
 | `Bilder/digiamp_plus.jpg` | Lageplan des DigiAMP+ aus der Raspberry-Pi-Doku |
+| `Schaltplan/` | Schaltplan (`schaltplan.pdf`, `blatt1.png`, `blatt2.png`), erzeugt mit `schaltplan.py` |
 | `EINKAUF.md` | vollständige Bestellliste (Elektronik, Kleinteile, Gehäuse) |
 | `Gehaeuse/` | Holzgehäuse: 3D-Modell, Maßzeichnungen, Zuschnittliste, Druckteile |
 
@@ -73,6 +74,10 @@ So funktioniert es:
 
 ### Steuerplatine (Lochraster 70 × 50 mm)
 
+Schaltplan: `Schaltplan/schaltplan.pdf` (Blatt 1).
+
+![Schaltplan Blatt 1](Schaltplan/blatt1.png)
+
 Sitzt im Technikfach rechts neben dem Pi auf dem Druckteil `steuer_halter`. Bauteile und Verbindungen:
 
 | Teil | Anschluss | Verbindung |
@@ -102,6 +107,8 @@ Der 74AHCT125 hebt das 3,3-V-Datensignal des Pi auf 5-V-Pegel; WS2812B verlangen
 - Vorher (Entwurf v1) sollte ein RP2040-Zero am USB des Pi die LEDs steuern und versorgen. Das hätte bis zu 1,2 A zusätzlich über den 5-V-Regler des DigiAMP+ gezogen, der nur 2,5 A für Pi und USB zusammen hat. Jetzt kommt der Strom aus dem eigenen Wandler, und die Daten kommen direkt vom Pi (PWM an GPIO12, Bibliothek `rpi_ws281x`). Der RP2040 entfällt.
 
 ## Anschlüsse an den Pi
+
+![Schaltplan Blatt 2](Schaltplan/blatt2.png)
 
 Alles kommt mit Dupont-Kabeln (Buchse) an den durchgeführten GPIO-Stecker oben auf dem DigiAMP+. Tasten und Drehgeber schalten gegen GND.
 

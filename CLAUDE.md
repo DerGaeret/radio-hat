@@ -16,6 +16,7 @@ Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext -layout` als Text ausl
 |---|---|
 | `README.md` | DigiAMP+ (Kurzdaten, Lage der Anschlüsse), Pi 4B, Netzteil, Soft-Off mit Original-A/E und Pololu-Modul, Steuerplatine (Verdrahtungstabelle), LED-Strom, GPIO-Tabelle, `config.txt`, Lautstärke, LEDs, erster Test |
 | `Bilder/digiamp_plus.jpg` | Lageplan DigiAMP+ aus der RPi-Doku (CC BY-SA 4.0) |
+| `Schaltplan/` | Schaltplan als PDF/PNG aus `schaltplan.py` (schemdraw + matplotlib; `pip install schemdraw matplotlib`). Blatt 1 Versorgung/Soft-Off/LEDs, Blatt 2 Pi-GPIO/Tasten/Drehgeber. Bei Änderungen an Verdrahtung oder GPIOs mit anpassen |
 | `EINKAUF.md` | vollständige Bestellliste (Elektronik, Kleinteile; Holz in `Gehaeuse/README.md`) |
 | `Pi/asound.conf` | ALSA: Hochpass 50 Hz (LADSPA `butthigh_iir` aus swh-plugins) vor Karte 0, ungetestet |
 | `Gehaeuse/README.md` | Gehäuse: Aufbau, Zuschnittliste, Leisten, Zusammenbau, Einkaufsliste |
