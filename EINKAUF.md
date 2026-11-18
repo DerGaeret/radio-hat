@@ -39,6 +39,8 @@ Verglichen wurde Reichelt mit Eckstein: Die Pololu-Module und die Lochrasterplat
 | 1 | Lautsprecherkabel 2 × 0,75 mm², 5 m | Lautsprecher | 0,78 € | [TME KL1-5 GL](https://www.reichelt.de/de/de/shop/produkt/lautsprecherkabel_2x0_75_mm_grau_5m-ring-375320) |
 | 1 | Schrumpfschlauch-Sortiment | Lötstellen | 5,35 € | [DELOCK 86271](https://www.reichelt.de/de/de/shop/produkt/schrumpfschlauch-sortiment_schwarz_100-teilig-152924) |
 
+Netzteil-Alternative: Universal-Laptopnetzteil 90 W (Amazon B09BZ73MP1, Modell SK90B200474, 18,5–20 V / 4,74 A) geht auch. Den Aufsteckstecker 5,5 × 2,5 mm nehmen (nachmessen: Innenstift 2,5 mm), Polung Mitte = Plus vor dem ersten Anschluss mit dem Multimeter prüfen und den Stecker in der Buchse festdrücken. Dann entfällt der Mean Well.
+
 ### Sonstiges
 
 | Anz. | Teil | Wofür | Link |
