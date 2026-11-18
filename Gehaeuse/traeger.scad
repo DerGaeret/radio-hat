@@ -17,6 +17,12 @@ tasten_z  = 7 + fenster/2;                           // 13.5
 schlitze  = [[56.5,61.5],[69,74.5],[79.5,89],[94,99.5]];  // U, K, Stationen, L
 schlitz_x = [33, 222.5];
 
+/* ---------- Original-Befestigung der Frontplatte ---------- */
+// Untere Eckbohrungen (aus dem Foto: 19 mm vom Rand, pz ca. 11): Originalschraube durch Frontplatte und
+// Frontbrett, Mutter hinten. Der Flansch des Trägers bekommt dort eine Aussparung.
+fp_schraube = [19, 11];
+fp_mutter_d = 10;    // Platz für Mutter (bis M4) und Scheibe
+
 /* ---------- Gehäuse-Bezug ---------- */
 fb_kante  = 22;     // Frontbretter reichen 22 mm hinter die Frontplatte
 fb_hinten = 18;     // Rückseite der Frontbretter
@@ -120,9 +126,11 @@ module flansch(links=true) {   // wird hinten an das Frontbrett geschraubt (2 Sp
       translate([x0, fb_hinten+0.3, tr_unten+4]) cube([fb_kante-2, 3, 40]);
       translate([links ? fb_kante-0.5 : pl_b-fb_kante-2, wand_y0, tr_unten+4]) cube([2.5, fb_hinten+3.3-wand_y0, 40]);
     }
-    for (z=[tr_unten+10, tr_unten+38]) translate([links ? 11 : pl_b-11, fb_hinten-1, z]) rotate([-90,0,0]) {
+    for (z=[tr_unten+22, tr_unten+38]) translate([links ? 11 : pl_b-11, fb_hinten-1, z]) rotate([-90,0,0]) {
       cylinder(d=3, h=10); translate([0,0,4.3]) cylinder(d1=3, d2=6, h=1.5);
     }
+    // Aussparung für Mutter und Schraubenende der unteren Original-Frontplattenschraube
+    translate([(links ? fp_schraube[0] : pl_b-fp_schraube[0]) - fp_mutter_d/2 - 0.1, fb_hinten-1, fp_schraube[1] - fp_mutter_d/2]) cube([fp_mutter_d+0.2, 6.3, fp_mutter_d]);
   }
 }
 

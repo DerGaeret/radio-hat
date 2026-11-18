@@ -56,7 +56,7 @@ Gemessen am Zollstock im Foto, Genauigkeit etwa ±1 mm. Vor dem 3D-Druck am Orig
 | Loch Sender | 36 mm von rechts | Ø 10,5 mm |
 | 4 Befestigungslöcher in den Ecken | ca. 19 mm von links bzw. rechts | ca. Ø 3 mm |
 
-Die vier Befestigungslöcher liegen über den 22 mm breiten Überlappungen der Frontbretter. Die Frontplatte kann dort also mit kurzen Schrauben (z. B. 2,5 × 8) direkt am Frontbrett festgeschraubt werden. Die Lochmitte liegt dann gut 1 mm von der Brettkante entfernt. Das passt, ist aber knapp, deshalb vorher am Original nachmessen.
+Die vier Befestigungslöcher liegen über den 22 mm breiten Überlappungen der Frontbretter. Die Frontplatte wird dort mit den **Originalschrauben und -muttern** befestigt: Löcher durch das Frontbrett bohren (Durchmesser der Schraube + 0,5 mm), Schraube von vorne, Mutter hinten. Die Schraube muss dafür mindestens 3 mm (Frontplatte) + 8 mm (Frontbrett) + Mutterhöhe lang sein, also etwa 14 mm; sind die Originalschrauben kürzer, die Mutter von hinten in eine Senkung im Frontbrett setzen (Forstnerbohrer, höchstens 4 mm tief). Die Lochmitte liegt knapp 3 mm von der Brettkante entfernt; vorher am Original nachmessen. Hinter den unteren Löchern haben die Flansche der Druckteile eine Aussparung 10 × 10 mm für Mutter und Schraubenende.
 
 ## Lautsprecher fest eingebaut
 

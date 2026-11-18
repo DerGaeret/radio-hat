@@ -51,15 +51,15 @@ DigiAMP+ (Quellen: raspberrypi.com Produktseite und Audio-Doku, pinout.xyz, Kern
 - Lautstärke: ALSA-Element „Digital“, ohne `24db_digital_gain` vom Treiber auf 0 dB (Wert 207) begrenzt.
 - Card-Name „RPi DigiAMP+“; mit `dtparam=audio=off` und `vc4-kms-v3d,noaudio` ist er Karte 0 (darauf baut `Pi/asound.conf`).
 
-Vom Nutzer festgelegt (18.11.2026): Raspberry Pi 4B, grüner DigiAMP+, Netzteil hinten am Radio (nicht direkt am DigiAMP+), Netzteil gebe ich vor; Original-RFT-A/E-Schalter mit softem Ausschalten; Skala WS2812B mit Senderzeiger; Originalknöpfe Bohrung Ø 3 × 17 mm; Tasten werden aufgeklebt.
+Vom Nutzer festgelegt (18.11.2026): Raspberry Pi 4B (vorhanden, mit Kühlkörper), Pololu-Teile über Eckstein, Frontplatte mit Originalschrauben und -muttern, grüner DigiAMP+, Netzteil hinten am Radio (nicht direkt am DigiAMP+), Netzteil gebe ich vor; Original-RFT-A/E-Schalter mit softem Ausschalten; Skala WS2812B mit Senderzeiger; Originalknöpfe Bohrung Ø 3 × 17 mm; Tasten werden aufgeklebt.
 
 Umgesetzt (18.11.2026, dritter Teil):
 
 - Netzteil Mean Well GST90A19-P1M (19 V, 4,74 A, 5,5 × 2,5, C14; Reichelt), Netzkabel NKSK 200 SW. Alternative XP VEC65US19. Einbaubuchse Delock 90188 (M8 × 0,75), Hohlstecker Lumberg 1634 02 an Silikonlitze 0,75 mm². Bestelllinks in `EINKAUF.md` (fast alles Reichelt, geprüft 18.11.2026).
-- Soft-Off: Einbaubuchse hinten → Pololu Big MOSFET Slide Switch HP (#2815; SW-Pin über Schalter auf GND = an, ON-Pin > 1 V = an; Bordschalter auf OFF) → VOUT an DigiAMP+ (DC-Kabel mit Hohlstecker) und Pololu D36V28F5 (5 V für LEDs). A/E (Original, nur ~0,4 mA) zwischen Punkt X und GND; BAT85 SW→X und GPIO10→X. `gpio-shutdown` GPIO10 (active_low=0, pull-up), `gpio-poweroff` GPIO9 active_low=1 an ON. Schaltplan des Moduls geprüft (pololu.com).
-- LEDs: 112 × WS2812B, 5 V vom D36V28F5, Daten GPIO12 (PWM0, `rpi_ws281x`) über 74HCT245, Software-Begrenzung ≤ 2 A. RP2040 entfällt, USB des Pi bleibt frei.
-- GPIO: Taste 3 → GPIO4; Taster Drehgeber Klang GPIO12 → GPIO14 (UART aus). Frei nur GPIO15.
-- Drehgeber ALPS STEC11B03 (30 Rastungen/15 Impulse, Taster, Welle Ø 6 × 25 geschlitzt), Pull-ups 2,7 kΩ/270 Ω auf ihren Lochrasterplatinen; gedruckte Kupplung Ø 11 × 16 mit Zylinderstift Ø 3 × 30 in den Originalknopf; Lager Ø 3,4 in der Trägerwand.
+- Soft-Off: Einbaubuchse hinten → Pololu Big MOSFET Slide Switch MP (#2814, Eckstein 6,53 €; seit 18.11. statt HP, reicht für max. ~3,5 A; SW-Pin über Schalter auf GND = an, ON-Pin > 1 V = an; Bordschalter auf OFF) → VOUT an DigiAMP+ (DC-Kabel mit Hohlstecker) und optional Pololu D24V10F5 (5 V / 1 A für LEDs, Eckstein 15,41 €). A/E (Original, nur ~0,4 mA) zwischen Punkt X und GND; BAT85 SW→X und GPIO10→X. `gpio-shutdown` GPIO10 (active_low=0, pull-up), `gpio-poweroff` GPIO9 active_low=1 an ON. Schaltplan des Moduls geprüft (pololu.com).
+- Beleuchtung ist **optional** (Nutzer 18.11.): 112 × WS2812B, 5 V vom D24V10F5, Daten GPIO12 (PWM0, `rpi_ws281x`) über 74HCT245, Software-Begrenzung ≤ 0,8 A. Stationsmarken: ein gemeinsamer Streifen hinter beiden Markenreihen, je Marke 1–2 LEDs → aktive Marke kann hervorgehoben werden (Lage der Marken noch nicht gemessen).
+- GPIO: Taste 3 → GPIO4. Drehgeber nur drehen, Taster unbenutzt (Nutzer 18.11.). Frei: GPIO7, 14, 15, 26.
+- Drehgeber ALPS STEC11B03 (30 Rastungen/15 Impulse, Taster, Welle Ø 6 × 25 geschlitzt), Pull-ups 2 × 2,7 kΩ (A, B) auf ihren Lochrasterplatinen, 4 Adern; gedruckte Kupplung Ø 11 × 16 mit Zylinderstift Ø 3 × 30 in den Originalknopf; Lager Ø 3,4 in der Trägerwand.
 - A/E-Halteplatte mit Loch Ø 10,5 an zwei Säulen; Maße des RFT-Schalters (`rft_a` 41, Buchse 8, Ø 25, Tiefe 13) nur aus dem Foto geschätzt.
 - Pi-Halter: Pi 65 mm hinter der Frontplatte (hinter den Drehgebern), GPIO-Kante vorne, 4 Sockel mit Bolzen M2,5 × 6 I/A von unten verschraubt. Neuer Steuerplatinen-Halter (Lochraster 70 × 50) rechts daneben.
 - Hochpass 50 Hz per ALSA/LADSPA.
@@ -86,7 +86,7 @@ Nichts davon ist am Gerät getestet.
 
 ## Stand 3D-Druck
 
-Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt: Träger mit Kupplungsrohren und A/E-Säulen, Kupplungen, A/E-Platte, Pi- und Steuerplatinen-Halter. Tasten 8 mm vor der Frontplatte, Adapter flach zum Aufkleben.
+Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt: Träger mit Kupplungsrohren, A/E-Säulen und Aussparung für die Original-Frontplattenmuttern, Kupplungen, A/E-Platte, Pi- und Steuerplatinen-Halter. Tasten 8 mm vor der Frontplatte, Adapter flach zum Aufkleben.
 
 ## Offene Fragen an den Nutzer (Antworten stehen noch aus)
 
@@ -98,9 +98,11 @@ Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt: Tr
 - 18.11.2026: Umstellung auf DigiAMP+ (eigene Platine entfernt, README neu, `Pi/asound.conf` neu, Pi-Halter und Bilder `ansicht_offen.png`/`ansicht_hinten.png` neu, `DRUCKTEILE.md` angepasst).
 - 18.11.2026, zweiter Teil: Pi 4B, grün, harte Trennung über A/E, Netzteilvorgabe, Buchse hinten, Pi im Halter gedreht, Einkaufsliste Elektronik in README.
 - 18.11.2026, dritter Teil: Soft-Off mit Original-A/E und Pololu-Modulen, LEDs mit eigenem 5-V-Wandler an GPIO12, Kupplungen für die Originalknöpfe, `EINKAUF.md`, Druckteile v2.
+- 18.11.2026, vierter Teil: Drehgeber ohne Taster, Beleuchtung optional, Pololu MP + D24V10F5 (Eckstein), Preise in `EINKAUF.md`, Frontplatte mit Originalschrauben (Aussparung im Flansch).
 - Maße des A/E-Schalters abwarten, Parameter `rft_*` anpassen, STL neu.
 
 ## Hinweise
 
 - Aus der Cloud nicht erreichbar: amazon.de, holzzuschnitt-shop.de, ebay.de, ti.com, mouser.com, lcsc.com, jlcpcb.com. Erreichbar: GitHub (auch raw.githubusercontent.com). Die Websuche liefert LCSC-Nummern und Datenblattauszüge.
-- Belegte GPIOs siehe `README.md`; frei ist nur GPIO15.
+- Belegte GPIOs siehe `README.md`; frei sind GPIO7, 14, 15, 26.
+- Preise abrufbar: Reichelt `https://www.reichelt.de/de/de/shop/suche/<begriff>` (Preis im Produkt-HTML `itemprop="price"`), Eckstein `https://eckstein-shop.de/?qs=<begriff>`.

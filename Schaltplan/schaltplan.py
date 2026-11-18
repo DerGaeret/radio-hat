@@ -43,7 +43,7 @@ def titel(d, xy, text, sub):
 # ---------------------------------------------------------------- Blatt 1
 def blatt1():
     d = schemdraw.Drawing(show=False, unit=2)
-    titel(d, (0, 9), 'Blatt 1: Stromversorgung, Soft-Off, Verstärker, LED-Ansteuerung',
+    titel(d, (0, 9), 'Blatt 1: Stromversorgung, Soft-Off, Verstärker, LED-Ansteuerung (optional)',
           'Retro-Radio, Stand 18.11.2026, ungetestet. Bauteile auf der Steuerplatine (Lochraster 70 × 50) mit * markiert.')
 
     # Netzteil und Einbaubuchse
@@ -54,7 +54,7 @@ def blatt1():
     d.add(elm.Wire('-').at(nt.M).to(j1.M1))
 
     # Pololu Schaltmodul
-    q = ic(d, (13, 5), '*Q1 Pololu Big MOSFET\nSlide Switch HP (#2815)\nBordschalter auf OFF',
+    q = ic(d, (13, 5), '*Q1 Pololu Big MOSFET\nSlide Switch MP (#2814)\nBordschalter auf OFF',
            links=[('VIN', 'VIN'), ('GND', 'G1')], rechts=[('VOUT', 'VOUT'), ('GND', 'G2')],
            unten=[('SW', 'SW'), ('ON', 'ON')], w=4.4)
     d.add(elm.Wire('-').at(j1.P2).to(q.VIN).label('X1 EIN +', fontsize=7))
@@ -101,7 +101,7 @@ def blatt1():
         'D2 sperrt die ~19 V an X, solange der Pi aus ist.', fontsize=7, halign='left'))
 
     # 5-V-Wandler
-    bk = ic(d, (13, -9), '*U1 Pololu D36V28F5, 5 V / 3,2 A\n(EN und PG frei)', links=[('VIN', 'VIN'), ('GND', 'G')],
+    bk = ic(d, (13, -9), '*U1 Pololu D24V10F5, 5 V / 1 A\n(nur mit Beleuchtung; PG frei)', links=[('VIN', 'VIN'), ('GND', 'G')],
             rechts=[('VOUT', 'VOUT'), ('GND', 'G2')], w=4)
     tag(d, bk.VIN, '+19V_SW', 'left', 0.8)
     d.add(elm.Line().at(bk.G).left().length(0.8)); d.add(elm.Ground())
@@ -115,7 +115,7 @@ def blatt1():
     gnd(d, bk.G2, 0.6)
 
     # Pegelwandler
-    u2 = ic(d, (25, -9), '*U2 74HCT245 (DIP-20)',
+    u2 = ic(d, (25, -9), '*U2 74HCT245 (DIP-20)\n(nur mit Beleuchtung)',
             links=[('A1 (2)', 'A'), ('DIR (1)', 'DIR'), ('/OE (19)', 'OE'), ('GND (10)', 'G')],
             rechts=[('B1 (18)', 'Y'), ('VCC (20)', 'V')], w=4)
     tag(d, u2.A, 'GPIO12 (Pin 32)', 'left', 1.0)
@@ -132,8 +132,8 @@ def blatt1():
 
     # LED-Skala
     y0 = -16.5
-    d.add(elm.Label().at((0, y0 + 2.9)).label('LED-Skala im Lichtkasten: 4 Streifen WS2812B à 28 LEDs (144/m), Daten in Reihe, Versorgung je Streifen einzeln. '
-                                              'Software-Grenze ≤ 2 A (Weiß ≤ 30 %).', fontsize=8, halign='left'))
+    d.add(elm.Label().at((0, y0 + 2.9)).label('OPTIONAL – LED-Skala im Lichtkasten: 4 Streifen WS2812B à 28 LEDs (144/m), Daten in Reihe, Versorgung je Streifen einzeln. '
+                                              'Software-Grenze ≤ 0,8 A.', fontsize=8, halign='left'))
     prev = (0.6, y0 - 0.4 + 0.8)
     tag(d, prev, 'LED_DIN', 'left', 0.01)
     for i, name in enumerate(['U-Band', 'K-Band', 'Stationsmarken', 'L-Band']):
@@ -158,13 +158,13 @@ def blatt2():
     d = schemdraw.Drawing(show=False, unit=2)
     titel(d, (0, 13), 'Blatt 2: Raspberry Pi 4B, Tasten, Drehgeber',
           'Alle Verbindungen mit Dupont-Kabeln am durchgeführten GPIO-Stecker oben auf dem DigiAMP+. Pull-ups der Tasten im Pi (Software).')
-    pins = [  # (Pin, Name, Seite)
-        ('1', '3V3'), ('7', 'GPIO4'), ('8', 'GPIO14'), ('9', 'GND'), ('11', 'GPIO17'), ('13', 'GPIO27'),
-        ('16', 'GPIO23'), ('17', '3V3'), ('18', 'GPIO24'), ('19', 'GPIO10'), ('21', 'GPIO9'), ('22', 'GPIO25'),
-        ('23', 'GPIO11'), ('24', 'GPIO8'), ('26', 'GPIO7'), ('29', 'GPIO5'), ('31', 'GPIO6'), ('32', 'GPIO12'),
-        ('33', 'GPIO13'), ('36', 'GPIO16'), ('37', 'GPIO26'), ('39', 'GND')]
-    links = [(f'{n} ({p})', f'P{p}') for p, n in pins[:11]]
-    rechts = [(f'{n} ({p})', f'P{p}') for p, n in pins[11:]]
+    pins = [  # (Pin, Name)
+        ('1', '3V3'), ('7', 'GPIO4'), ('9', 'GND'), ('11', 'GPIO17'), ('13', 'GPIO27'),
+        ('16', 'GPIO23'), ('17', '3V3'), ('18', 'GPIO24'), ('19', 'GPIO10'), ('21', 'GPIO9'),
+        ('22', 'GPIO25'), ('23', 'GPIO11'), ('24', 'GPIO8'), ('29', 'GPIO5'), ('31', 'GPIO6'), ('32', 'GPIO12'),
+        ('33', 'GPIO13'), ('36', 'GPIO16'), ('39', 'GND')]
+    links = [(f'{n} ({p})', f'P{p}') for p, n in pins[:10]]
+    rechts = [(f'{n} ({p})', f'P{p}') for p, n in pins[10:]]
     pi = ic(d, (10, 4), 'Raspberry Pi 4B, 40-pol. GPIO\n(über DigiAMP+ durchgeführt)\nDigiAMP+ belegt GPIO0–3, 18–22',
             links=links, rechts=rechts, w=6, ps=0.9)
     # linke Seite
@@ -172,7 +172,6 @@ def blatt2():
     d.add(elm.Line().at(pi.P9).left().length(0.8)); d.add(elm.Ground())
     tag(d, pi.P17, '+3V3', 'left', 0.8)
     tag(d, pi.P19, 'GPIO10 → Blatt 1 (A/E)', 'left', 0.8)
-    tag(d, pi.P8, 'E1_T', 'left', 0.8)
     for p, n in (('7', 'S3'), ('11', 'S1'), ('13', 'S2'), ('16', 'S4'), ('18', 'S5')):
         d.add(elm.Line().at(getattr(pi, 'P' + p)).left().length(1.5))
         d.add(elm.Button().left().label(f'{n} Cherry MX', fontsize=7))
@@ -181,39 +180,31 @@ def blatt2():
     d.add(elm.Line().at(pi.P22).right().length(1.5))
     d.add(elm.Button().right().label('S6 Cherry MX', fontsize=7)); d.add(elm.Ground().theta(0))
     tag(d, pi.P21, 'GPIO9 → Blatt 1 (ON)', 'left', 0.8)
-    tag(d, pi.P32, 'GPIO12 → Blatt 1 (LED)', 'right', 0.8)
+    tag(d, pi.P32, 'GPIO12 → Blatt 1 (LED, optional)', 'right', 0.8)
     d.add(elm.Line().at(pi.P39).right().length(0.8)); d.add(elm.Ground())
-    for p, n in (('29', 'E1_A'), ('31', 'E1_B'), ('33', 'E2_A'), ('36', 'E2_B'), ('37', 'E2_T'),
-                 ('23', 'E3_A'), ('24', 'E3_B'), ('26', 'E3_T')):
+    for p, n in (('29', 'E1_A'), ('31', 'E1_B'), ('33', 'E2_A'), ('36', 'E2_B'),
+                 ('23', 'E3_A'), ('24', 'E3_B')):
         tag(d, getattr(pi, 'P' + p), n, 'right', 0.8)
     d.add(elm.Label().at((0, -2.6)).label('Tasten S1–S6: Reihenfolge von links nach rechts in der Frontplatte (L, M, K, U, TA-TB, AFC-AUS). '
-                                         'GPIO14 nur mit abgeschalteter serieller Schnittstelle.', fontsize=7, halign='left'))
+                                         'Frei: GPIO7, 14, 15, 26.', fontsize=7, halign='left'))
 
-    # Drehgeber
+    # Drehgeber: nur Drehen, Taster bleibt frei. Pins von vorne gesehen A, C, B nebeneinander.
     for i, (n, name) in enumerate((('E1', 'Klang'), ('E2', 'Lautstärke'), ('E3', 'Sender'))):
-        x0 = i * 11
-        y0 = -6.5
-        e = ic(d, (x0 + 6, y0), f'{n} {name}\nALPS STEC11B03\nauf Lochraster 20 × 25',
-               links=[('A', 'A'), ('B', 'B'), ('Taster 1', 'T')], rechts=[('C', 'C'), ('Taster 2', 'T2')], w=3)
-        for a, net, r in (('A', f'{n}_A', '2,7 kΩ'), ('B', f'{n}_B', '2,7 kΩ'), ('T', f'{n}_T', '270 Ω')):
-            pin = getattr(e, a)
-            d.add(elm.Line().at(pin).left().length(1.2))
+        x0 = i * 10.5 - 0.5
+        y0 = -5.5
+        e = ic(d, (x0 + 5, y0), f'{n} {name}: ALPS STEC11B03\n(Taster-Pins frei lassen)',
+               unten=[('A', 'A'), ('C', 'C'), ('B', 'B')], w=4, h=1.6, ps=1.4)
+        for a, seite in (('A', 'left'), ('B', 'right')):
+            d.add(elm.Line().at(getattr(e, a)).down().length(0.9))
             k = d.here
             d.add(elm.Dot())
-            d.add(elm.Line().at(k).left().length(0.6))
-            d.add(elm.Tag().left().label(net, fontsize=FS))
-        d.add(elm.Line().at(e.C).right().length(0.6)); d.add(elm.Ground())
-        d.add(elm.Line().at(e.T2).right().length(0.6)); d.add(elm.Ground())
-        # Widerstände als Reihe darunter
-        yb = y0 - 3.2
-        for j, (a, r) in enumerate((('A', '2,7 kΩ'), ('B', '2,7 kΩ'), ('T', '270 Ω'))):
-            xx = x0 + 1 + j * 2.4
-            d.add(elm.Resistor().at((xx, yb)).down().label(f'{r}', fontsize=7, loc='bottom'))
-            d.add(elm.Vdd().at((xx, yb)).label('+3V3', fontsize=7))
-            tag(d, (xx, yb - 2.0), f'{n}_{a}', 'down', 0.4)
-    d.add(elm.Label().at((0, -14.5)).label(
-        'Drehgeber: mindestens 1 mA an A/B und 10 mA am Taster (Datenblatt) → Pull-ups 2,7 kΩ und 270 Ω nach 3,3 V auf der Drehgeberplatine. '
-        'Pro Drehgeber 5 Adern: A, B, Taster, 3,3 V, GND.\nKernel: dtoverlay=rotary-encoder, steps-per-period=2 (30 Rastungen, 15 Impulse).', fontsize=7, halign='left'))
+            tag(d, k, f'{n}_{a} → Pi', seite, 1.6)
+            d.add(elm.Resistor().at(k).down().label('2,7 kΩ', fontsize=8, loc='bottom' if seite == 'right' else 'top'))
+            tag(d, d.here, '+3V3', 'down', 0.3)
+        d.add(elm.Line().at(e.C).down().length(0.9)); d.add(elm.Ground())
+    d.add(elm.Label().at((0, -12.8)).label(
+        'Drehgeber: mindestens 1 mA an A und B (Datenblatt) → je 2,7 kΩ nach 3,3 V auf der Drehgeberplatine (1,2 mA). '
+        'Pro Drehgeber 4 Adern: A, B, 3,3 V, GND. Die Taster werden nicht benutzt.\nKernel: dtoverlay=rotary-encoder, steps-per-period=2 (30 Rastungen, 15 Impulse).', fontsize=7, halign='left'))
     return d
 
 if __name__ == '__main__':
