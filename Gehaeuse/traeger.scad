@@ -2,6 +2,7 @@
 // Koordinaten der Frontteile: px = ab linker Kante der Frontplatte, pz = ab Unterkante der Frontplatte,
 // y = Tiefe wie im Gehäuse (Frontplatte vorne y=7, hinten y=10).
 // Ansicht/Export: teil = "alle" | "traeger_links" | "traeger_rechts" | "lichtkasten" | "pi_halter" | "tastenadapter"
+//                  | "kupplung" | "ae_platte" | "steuer_halter"
 teil = "alle";
 $fn = 40;
 
@@ -23,12 +24,31 @@ boden_pz  = -4;     // Innenseite Boden (z = 8) in Frontplatten-Koordinaten
 deckel_pz = 118;    // Innenseite Deckel
 
 /* ---------- Bauteile ---------- */
-// Drehgeber ALPS STEC11B: Körper ca. 12 x 12 x 6,5, Welle 6 mm
-enc_welle  = 20;    // Wellenlänge ab Gehäusevorderseite (STEC11B gibt es mit 15/20/25/30)
-welle_spitze = -2;  // Wellenspitze steckt 9 mm tief im Knopf (Knopf hinten bei y=7)
-enc_vorne  = welle_spitze + enc_welle;   // 18: Vorderseite Drehgeber
+// Originalknöpfe: 19 mm lang + 3 mm Nase, Bohrung Ø 3 x 17 mm tief (Nutzer, 18.11.2026).
+knopf_hinten = pl_vorne - 0.5;          // 6.5: Rückseite des Knopfs, 0,5 mm vor der Frontplatte
+knopf_bohr   = 17;
+stift_tief   = 16;                      // so weit steckt die Achse im Knopf (1 mm Reserve)
+stift_spitze = knopf_hinten - stift_tief;   // -9.5
+// Drehgeber ALPS STEC11B03: Körper 11,6 x 12 x 6,5, runde geschlitzte Welle Ø 6 x 25 mm ab Montagefläche
+enc_welle  = 25;
 enc_tief   = 6.5;
+// Kupplung: Zylinderstift ISO 2338 Ø 3 x 30 (Stahl) vorne, Drehgeberwelle hinten
+stift_l    = 30;
+kup_d      = 11;  kup_vorne = 13.8;  kup_l = 16;
+kup_stift  = stift_spitze + stift_l - kup_vorne + 0.5;   // 7.2: Tiefe der Stiftbohrung
+kup_welle_tief = 8;                                       // Welle steckt 8 mm in der Kupplung
+enc_vorne  = kup_vorne + kup_l - kup_welle_tief + enc_welle;   // 46.8: Montagefläche Drehgeber
 lr_b = 20;  lr_h = 25;  lr_t = 1.6;      // Lochrasterplatine je Drehgeber
+// Original-A/E-Schalter (RFT): Maße aus dem Foto GESCHÄTZT, vor dem Druck nachmessen.
+rft_a       = 41;    // Anlagefläche (Flansch) bis Wellenende
+rft_buchse  = 8;     // Gewindebuchse ab Flansch
+rft_loch    = 10.5;  // Loch in der Halteplatte (passt für Gewinde M8 bis M10)
+rft_koerper = 25;    // Gehäuse-Ø
+rft_tief    = 13;    // Gehäusetiefe hinter dem Flansch
+ae_platte_t = 3;
+ae_flansch_y = stift_spitze + rft_a;          // 31.5: Flansch liegt an der Rückseite der Halteplatte
+ae_platte_y  = ae_flansch_y - ae_platte_t;    // 28.5
+ae_saeulen   = [[0,-13],[13,0]];             // Schraubsäulen relativ zur Achse (dx, dz)
 // Cherry MX: Montageplatte 1,5 mm, Ausschnitt 14 x 14
 mx_ausschnitt = 14;  mx_platte = 1.5;
 // Tastenkappe 18 lang, 1 mm vor der Holzkante; Adapter: Platte 2 mm + Stößel 6 mm
@@ -47,12 +67,13 @@ tiefe_tr = 40;              // Träger reicht bis y = 40
 module frontwand(x0, x1) {
   difference() {
     translate([x0, wand_y0, tr_unten]) cube([x1-x0, wand_t, tr_oben-tr_unten]);
-    for (k=knoepfe) translate([k[0], wand_y0-1, k[1]]) rotate([-90,0,0]) cylinder(d=8, h=wand_t+2);
+    for (i=[0:3]) translate([knoepfe[i][0], wand_y0-1, knoepfe[i][1]]) rotate([-90,0,0])
+      cylinder(d=(i==0 ? 6 : 3.4), h=wand_t+2);   // A/E: Welle frei; Drehgeber: Lager für den 3-mm-Stift
     for (x=tasten_x) translate([x-(fenster+0.6)/2, wand_y0-1, tasten_z-(fenster+0.6)/2]) cube([fenster+0.6, wand_t+2, fenster+0.6]);
   }
 }
 
-module drehgeber_turm(k) {   // Block mit Wellenloch, zwei Säulen für die Lochrasterplatine
+module drehgeber_turm(k) {   // Rohr für die Kupplung, zwei Säulen für die Lochrasterplatine
   x = k[0]; z = k[1];
   difference() {
     union() {
@@ -60,8 +81,32 @@ module drehgeber_turm(k) {   // Block mit Wellenloch, zwei Säulen für die Loch
       for (dz=[-9.5,9.5]) translate([x, wand_y1, z+dz]) rotate([-90,0,0])
         cylinder(d=6, h=enc_vorne+enc_tief-wand_y1);
     }
-    translate([x, wand_y0-1, z]) rotate([-90,0,0]) cylinder(d=7, h=40);
+    translate([x, wand_y1-0.01, z]) rotate([-90,0,0]) cylinder(d=kup_d+0.8, h=60);
     for (dz=[-9.5,9.5]) translate([x, enc_vorne, z+dz]) rotate([-90,0,0]) cylinder(d=2.2, h=20);
+  }
+}
+
+module ae_turm(k) {   // zwei Säulen für die Halteplatte des Original-A/E-Schalters
+  for (d=ae_saeulen) difference() {
+    translate([k[0]+d[0], wand_y1, k[1]+d[1]]) rotate([-90,0,0]) cylinder(d=6, h=ae_platte_y-wand_y1);
+    translate([k[0]+d[0], wand_y1+2, k[1]+d[1]]) rotate([-90,0,0]) cylinder(d=2.2, h=40);
+  }
+}
+
+module ae_platte() {   // in Gehäusekoordinaten um die A/E-Achse; Schalter mit seiner Mutter festschrauben
+  k = knoepfe[0];
+  difference() {
+    translate([k[0]-12, ae_platte_y, k[1]-18]) cube([28, ae_platte_t, 31]);
+    translate([k[0], ae_platte_y-1, k[1]]) rotate([-90,0,0]) cylinder(d=rft_loch, h=10);
+    for (d=ae_saeulen) translate([k[0]+d[0], ae_platte_y-1, k[1]+d[1]]) rotate([-90,0,0]) cylinder(d=2.8, h=10);
+  }
+}
+
+module kupplung() {   // Achse z: vorne (z=0) Stiftbohrung Ø 3, hinten Bohrung Ø 6 für die Drehgeberwelle
+  difference() {
+    cylinder(d=kup_d, h=kup_l);
+    translate([0,0,-1]) cylinder(d=3.0, h=kup_stift+1);
+    translate([0,0,kup_l-kup_welle_tief]) cylinder(d=6.0, h=kup_welle_tief+1);
   }
 }
 
@@ -86,7 +131,8 @@ module traeger_links() {
   difference() {
     union() {
       frontwand(x0, x1);
-      for (i=[0:2]) drehgeber_turm(knoepfe[i]);
+      ae_turm(knoepfe[0]);
+      for (i=[1:2]) drehgeber_turm(knoepfe[i]);
       leiste_oben(x0, x1); leiste_unten(x0, x1);
       flansch(true);
       translate([x1-10, wand_y1, 0]) cube([16, 3, 9]);              // Lasche zum rechten Träger
@@ -149,13 +195,16 @@ module lichtkasten() {
 
 /* ---------- Halter für Raspberry Pi + DigiAMP+ (Gehäusekoordinaten) ---------- */
 // Der DigiAMP+ (58 x 65 mm) sitzt direkt auf dem Pi, mit den Abstandsbolzen aus seinem Lieferumfang
-// auf den vier Pi-Löchern. Der Halter trägt deshalb nur noch den Pi.
+// auf den vier Pi-Löchern. Der Halter trägt nur den Pi: auf jedem Sockel ein Abstandsbolzen M2,5 x 6
+// Innen/Außen, von unten mit M2,5 x 6 angeschraubt; sein Außengewinde geht durch den Pi in den Bolzen zum DigiAMP+.
 // Der Pi liegt mit der GPIO-Kante nach vorne: Hohlbuchse und Lautsprecherklemmen des DigiAMP+ sitzen
 // an der gegenüberliegenden Kante und zeigen so zur Rückwand. USB/Ethernet zeigen nach links (-x).
-pi_gpio_y = 49;    // GPIO-Kante des Pi (Gehäuse-y), Pi reicht nach hinten bis y = 105
+pi_gpio_y = 65;    // GPIO-Kante des Pi (Gehäuse-y), Pi reicht nach hinten bis y = 121 (hinter den Drehgebern)
 pi_x0     = 290;   // linke Kante des Pi (Gehäuse-x, USB-Seite)
 boden_z   = 8;
-pi_hoehe  = 6;     // Pi-Platine liegt 6 mm über der Halterplatte
+sockel_h  = 3;     // Sockel auf der Halterplatte
+bolzen_h  = 6;     // Abstandsbolzen M2,5 x 6 Innen/Außen
+pi_hoehe  = sockel_h + bolzen_h;   // Pi-Unterseite über der Halterplatte
 amp_abst  = 9;     // Abstand Pi-Platine zu DigiAMP+-Platine, nur für die Vorschau (Bolzen aus dem Lieferumfang)
 ph_t      = 2.5;
 pi_loecher  = [[3.5,3.5],[61.5,3.5],[3.5,52.5],[61.5,52.5]];   // Pi-Koordinaten (y ab GPIO-Kante Richtung Pi)
@@ -166,13 +215,35 @@ module pi_halter() {
   difference() {
     union() {
       translate([x0, y0, boden_z]) cube([x1-x0, y1-y0, ph_t]);
-      for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z]) cylinder(d=6, h=ph_t+pi_hoehe);
+      for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z]) cylinder(d=8, h=ph_t+sockel_h);
     }
-    for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z+1]) cylinder(d=2.2, h=40);
+    for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z-1]) {      // M2,5 x 6 von unten
+      cylinder(d=2.8, h=20); cylinder(d=5.5, h=1+2.5);
+    }
     for (x=[x0+5, x1-5], y=[y0+5, y1-5]) translate([x, y, boden_z-1]) {   // Spax 3 x 10 in den Boden
       cylinder(d=3.2, h=10); translate([0,0,ph_t-0.5]) cylinder(d=6.5, h=10);
     }
     translate([x0+20, y0+14, boden_z-1]) cube([x1-x0-40, y1-y0-28, 5]);       // Material sparen
+  }
+}
+
+/* ---------- Halter für die Steuerplatine (Lochraster 50 x 70) ---------- */
+// Trägt Pololu-Schaltmodul, 5-V-Wandler, Pegelwandler und Anschlüsse. Lochabstand nachmessen.
+st_x0 = 392;  st_y0 = 78;          // linke vordere Ecke der Lochrasterplatine (Gehäuse)
+st_gr = [70, 50];  st_loch = [66, 46];
+module steuer_halter() {
+  x0 = st_x0-6; y0 = st_y0-6; x1 = st_x0+st_gr[0]+6; y1 = st_y0+st_gr[1]+6;
+  lp = [for (i=[0,1], j=[0,1]) [st_x0+(st_gr[0]-st_loch[0])/2+i*st_loch[0], st_y0+(st_gr[1]-st_loch[1])/2+j*st_loch[1]]];
+  difference() {
+    union() {
+      translate([x0, y0, boden_z]) cube([x1-x0, y1-y0, ph_t]);
+      for (p=lp) translate([p[0], p[1], boden_z]) cylinder(d=6, h=ph_t+8);
+    }
+    for (p=lp) translate([p[0], p[1], boden_z+1]) cylinder(d=1.8, h=20);   // M2 selbstschneidend
+    for (x=[x0+5, x1-5], y=[y0+5, y1-5]) translate([x, y, boden_z-1]) {
+      cylinder(d=3.2, h=10); translate([0,0,ph_t-0.5]) cylinder(d=6.5, h=10);
+    }
+    translate([x0+16, y0+14, boden_z-1]) cube([x1-x0-32, y1-y0-28, 5]);
   }
 }
 
@@ -192,11 +263,20 @@ module tastenadapter() {
 
 /* ---------- Platzhalter (nur Ansicht) ---------- */
 module bauteile_vorschau() {
-  for (k=knoepfe) {
-    color("Silver") translate([k[0], pl_vorne, k[1]]) rotate([90,0,0]) cylinder(d1=16, d2=15, h=19);
-    color("DarkSlateGray") translate([k[0]-6, enc_vorne, k[1]-6]) cube([12, enc_tief, 12]);
-    color("SeaGreen") translate([k[0]-lr_b/2, enc_vorne+enc_tief, k[1]-lr_h/2]) cube([lr_b, lr_t, lr_h]);
+  for (i=[0:3]) { k = knoepfe[i];
+    color("Silver") translate([k[0], knopf_hinten, k[1]]) rotate([90,0,0]) cylinder(d1=16, d2=15, h=19);
+    if (i > 0) {
+      color("LightGray") translate([k[0], stift_spitze, k[1]]) rotate([-90,0,0]) cylinder(d=3, h=stift_l);
+      color("Orange") translate([k[0], kup_vorne, k[1]]) rotate([-90,0,0]) kupplung();
+      color("DarkSlateGray") translate([k[0]-6, enc_vorne, k[1]-6]) cube([12, enc_tief, 12]);
+      color("SeaGreen") translate([k[0]-lr_b/2, enc_vorne+enc_tief, k[1]-lr_h/2]) cube([lr_b, lr_t, lr_h]);
+    }
   }
+  k = knoepfe[0];
+  color("LightGray") translate([k[0], stift_spitze, k[1]]) rotate([-90,0,0]) cylinder(d=3.5, h=rft_a);
+  color("DimGray") translate([k[0], ae_flansch_y-rft_buchse, k[1]]) rotate([-90,0,0]) cylinder(d=9, h=rft_buchse);
+  color([0.1,0.1,0.1]) translate([k[0], ae_flansch_y, k[1]]) rotate([-90,0,0]) cylinder(d=rft_koerper, h=rft_tief);
+  color("Orange") ae_platte();
   for (x=tasten_x) {
     color([0.1,0.1,0.1]) translate([x-6, pl_vorne-kappe_vor, tasten_z-6]) cube([12, kappe_l, 12]);
     color("Black") translate([x-7, mx_platte_y-6.6, tasten_z-7]) cube([14, 6.6+mx_platte+5, 14]);
@@ -224,7 +304,11 @@ module traeger_einbau(mit_bauteilen=true) {
     if (mit_bauteilen) bauteile_vorschau();
   }
   color("LightSteelBlue") pi_halter();
-  if (mit_bauteilen) pi_vorschau();
+  color("LightSteelBlue") steuer_halter();
+  if (mit_bauteilen) {
+    pi_vorschau();
+    color("SeaGreen") translate([st_x0, st_y0, boden_z+ph_t+8]) cube([st_gr[0], st_gr[1], 1.6]);
+  }
 }
 
 /* ---------- Druckausrichtung ---------- */
@@ -233,4 +317,7 @@ if (teil == "traeger_links")  rotate([90,0,0]) translate([0,-wand_y0,0]) traeger
 if (teil == "traeger_rechts") rotate([90,0,0]) translate([0,-wand_y0,0]) traeger_rechts();
 if (teil == "lichtkasten")    rotate([90,0,0]) translate([0,-wand_y0,0]) lichtkasten();
 if (teil == "pi_halter")      translate([0,0,-boden_z]) pi_halter();
+if (teil == "kupplung")       for (i=[0:2]) translate([i*15,0,0]) kupplung();
+if (teil == "ae_platte")      rotate([90,0,0]) translate([0,-ae_platte_y,0]) ae_platte();
+if (teil == "steuer_halter")  translate([0,0,-boden_z]) steuer_halter();
 if (teil == "tastenadapter")  for (i=[0:5]) translate([i*15,0,0]) tastenadapter();

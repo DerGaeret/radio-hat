@@ -132,6 +132,8 @@ Die hinteren Leisten sitzen 8 mm vor der Hinterkante, damit die Rückwände bün
 - Lochsäge Ø 100 mm, Forstnerbohrer 12 mm und 25 mm, Kegelsenker, Zwingen
 - Polyesterwatte, ca. 100 g
 
+Elektronik und Kleinteile für das Technikfach: `../EINKAUF.md`.
+
 ## Ist 8 mm zu dünn?
 
 Es geht, liegt aber an der unteren Grenze. Mit den verleimten Leisten wird der Kasten steif genug. Die Kammerwände sind klein und rundum verleimt, mit Dämmwolle schwingen sie kaum hörbar mit. 10 oder 12 mm wären robuster; dafür in `gehaeuse.scad` und `zeichnung.py` nur `t` ändern.

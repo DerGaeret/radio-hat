@@ -14,8 +14,9 @@ Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext -layout` als Text ausl
 
 | Pfad | Inhalt |
 |---|---|
-| `README.md` | DigiAMP+ (Kurzdaten, Lage der Anschlüsse), Pi 4B, Netzteil (Kaufvorgabe), Stromweg mit A/E-Schalter, Einkaufsliste Elektronik, Anschlusstabelle Tasten/Drehgeber, `config.txt`, Lautstärke, Overlay-Dateisystem, erster Test |
+| `README.md` | DigiAMP+ (Kurzdaten, Lage der Anschlüsse), Pi 4B, Netzteil, Soft-Off mit Original-A/E und Pololu-Modul, Steuerplatine (Verdrahtungstabelle), LED-Strom, GPIO-Tabelle, `config.txt`, Lautstärke, LEDs, erster Test |
 | `Bilder/digiamp_plus.jpg` | Lageplan DigiAMP+ aus der RPi-Doku (CC BY-SA 4.0) |
+| `EINKAUF.md` | vollständige Bestellliste (Elektronik, Kleinteile; Holz in `Gehaeuse/README.md`) |
 | `Pi/asound.conf` | ALSA: Hochpass 50 Hz (LADSPA `butthigh_iir` aus swh-plugins) vor Karte 0, ungetestet |
 | `Gehaeuse/README.md` | Gehäuse: Aufbau, Zuschnittliste, Leisten, Zusammenbau, Einkaufsliste |
 | `Gehaeuse/gehaeuse.scad` | Gehäusemodell (OpenSCAD), bindet `traeger.scad` ein |
@@ -33,7 +34,7 @@ pip install matplotlib numpy scipy pillow
 
 - Bilder: `cd Gehaeuse && xvfb-run -a openscad -o bilder/ansicht_vorne.png --imgsize=1600,900 --camera=336,95,60,75,0,20,1250 --colorscheme=Tomorrow gehaeuse.scad` (weitere Ansichten: `-D 'ansicht="ohne_deckel"'` Kamera `336,95,60,50,0,200,1250`; `"hinten_offen"` `336,120,60,68,0,215,1400`; `"explosion"` `336,30,60,65,0,25,1900`)
 - Zeichnungen: `cd Gehaeuse && python3 zeichnung.py`
-- STL: `cd Gehaeuse && openscad -o stl/TEIL.stl -D 'teil="TEIL"' traeger.scad` (TEIL = traeger_links, traeger_rechts, lichtkasten, pi_halter, tastenadapter)
+- STL: `cd Gehaeuse && openscad -o stl/TEIL.stl -D 'teil="TEIL"' traeger.scad` (TEIL = traeger_links, traeger_rechts, lichtkasten, pi_halter, steuer_halter, ae_platte, kupplung, tastenadapter)
 - Renderings: `cd Gehaeuse/render && python3 render.py 1600 1000 gut` (ca. 1 min)
 - Maße stehen doppelt in `gehaeuse.scad` und `zeichnung.py` (und teils `render.py`) – bei Änderungen alle anpassen.
 
@@ -49,17 +50,18 @@ DigiAMP+ (Quellen: raspberrypi.com Produktseite und Audio-Doku, pinout.xyz, Kern
 - Lautstärke: ALSA-Element „Digital“, ohne `24db_digital_gain` vom Treiber auf 0 dB (Wert 207) begrenzt.
 - Card-Name „RPi DigiAMP+“; mit `dtparam=audio=off` und `vc4-kms-v3d,noaudio` ist er Karte 0 (darauf baut `Pi/asound.conf`).
 
-Vom Nutzer festgelegt (18.11.2026): Raspberry Pi 4B, grüner DigiAMP+, A/E-Schalter trennt die Versorgung hart, Netzteil wird hinten am Radio eingesteckt (nicht direkt am DigiAMP+); Netzteil gebe ich vor, der Nutzer kauft es.
+Vom Nutzer festgelegt (18.11.2026): Raspberry Pi 4B, grüner DigiAMP+, Netzteil hinten am Radio (nicht direkt am DigiAMP+), Netzteil gebe ich vor; Original-RFT-A/E-Schalter mit softem Ausschalten; Skala WS2812B mit Senderzeiger; Originalknöpfe Bohrung Ø 3 × 17 mm; Tasten werden aufgeklebt.
 
-Von mir festgelegt (18.11.2026):
+Umgesetzt (18.11.2026, dritter Teil):
 
 - Netzteil 19 V ≥ 3,42 A, 5,5 × 2,5 Mitte Plus, Empfehlung XP Power VEC65US19 (Lautsprecher 8 Ω, max. 20 W). Netzkabel separat.
-- Stromweg: Einbaubuchse 5,5 × 2,5 (M8) im Rückwanddeckel → A/E-Schalter in Plus (≥ 4 A bei 24 V DC) → DC-Kabel mit Hohlstecker in die Buchse des DigiAMP+ (alternativ P5). Kein gpio-shutdown/-poweroff. SD-Karte über Overlay-Dateisystem schützen.
-- Pi im Halter um 180° gedreht: GPIO-Kante vorne (y 49), Hohlbuchse und Klemmen hinten (y ≈ 105), USB links.
-- GPIO-Belegung wie bisher, nur Taste 3 von GPIO22 auf GPIO4. A/E hängt nicht mehr am Pi. Frei: GPIO9, 10, 14, 15. LED-Dimmung ohne Zeiger jetzt an GPIO9 statt GPIO20.
-- Drehgeber-Pull-ups (2,7 kΩ A/B, 270 Ω Taster nach 3,3 V) auf die Lochraster-Platinchen der Drehgeber; Verkabelung mit Dupont-Kabeln an den durchgeführten Stecker.
-- Hochpass 50 Hz jetzt per ALSA/LADSPA statt Biquad im Verstärker.
-- Pi-Halter trägt nur noch den Pi (97 × 68 × 8,5 mm, 4 Säulen 6 mm); DigiAMP+ mit seinen Bolzen auf dem Pi.
+- Soft-Off: Einbaubuchse hinten → Pololu Big MOSFET Slide Switch HP (#2815; SW-Pin über Schalter auf GND = an, ON-Pin > 1 V = an; Bordschalter auf OFF) → VOUT an DigiAMP+ (DC-Kabel mit Hohlstecker) und Pololu D36V28F5 (5 V für LEDs). A/E (Original, nur ~0,4 mA) zwischen Punkt X und GND; BAT85 SW→X und GPIO10→X. `gpio-shutdown` GPIO10 (active_low=0, pull-up), `gpio-poweroff` GPIO9 active_low=1 an ON. Schaltplan des Moduls geprüft (pololu.com).
+- LEDs: 112 × WS2812B, 5 V vom D36V28F5, Daten GPIO12 (PWM0, `rpi_ws281x`) über 74AHCT125, Software-Begrenzung ≤ 2 A. RP2040 entfällt, USB des Pi bleibt frei.
+- GPIO: Taste 3 → GPIO4; Taster Drehgeber Klang GPIO12 → GPIO14 (UART aus). Frei nur GPIO15.
+- Drehgeber ALPS STEC11B03 (30 Rastungen/15 Impulse, Taster, Welle Ø 6 × 25 geschlitzt), Pull-ups 2,7 kΩ/270 Ω auf ihren Lochrasterplatinen; gedruckte Kupplung Ø 11 × 16 mit Zylinderstift Ø 3 × 30 in den Originalknopf; Lager Ø 3,4 in der Trägerwand.
+- A/E-Halteplatte mit Loch Ø 10,5 an zwei Säulen; Maße des RFT-Schalters (`rft_a` 41, Buchse 8, Ø 25, Tiefe 13) nur aus dem Foto geschätzt.
+- Pi-Halter: Pi 65 mm hinter der Frontplatte (hinter den Drehgebern), GPIO-Kante vorne, 4 Sockel mit Bolzen M2,5 × 6 I/A von unten verschraubt. Neuer Steuerplatinen-Halter (Lochraster 70 × 50) rechts daneben.
+- Hochpass 50 Hz per ALSA/LADSPA.
 
 Nichts davon ist am Gerät getestet.
 
@@ -79,33 +81,25 @@ Nichts davon ist am Gerät getestet.
 - 6 Tastenfenster 13 × 13, Abstand 7 mm, Unterkante pz 7, erstes ab px 126.
 - Befestigungslöcher: Mitte 19 mm vom Seitenrand (Höhe aus Foto ca. pz 11 und 102).
 - Durchsichtig (aus Foto, ±1,5): Schlitze U pz 56,5–61,5, K 69–74,5, L 94–99,5 (je px 33–222), Stationsmarken pz 79,5–89.
-- Originalknöpfe: 19 mm lang + 3 mm Nase, Ø vorne 15 / hinten 16. Originaltasten: 18 lang, hinten 12, vorne 11 breit.
+- Originalknöpfe: 19 mm lang + 3 mm Nase, Ø vorne 15 / hinten 16, Bohrung Ø 3 × 17 mm mit Metallhülse. Originaltasten: 18 lang, hinten 12, vorne 11 breit.
 
 ## Stand 3D-Druck
 
-Entwurf v1 fertig (siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt. Annahmen: Drehgeber-Welle 20 mm, Tasten 8 mm vor der Frontplatte, Drehgeber auf Lochraster 20 × 25, Pi mit aufgestecktem DigiAMP+ auf dem Boden.
+Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt: Träger mit Kupplungsrohren und A/E-Säulen, Kupplungen, A/E-Platte, Pi- und Steuerplatinen-Halter. Tasten 8 mm vor der Frontplatte, Adapter flach zum Aufkleben.
 
 ## Offene Fragen an den Nutzer (Antworten stehen noch aus)
 
-Elektronik:
-
-1. Welcher A/E-Schalter (muss ≥ 4 A bei 24 V DC können; hängt mit Gehäusefrage 2 zusammen)?
-
-Gehäuse:
-
-1. Bohrung der Originalknöpfe (Ø, Tiefe, rund/abgeflacht/Feder) → danach Knopfadapter entwerfen.
-2. Welches Bauteil an A/E (Platz bisher 12 × 12 wie Drehgeber; Alternative Poti mit Schalter)?
-3. Wellenlänge der STEC11B (angenommen 20 mm; Parameter `enc_welle`).
-4. LED-Skalenbeleuchtung mit Senderzeiger (WS2812B + RP2040-Zero per USB) oder nur warmweiß über GPIO9?
-5. Druckbettgröße (Teile sind auf ≤ 200 mm ausgelegt).
+1. Maße des Original-A/E-Schalters: Flansch bis Wellenende, Länge und Ø der Gewindebuchse, Gehäuse-Ø und -tiefe, Ø des dünnen Wellenendes.
+2. Druckbettgröße (Teile sind auf ≤ 200 mm ausgelegt).
 
 ## Nächste Schritte (Stand 18.11.2026)
 
 - 18.11.2026: Umstellung auf DigiAMP+ (eigene Platine entfernt, README neu, `Pi/asound.conf` neu, Pi-Halter und Bilder `ansicht_offen.png`/`ansicht_hinten.png` neu, `DRUCKTEILE.md` angepasst).
 - 18.11.2026, zweiter Teil: Pi 4B, grün, harte Trennung über A/E, Netzteilvorgabe, Buchse hinten, Pi im Halter gedreht, Einkaufsliste Elektronik in README.
-- Antworten auf die offenen Fragen abwarten; danach ggf. Ein/Aus-Schaltung, Knopfadapter und Druckteile v2.
+- 18.11.2026, dritter Teil: Soft-Off mit Original-A/E und Pololu-Modulen, LEDs mit eigenem 5-V-Wandler an GPIO12, Kupplungen für die Originalknöpfe, `EINKAUF.md`, Druckteile v2.
+- Maße des A/E-Schalters abwarten, Parameter `rft_*` anpassen, STL neu.
 
 ## Hinweise
 
 - Aus der Cloud nicht erreichbar: amazon.de, holzzuschnitt-shop.de, ebay.de, ti.com, mouser.com, lcsc.com, jlcpcb.com. Erreichbar: GitHub (auch raw.githubusercontent.com). Die Websuche liefert LCSC-Nummern und Datenblattauszüge.
-- Belegte GPIOs siehe `README.md`; frei sind nur GPIO9 (solange SPI aus), 14, 15.
+- Belegte GPIOs siehe `README.md`; frei ist nur GPIO15.
