@@ -58,7 +58,7 @@ Maße ab der linken unteren Ecke der Frontplatte (px nach rechts, pz nach oben).
   - Er liegt auf dem Boden des Technikfachs, wird mit 4 Spax 3 × 10 festgeschraubt und hält den Pi.
   - Der DigiAMP+ (58 × 65 mm) steckt direkt auf dem Pi und wird mit den mitgelieferten Abstandsbolzen auf den vier Pi-Löchern verschraubt. Er braucht deshalb keine eigenen Säulen.
   - Pi auf 6 mm hohen Säulen. Die unteren Schrauben der Abstandsbolzen gehen durch den Pi in die Säulen: M2,5 selbstschneidend oder Gewindeeinsätze M2,5 einschmelzen. Ist die mitgelieferte Schraube zu kurz, eine M2,5 × 12 nehmen.
-  - Hohlbuchse und Lautsprecherklemmen des DigiAMP+ sollen zur Rückwand zeigen. Wo genau sie liegen, steht in der Doku nicht; beim Einbau den Pi notfalls um 180° drehen. Die vier Säulen passen auch dann, weil das Lochbild (58 × 49 mm) symmetrisch ist; der Pi steht dann seitlich 21 mm über die Halterplatte hinaus.
+  - Der Pi liegt mit der GPIO-Kante nach vorne. Hohlbuchse und Lautsprecherklemmen des DigiAMP+ liegen an der gegenüberliegenden Kante und zeigen so zur Rückwand, gut erreichbar über den magnetischen Deckel. USB und Ethernet des Pi zeigen nach links.
 
 ## Beleuchtung hinter der Frontplatte
 
@@ -85,7 +85,7 @@ Ein Bildschirm hinter der Platte wäre nur durch die drei 5 mm hohen Schlitze zu
 Hinter jedem Schlitz liegt eine eigene Kammer mit einem LED-Streifen. Der weiße 0,8-mm-Diffusor vorne verteilt das Licht gleichmäßig, wie die alten Skalenlampen.
 
 - **Streifen:** WS2812B mit 144 LEDs/m und 10 mm Breite. Etwa 4 × 28 LEDs (4 × 194 mm), zusammen 112 LEDs. Einzeln ansteuerbare LEDs können einen **Senderzeiger** darstellen. An der Position des eingestellten Senders leuchtet in allen Reihen eine LED rot, wie der Zeiger früher. Für das aktive Band leuchtet die passende Reihe heller.
-- **Ansteuerung:** WS2812B brauchen am Pi einen PWM-, PCM- oder SPI-Pin. Die sind alle schon belegt: GPIO12 durch einen Drehgeber, GPIO18 bis 21 durch den DigiAMP+ (I²S), GPIO10 durch den A/E-Schalter. Am einfachsten ist deshalb ein kleiner Mikrocontroller wie ein RP2040-Zero (ca. 5 €). Er hängt per USB am Pi und bekommt die Zeigerposition als einfache serielle Befehle. Er versorgt die LEDs auch mit 5 V.
+- **Ansteuerung:** WS2812B brauchen am Pi einen PWM-, PCM- oder SPI-Pin. Die sind alle schon belegt: GPIO12 durch einen Drehgeber, GPIO18 bis 21 durch den DigiAMP+ (I²S), GPIO10 nur über SPI, das wegen Drehgeber 3 aus bleibt. Am einfachsten ist deshalb ein kleiner Mikrocontroller wie ein RP2040-Zero (ca. 5 €). Er hängt per USB am Pi und bekommt die Zeigerposition als einfache serielle Befehle. Er versorgt die LEDs auch mit 5 V.
 - **Strom:** Bei voller Helligkeit in Weiß bräuchten 112 LEDs fast 7 A. Als Hintergrundlicht reichen etwa 10 % Helligkeit, das sind rund 0,4 A und damit kein Problem für den USB-Anschluss. Die Helligkeit in der Firmware begrenzen.
 - **Einfachste Variante ohne Zeiger:** warmweißer 5-V-LED-Streifen, über einen MOSFET an GPIO9 gedimmt (GPIO9 ist frei, solange SPI aus bleibt). Dann leuchtet die Skala gleichmäßig wie früher, aber ohne Zeiger.
 - **Tasten beleuchten (optional):** Cherry-MX-Schalter haben eine Öffnung für eine 3-mm-LED. Mit durchscheinenden Tastenkappen könnte die gedrückte Bandtaste leuchten. Die Originaltasten sind aber schwarz und undurchsichtig.
@@ -93,5 +93,5 @@ Hinter jedem Schlitz liegt eine eigene Kammer mit einem LED-Streifen. Der weiße
 ## Noch offen
 
 - **Knöpfe:** Für die Befestigung der Originalknöpfe auf der 6-mm-Welle fehlt noch ein Adapter. Dafür brauche ich die Bohrung im Knopf: Durchmesser, Tiefe und ob rund, abgeflacht oder mit Feder.
-- **A/E-Schalter:** Der Platz ist wie ein Drehgeber ausgelegt (12 × 12 mm).
+- **A/E-Schalter:** Der Platz ist wie ein Drehgeber ausgelegt (12 × 12 mm). Er schaltet die 19 V des Netzteils direkt und muss mindestens 4 A bei 24 V DC können (README, „Stromweg und A/E-Schalter“).
 - **Wellenlänge der Drehgeber:** Angenommen sind 20 mm ab Vorderseite des Drehgebers. Bei anderer Länge `enc_welle` in `traeger.scad` ändern, Turm und Platine rücken mit.

@@ -14,7 +14,8 @@ Der Nutzer achtet auf Nutzungslimits: PDFs mit `pdftotext -layout` als Text ausl
 
 | Pfad | Inhalt |
 |---|---|
-| `README.md` | DigiAMP+ (Kurzdaten mit Quellen), Pi-Wahl, Netzteil, Anschlusstabelle Tasten/Drehgeber/A-E, `config.txt`, Lautstärke, Ein/Aus-Varianten, erster Test |
+| `README.md` | DigiAMP+ (Kurzdaten, Lage der Anschlüsse), Pi 4B, Netzteil (Kaufvorgabe), Stromweg mit A/E-Schalter, Einkaufsliste Elektronik, Anschlusstabelle Tasten/Drehgeber, `config.txt`, Lautstärke, Overlay-Dateisystem, erster Test |
+| `Bilder/digiamp_plus.jpg` | Lageplan DigiAMP+ aus der RPi-Doku (CC BY-SA 4.0) |
 | `Pi/asound.conf` | ALSA: Hochpass 50 Hz (LADSPA `butthigh_iir` aus swh-plugins) vor Karte 0, ungetestet |
 | `Gehaeuse/README.md` | Gehäuse: Aufbau, Zuschnittliste, Leisten, Zusammenbau, Einkaufsliste |
 | `Gehaeuse/gehaeuse.scad` | Gehäusemodell (OpenSCAD), bindet `traeger.scad` ein |
@@ -48,10 +49,14 @@ DigiAMP+ (Quellen: raspberrypi.com Produktseite und Audio-Doku, pinout.xyz, Kern
 - Lautstärke: ALSA-Element „Digital“, ohne `24db_digital_gain` vom Treiber auf 0 dB (Wert 207) begrenzt.
 - Card-Name „RPi DigiAMP+“; mit `dtparam=audio=off` und `vc4-kms-v3d,noaudio` ist er Karte 0 (darauf baut `Pi/asound.conf`).
 
-Festgelegt (18.11.2026, von mir vorgeschlagen, vom Nutzer noch nicht bestätigt):
+Vom Nutzer festgelegt (18.11.2026): Raspberry Pi 4B, grüner DigiAMP+, A/E-Schalter trennt die Versorgung hart, Netzteil wird hinten am Radio eingesteckt (nicht direkt am DigiAMP+); Netzteil gebe ich vor, der Nutzer kauft es.
 
-- Netzteil 19–20 V ≥ 3 A (Lautsprecher 8 Ω, max. 20 W); bei 24 V „Digital“ ≤ −3 dB.
-- GPIO-Belegung wie bisher, nur Taste 3 von GPIO22 auf GPIO4. A/E an GPIO10 (`gpio-shutdown`). Frei: GPIO9, 14, 15. LED-Dimmung ohne Zeiger jetzt an GPIO9 statt GPIO20.
+Von mir festgelegt (18.11.2026):
+
+- Netzteil 19 V ≥ 3,42 A, 5,5 × 2,5 Mitte Plus, Empfehlung XP Power VEC65US19 (Lautsprecher 8 Ω, max. 20 W). Netzkabel separat.
+- Stromweg: Einbaubuchse 5,5 × 2,5 (M8) im Rückwanddeckel → A/E-Schalter in Plus (≥ 4 A bei 24 V DC) → DC-Kabel mit Hohlstecker in die Buchse des DigiAMP+ (alternativ P5). Kein gpio-shutdown/-poweroff. SD-Karte über Overlay-Dateisystem schützen.
+- Pi im Halter um 180° gedreht: GPIO-Kante vorne (y 49), Hohlbuchse und Klemmen hinten (y ≈ 105), USB links.
+- GPIO-Belegung wie bisher, nur Taste 3 von GPIO22 auf GPIO4. A/E hängt nicht mehr am Pi. Frei: GPIO9, 10, 14, 15. LED-Dimmung ohne Zeiger jetzt an GPIO9 statt GPIO20.
 - Drehgeber-Pull-ups (2,7 kΩ A/B, 270 Ω Taster nach 3,3 V) auf die Lochraster-Platinchen der Drehgeber; Verkabelung mit Dupont-Kabeln an den durchgeführten Stecker.
 - Hochpass 50 Hz jetzt per ALSA/LADSPA statt Biquad im Verstärker.
 - Pi-Halter trägt nur noch den Pi (97 × 68 × 8,5 mm, 4 Säulen 6 mm); DigiAMP+ mit seinen Bolzen auf dem Pi.
@@ -84,10 +89,7 @@ Entwurf v1 fertig (siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt. Annahme
 
 Elektronik:
 
-1. Ein/Aus: Der DigiAMP+ hat keine Selbsthaltung. Steckdosenleiste, Selbsthaltung auf Lochraster (P-MOSFET + `gpio-poweroff` an GPIO9) oder Taster an GPIO3? (README, „Ein/Aus“)
-2. Welcher Pi (3, 4 oder 5)? Welches Netzteil (19/20 V, Stecker 5,5 × 2,5)?
-3. Grüne (Raspberry Pi) oder schwarze (IQaudIO) Ausführung des DigiAMP+?
-4. Lage von Hohlbuchse und Klemmen auf dem DigiAMP+ (für die Ausrichtung im Pi-Halter).
+1. Welcher A/E-Schalter (muss ≥ 4 A bei 24 V DC können; hängt mit Gehäusefrage 2 zusammen)?
 
 Gehäuse:
 
@@ -100,6 +102,7 @@ Gehäuse:
 ## Nächste Schritte (Stand 18.11.2026)
 
 - 18.11.2026: Umstellung auf DigiAMP+ (eigene Platine entfernt, README neu, `Pi/asound.conf` neu, Pi-Halter und Bilder `ansicht_offen.png`/`ansicht_hinten.png` neu, `DRUCKTEILE.md` angepasst).
+- 18.11.2026, zweiter Teil: Pi 4B, grün, harte Trennung über A/E, Netzteilvorgabe, Buchse hinten, Pi im Halter gedreht, Einkaufsliste Elektronik in README.
 - Antworten auf die offenen Fragen abwarten; danach ggf. Ein/Aus-Schaltung, Knopfadapter und Druckteile v2.
 
 ## Hinweise

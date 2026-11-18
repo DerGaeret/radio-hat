@@ -7,6 +7,7 @@ Bis zum 17.11.2026 war hier eine eigene Verstärkerplatine (Radio HAT, TAS5805M)
 | Datei | Wofür |
 |---|---|
 | `Pi/asound.conf` | ALSA-Einstellung: Hochpass 50 Hz vor dem DigiAMP+ |
+| `Bilder/digiamp_plus.jpg` | Lageplan des DigiAMP+ aus der Raspberry-Pi-Doku |
 | `Gehaeuse/` | Holzgehäuse: 3D-Modell, Maßzeichnungen, Zuschnittliste, Druckteile |
 
 Quellen: [Produktseite](https://www.raspberrypi.com/products/digiamp-plus/), [Doku](https://www.raspberrypi.com/documentation/accessories/audio.html), [pinout.xyz](https://pinout.xyz/pinout/pi_digiamp), Overlay-Beschreibung und Treiber im Raspberry-Pi-Kernel (`overlays/README`, `sound/soc/bcm/iqaudio-dac.c`).
@@ -14,27 +15,67 @@ Quellen: [Produktseite](https://www.raspberrypi.com/products/digiamp-plus/), [Do
 ## DigiAMP+ in Kürze
 
 - Verstärker TI TAS5756M (DAC und Endstufe in einem Chip, I²C-Adresse 0x4C), bis 2 × 35 W laut Produktseite. Zwei Schraubklemmen für passive Lautsprecher. Mit Blick von oben und der Netzbuchse links: links „−“, rechts „+“, an beiden Klemmen gleich.
-- Versorgung 12 bis 24 V Gleichspannung über Hohlbuchse 5,5 × 2,5 mm. Alternativ fest verdrahtet an P5 (Polung beachten).
+- Versorgung 12 bis 24 V Gleichspannung, 3 A, über Hohlbuchse 5,5 × 2,5 mm (Stecker 2,5 mm innen, 5,5 mm außen, 11 mm lang). Alternativ fest verdrahtet an P5 (Polung beachten).
 - Versorgt den Pi über den GPIO-Stecker mit 5,1 V, 2,5 A. **Den Pi nie zusätzlich über seinen eigenen USB-C-Anschluss versorgen.**
 - Belegt GPIO2/3 (I²C), GPIO18 bis 21 (I²S), GPIO22 (Stummschaltung und Mute-LED), dazu GPIO0/1 für das HAT-EEPROM.
 - 58 × 65 mm, steckt direkt auf dem Pi, Befestigung mit den mitgelieferten Abstandsbolzen auf den vier Pi-Löchern. Der GPIO-Stecker wird nach oben durchgeführt.
 - Startet stummgeschaltet (Mute-LED leuchtet). Der Treiber schaltet beim Abspielen ein und 5 s nach dem Ende wieder stumm.
 - Betrieb 0 bis 50 °C.
+- Lage (Bild in der Doku, GPIO-Stecker oben): Hohlbuchse links unten an der Kante gegenüber dem GPIO-Stecker, rechts daneben die Klemmen LEFT und RIGHT, ganz links P5 (2 Pins, „−“ „+“). Diese Kante liegt über der USB-C/HDMI-Seite des Pi; die Hohlbuchse sitzt auf der Seite von Pin 1 (SD-Karten-Ende).
 
-## Welcher Pi
+![DigiAMP+](Bilder/digiamp_plus.jpg)
 
-Die Doku schreibt, der DigiAMP+ sei für Pi 3 und älter ausgelegt. Ein Pi 4 geht, solange an seinen USB-Buchsen nichts Stromhungriges hängt; sonst einen USB-Hub mit eigenem Netzteil nehmen. Ein Pi 5 bekommt mit 2,5 A nur eingeschränkte USB-Leistung und ist nicht zu empfehlen. Ein RP2040-Zero für die LED-Skala (etwa 0,4 A bei 10 % Helligkeit) liegt beim Pi 4 noch im Rahmen.
+Bild: Raspberry Pi Ltd., Dokumentation (github.com/raspberrypi/documentation), CC BY-SA 4.0.
 
-## Netzteil
+## Pi
 
-- Raspberry Pi empfiehlt das XP Power VEC65US19 (19 V, 65 W). Ein geregeltes Netzteil mit **19 oder 20 V, mindestens 3 A** und Hohlstecker 5,5 × 2,5 mm passt.
-- Nicht mehr als 20 V: Die Lautsprecher (Sharp VSP0010PBS78A) haben 8 Ω und vertragen höchstens 20 W. Die Brückenendstufe schafft an 8 Ω höchstens etwa U² / 16 Ω ohne Verluste, also bei 19 V etwa 22 W, real knapp 20 W vor dem Übersteuern; bei 24 V wären es über 30 W. Wer ein 24-V-Netzteil nimmt, darf „Digital“ nie über −3 dB stellen.
-- Die Polung des Hohlsteckers nennt die Doku nicht. Vor dem ersten Einstecken auf dem Netzteil-Aufdruck prüfen (üblich: Mitte +).
-- Im Gehäuse sitzt die Netzbuchse im Rückwanddeckel. Entweder eine Einbaubuchse 5,5 × 2,5 mm mit zwei Litzen an P5 (Polung!) oder ein kurzes Verlängerungskabel Buchse/Stecker 5,5 × 2,5 mm zur Hohlbuchse des DigiAMP+.
+Raspberry Pi 4B. Die Doku schreibt, der DigiAMP+ sei für Pi 3 und älter ausgelegt; am Pi 4 soll stromhungriges USB-Zubehör an einen USB-Hub mit eigenem Netzteil, sonst kommt die Unterspannungswarnung. Tastatur, USB-Stick oder der RP2040-Zero für die LED-Skala (etwa 0,4 A bei 10 % Helligkeit) gehen direkt. Der USB-C-Anschluss des Pi bleibt immer frei.
+
+## Netzteil (kaufen)
+
+Gesucht ist ein geregeltes Steckernetzteil (Tischnetzteil wie bei Laptops):
+
+| Merkmal | Wert |
+|---|---|
+| Spannung | **19 V** (20 V geht auch) |
+| Strom | mindestens 3,42 A (65 W) |
+| Stecker | Hohlstecker 5,5 × 2,5 mm, Mitte Plus |
+| Art | geregeltes Schaltnetzteil, CE-Zeichen |
+
+Empfehlung von Raspberry Pi: **XP Power VEC65US19** (19 V, 3,42 A, 65 W, Stecker 5,5 × 2,5 × 11 mm Mitte Plus, Eingang 90–264 V). Das Netzkabel wird laut Händlern separat verkauft; vor dem Kauf nachsehen, welche Buchse das Netzteil hat (C6, C8 oder C14), und das passende Kabel mit Euro- bzw. Schukostecker mitbestellen. Ein gleichwertiges 19-V-Laptopnetzteil mit 5,5 × 2,5 mm tut es genauso.
+
+Warum 19 V und nicht 24 V: Die Lautsprecher (Sharp VSP0010PBS78A) haben 8 Ω und vertragen höchstens 20 W. Die Brückenendstufe schafft an 8 Ω höchstens etwa U² / 16 Ω ohne Verluste, bei 19 V also etwa 22 W, real knapp 20 W vor dem Übersteuern; bei 24 V wären es über 30 W. 12 V würde gehen, gibt aber nur etwa 8 W.
+
+## Stromweg und A/E-Schalter
+
+Das Netzteil wird hinten am Radio eingesteckt, nicht direkt am DigiAMP+. Der A/E-Schalter trennt die 19 V hart:
+
+```
+Netzteil → Einbaubuchse im Rückwanddeckel → A/E-Schalter (Plusleitung) → Kabel mit Hohlstecker → Hohlbuchse DigiAMP+
+                                   └────────────── Minusleitung ──────────────┘
+```
+
+- **Einbaubuchse:** Hohlbuchse 5,5 × 2,5 mm zum Einschrauben (Gewinde M8, im Modell ist dafür ein Loch Ø 8 mm im Rückwanddeckel vorgesehen; Lochmaß an der gekauften Buchse prüfen), mit Lötanschlüssen.
+- **Zum DigiAMP+:** ein DC-Kabel mit Hohlstecker 5,5 × 2,5 mm und offenem Ende (etwa 50 cm, mindestens 0,5 mm², besser 0,75 mm²). Der Hohlstecker steckt in der Buchse des DigiAMP+. Alternativ die zwei Adern direkt an P5 löten; dann auf den Aufdruck „−“ und „+“ achten.
+- **A/E-Schalter:** in die Plusleitung (Mitte des Steckers). Er muss Gleichstrom schalten können: **mindestens 4 A bei 24 V DC** (nicht nur AC-Angabe lesen; viele Poti-Schalter können nur 0,5 bis 2 A). Bauteil noch offen (Gehäuse, offene Frage 2).
+- Polung an der Einbaubuchse: Mittelstift = Plus. Vor dem ersten Einschalten ohne Pi mit dem Messgerät an der Hohlbuchse des Kabels nachmessen: innen +19 V.
+
+**Hartes Ausschalten und die SD-Karte:** Der Pi wird ohne Herunterfahren abgeschaltet. Das verträgt das Linux-Dateisystem auf der SD-Karte auf Dauer schlecht. Deshalb nach der Einrichtung das Overlay-Dateisystem einschalten (`sudo raspi-config` → Performance Options → Overlay File System → Ja, Boot-Partition schreibgeschützt → Ja). Dann schreibt der Pi nichts mehr auf die Karte, alle Änderungen gehen beim Ausschalten verloren. Vorher alles fertig einrichten und die Lautstärke speichern; für spätere Änderungen das Overlay vorübergehend wieder ausschalten. Gespeicherte Senderwahl oder Lautstärke nach dem Ausschalten bräuchte dann einen eigenen beschreibbaren Bereich (z. B. zweite Partition); das kann später kommen.
+
+## Einkaufsliste Elektronik
+
+- Raspberry Pi 4B mit microSD-Karte (16 GB oder mehr)
+- Raspberry Pi DigiAMP+ (grün)
+- Netzteil 19 V, mindestens 3,42 A, Hohlstecker 5,5 × 2,5 mm Mitte Plus (siehe oben), dazu Netzkabel
+- Einbau-Hohlbuchse 5,5 × 2,5 mm zum Einschrauben, Lötanschluss
+- DC-Kabel mit Hohlstecker 5,5 × 2,5 mm, offenes Ende, etwa 50 cm, 0,75 mm²
+- A/E-Schalter, mindestens 4 A bei 24 V DC
+- Lautsprecherkabel 2 × 0,75 mm², etwa 2 × 40 cm
+- Dupont-Kabel Buchse (für den GPIO-Stecker), Lochraster, Widerstände 6 × 2,7 kΩ und 3 × 270 Ω (je 0,25 W)
 
 ## Anschlüsse an den Pi
 
-Tasten, Drehgeber und A/E-Schalter kommen mit Dupont-Kabeln (Buchse) an den durchgeführten GPIO-Stecker oben auf dem DigiAMP+. Alle schalten gegen GND.
+Tasten und Drehgeber kommen mit Dupont-Kabeln (Buchse) an den durchgeführten GPIO-Stecker oben auf dem DigiAMP+. Alle schalten gegen GND.
 
 | Bauteil | GPIO | Pin am Stecker |
 |---|---|---|
@@ -47,19 +88,17 @@ Tasten, Drehgeber und A/E-Schalter kommen mit Dupont-Kabeln (Buchse) an den durc
 | Drehgeber 1 (A, B, Taster) | GPIO5, GPIO6, GPIO12 | 29, 31, 32 |
 | Drehgeber 2 (A, B, Taster) | GPIO13, GPIO16, GPIO26 | 33, 36, 37 |
 | Drehgeber 3 (A, B, Taster) | GPIO11, GPIO8, GPIO7 | 23, 24, 26 |
-| A/E-Schalter | GPIO10 | 19 |
 | 3,3 V für die Pull-ups der Drehgeber | – | 1 oder 17 |
 | GND | – | 6, 9, 14, 20, 25, 30, 34, 39 |
 
-Frei bleiben GPIO9, 14 und 15 (GPIO9 nur, solange SPI aus ist).
+Frei bleiben GPIO9, 10, 14 und 15 (GPIO9 und 10 nur, solange SPI aus ist).
 
 - **Tasten (Cherry MX Blue):** Pull-ups im Pi, in der Software einschalten, 20 ms entprellen.
 - **Drehgeber (ALPS STEC11B):** Der Drehgeber verlangt laut Datenblatt mindestens 1 mA an A/B und 10 mA am Taster; die Pull-ups im Pi (etwa 50 kΩ) liefern nur rund 0,07 mA. Deshalb auf jede Lochrasterplatine der Drehgeber (siehe `Gehaeuse/DRUCKTEILE.md`) drei Widerstände löten: 2,7 kΩ von A und von B nach 3,3 V (1,2 mA), 270 Ω vom Taster nach 3,3 V (12 mA). Pin C und ein Tasterkontakt an GND. Pro Drehgeber ein Kabel mit 5 Adern: A, B, Taster, 3,3 V, GND.
-- **A/E-Schalter:** rastend, zwischen GPIO10 und GND. Geschlossen = Ein. Öffnen fährt den Pi herunter (siehe unten, Ein/Aus ist noch offen).
 
 ## Pi einrichten
 
-Den DigiAMP+ aufstecken und verschrauben, Lautsprecher anklemmen, Netzteil einstecken. Der Pi startet mit.
+Den DigiAMP+ (grüne Ausführung) aufstecken und verschrauben, Lautsprecher anklemmen, Strom ein. Der Pi startet mit.
 
 Erkennung prüfen:
 
@@ -67,20 +106,17 @@ Erkennung prüfen:
 grep -a . /proc/device-tree/hat/*
 ```
 
-Bei der grünen Raspberry-Pi-Ausführung steht dort „Raspberry Pi Ltd.“. Das HAT-EEPROM lädt den Treiber dann von selbst. Nur wenn nichts erkannt wird, in `/boot/firmware/config.txt` eintragen:
+Dort muss „Raspberry Pi Ltd.“ stehen. Das HAT-EEPROM lädt den Treiber dann von selbst. Nur wenn nichts erkannt wird, in `/boot/firmware/config.txt` eintragen:
 
 ```
 dtoverlay=
 dtoverlay=rpi-digiampplus
 ```
 
-(Schwarze IQaudIO-Ausführung: `dtoverlay=iqaudio-dacplus,auto_mute_amp`.)
-
 Außerdem in `/boot/firmware/config.txt`:
 
 ```
 dtparam=audio=off
-dtoverlay=gpio-shutdown,gpio_pin=10,active_low=0,gpio_pull=up
 dtoverlay=rotary-encoder,pin_a=5,pin_b=6,relative_axis=1,steps-per-period=2
 dtoverlay=rotary-encoder,pin_a=13,pin_b=16,relative_axis=1,steps-per-period=2
 dtoverlay=rotary-encoder,pin_a=11,pin_b=8,relative_axis=1,steps-per-period=2
@@ -90,7 +126,8 @@ und die vorhandene Zeile `dtoverlay=vc4-kms-v3d` zu `dtoverlay=vc4-kms-v3d,noaud
 
 - `24db_digital_gain` **nicht** setzen. Ohne diesen Schalter lässt der Treiber die Lautstärke („Digital“) höchstens bis 0 dB zu; darüber würde laute Musik übersteuert.
 - SPI ausgeschaltet lassen (`dtparam=spi=on` darf nicht aktiv sein), weil GPIO7, 8 und 11 für Drehgeber 3 gebraucht werden.
-- Die alten Einträge `dtoverlay=hifiberry-dac` und `dtoverlay=gpio-poweroff,gpiopin=4,…` der eigenen Platine dürfen nicht mehr drinstehen; GPIO4 ist jetzt Taste 3.
+- Kein `gpio-shutdown` und kein `gpio-poweroff`: Der A/E-Schalter trennt den Strom direkt.
+- Die alten Einträge der eigenen Platine (`hifiberry-dac`, `gpio-shutdown`, `gpio-poweroff`) dürfen nicht mehr drinstehen; GPIO4 ist jetzt Taste 3.
 - Beim Drehgeber ergeben zwei Rastungen einen vollen Impulszyklus, daher `steps-per-period=2`. Stimmt die Drehrichtung nicht, A und B tauschen.
 
 Neu starten und prüfen:
@@ -123,19 +160,12 @@ sudo alsactl store
 
 Eigene Programme stellen die Lautstärke über das ALSA-Element „Digital“ ein (in MPD: `mixer_type "hardware"`, `mixer_control "Digital"`).
 
-## Ein/Aus (noch offen)
-
-Die eigene Platine hatte eine Selbsthaltung: Schalter aus → Pi fährt herunter → erst dann geht der Strom weg. Der DigiAMP+ hat das nicht. Mit dem Eintrag oben fährt der Pi beim Öffnen des A/E-Schalters sauber herunter, bleibt danach aber mit Strom versorgt (Verstärker stumm). Wieder einschalten geht dann nur, indem man das Netzteil kurz trennt. Möglichkeiten:
-
-1. Netzteil an einer schaltbaren Steckdosenleiste, A/E-Schalter nur zum Herunterfahren.
-2. Kleine Selbsthaltung in der 19-V-Leitung auf Lochraster (P-MOSFET, gehalten über `gpio-poweroff` an GPIO9), wie früher auf der eigenen Platine.
-3. Taster statt Schalter an GPIO3: Ein heruntergefahrener Pi startet, wenn GPIO3 auf GND gezogen wird. GPIO3 ist aber zugleich die I²C-Taktleitung zum Verstärker; ein Druck während des Betriebs kann eine Lautstärkeänderung stören.
-
 ## Erster Test
 
-1. Lautsprecher abklemmen, DigiAMP+ auf den Pi, Netzteil einstecken. Power-LED an, Mute-LED an.
-2. Pi bootet. `aplay -l` zeigt „RPi DigiAMP+“.
-3. Lautsprecher anklemmen. `speaker-test -c 2 -t wav` spielt abwechselnd links und rechts; die Mute-LED geht beim Abspielen aus.
-4. Hochpass prüfen: `speaker-test -c 2 -t sine -f 30` muss deutlich leiser sein als `-f 100`.
-5. Ohne Musik das Ohr an den Lautsprecher halten: kein Brummen oder Zirpen.
-6. A/E-Schalter öffnen: Der Pi fährt herunter.
+1. Ohne Pi und DigiAMP+: Netzteil hinten einstecken, A/E ein, am Hohlstecker des Innenkabels messen: innen +19 V, außen Minus. A/E aus: 0 V.
+2. Lautsprecher abklemmen, DigiAMP+ auf den Pi, Hohlstecker einstecken, A/E ein. Power-LED an, Mute-LED an.
+3. Pi bootet. `aplay -l` zeigt „RPi DigiAMP+“.
+4. Lautsprecher anklemmen. `speaker-test -c 2 -t wav` spielt abwechselnd links und rechts; die Mute-LED geht beim Abspielen aus.
+5. Hochpass prüfen: `speaker-test -c 2 -t sine -f 30` muss deutlich leiser sein als `-f 100`.
+6. Ohne Musik das Ohr an den Lautsprecher halten: kein Brummen oder Zirpen.
+7. Zum Schluss Overlay-Dateisystem einschalten (siehe „Stromweg und A/E-Schalter“).

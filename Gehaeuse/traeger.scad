@@ -150,17 +150,19 @@ module lichtkasten() {
 /* ---------- Halter für Raspberry Pi + DigiAMP+ (Gehäusekoordinaten) ---------- */
 // Der DigiAMP+ (58 x 65 mm) sitzt direkt auf dem Pi, mit den Abstandsbolzen aus seinem Lieferumfang
 // auf den vier Pi-Löchern. Der Halter trägt deshalb nur noch den Pi.
-pi_gpio_y = 105;   // GPIO-Kante des Pi (Gehäuse-y)
-pi_x0     = 290;   // linke Kante des Pi (Gehäuse-x)
+// Der Pi liegt mit der GPIO-Kante nach vorne: Hohlbuchse und Lautsprecherklemmen des DigiAMP+ sitzen
+// an der gegenüberliegenden Kante und zeigen so zur Rückwand. USB/Ethernet zeigen nach links (-x).
+pi_gpio_y = 49;    // GPIO-Kante des Pi (Gehäuse-y), Pi reicht nach hinten bis y = 105
+pi_x0     = 290;   // linke Kante des Pi (Gehäuse-x, USB-Seite)
 boden_z   = 8;
 pi_hoehe  = 6;     // Pi-Platine liegt 6 mm über der Halterplatte
 amp_abst  = 9;     // Abstand Pi-Platine zu DigiAMP+-Platine, nur für die Vorschau (Bolzen aus dem Lieferumfang)
 ph_t      = 2.5;
 pi_loecher  = [[3.5,3.5],[61.5,3.5],[3.5,52.5],[61.5,52.5]];   // Pi-Koordinaten (y ab GPIO-Kante Richtung Pi)
-function pi2g(p) = [pi_x0 + p[0], pi_gpio_y - p[1]];
+function pi2g(p) = [pi_x0 + 85 - p[0], pi_gpio_y + p[1]];   // um 180° gedreht
 
 module pi_halter() {
-  x0 = pi_x0-6; x1 = pi_x0+91; y0 = pi_gpio_y-62; y1 = pi_gpio_y+6;
+  x0 = pi_x0-6; x1 = pi_x0+91; y0 = pi_gpio_y-6; y1 = pi_gpio_y+62;
   difference() {
     union() {
       translate([x0, y0, boden_z]) cube([x1-x0, y1-y0, ph_t]);
@@ -203,10 +205,13 @@ module bauteile_vorschau() {
 
 module pi_vorschau() {
   pz = boden_z + ph_t + pi_hoehe;
-  color("Green") translate([pi_x0, pi_gpio_y-56, pz]) cube([85, 56, 1.6]);
-  color("Silver") translate([pi_x0+66, pi_gpio_y-54, pz+1.6]) cube([21, 52, 16]);
-  // DigiAMP+ 65 x 58 mm über dem Pi; Hohlbuchse und Schraubklemmen nur angedeutet
-  color("DarkGreen") translate([pi_x0, pi_gpio_y-58, pz+1.6+amp_abst]) cube([65, 58, 1.6]);
+  color("Green") translate([pi_x0, pi_gpio_y, pz]) cube([85, 56, 1.6]);
+  color("Silver") translate([pi_x0-2, pi_gpio_y+2, pz+1.6]) cube([21, 52, 16]);      // USB/Ethernet
+  // DigiAMP+ 65 x 58 mm über dem Pi, Hohlbuchse und Klemmen an der hinteren Kante
+  az = pz+1.6+amp_abst;
+  color("DarkGreen") translate([pi_x0+20, pi_gpio_y, az]) cube([65, 58, 1.6]);
+  color("Black") translate([pi_x0+85-17, pi_gpio_y+44, az+1.6]) cube([9, 16, 11]);     // Hohlbuchse
+  for (dx=[30, 49]) color("RoyalBlue") translate([pi_x0+85-dx-13, pi_gpio_y+48, az+1.6]) cube([13, 9, 10]);
 }
 
 /* ---------- Einbau ins Gehäuse ---------- */
