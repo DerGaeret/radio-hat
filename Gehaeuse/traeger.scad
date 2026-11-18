@@ -196,7 +196,7 @@ module lichtkasten() {
 /* ---------- Halter für Raspberry Pi + DigiAMP+ (Gehäusekoordinaten) ---------- */
 // Der DigiAMP+ (58 x 65 mm) sitzt direkt auf dem Pi, mit den Abstandsbolzen aus seinem Lieferumfang
 // auf den vier Pi-Löchern. Der Halter trägt nur den Pi: auf jedem Sockel ein Abstandsbolzen M2,5 x 6
-// Innen/Außen, von unten mit M2,5 x 6 angeschraubt; sein Außengewinde geht durch den Pi in den Bolzen zum DigiAMP+.
+// Innen/Außen, von unten mit M2,5 x 8 angeschraubt; sein Außengewinde geht durch den Pi in den Bolzen zum DigiAMP+.
 // Der Pi liegt mit der GPIO-Kante nach vorne: Hohlbuchse und Lautsprecherklemmen des DigiAMP+ sitzen
 // an der gegenüberliegenden Kante und zeigen so zur Rückwand. USB/Ethernet zeigen nach links (-x).
 pi_gpio_y = 65;    // GPIO-Kante des Pi (Gehäuse-y), Pi reicht nach hinten bis y = 121 (hinter den Drehgebern)
@@ -217,7 +217,7 @@ module pi_halter() {
       translate([x0, y0, boden_z]) cube([x1-x0, y1-y0, ph_t]);
       for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z]) cylinder(d=8, h=ph_t+sockel_h);
     }
-    for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z-1]) {      // M2,5 x 6 von unten
+    for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z-1]) {      // M2,5 x 8 von unten
       cylinder(d=2.8, h=20); cylinder(d=5.5, h=1+2.5);
     }
     for (x=[x0+5, x1-5], y=[y0+5, y1-5]) translate([x, y, boden_z-1]) {   // Spax 3 x 10 in den Boden

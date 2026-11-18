@@ -44,7 +44,7 @@ Gesucht ist ein geregeltes Tischnetzteil wie bei Laptops:
 | Stecker | Hohlstecker 5,5 × 2,5 mm, Mitte Plus |
 | Art | geregeltes Schaltnetzteil, CE-Zeichen |
 
-Empfehlung von Raspberry Pi: **XP Power VEC65US19** (19 V, 3,42 A, 65 W, Stecker 5,5 × 2,5 × 11 mm Mitte Plus, Eingang 90–264 V). Das Netzkabel wird laut Händlern separat verkauft; vor dem Kauf nachsehen, welche Buchse das Netzteil hat (C6, C8 oder C14), und das passende Kabel mitbestellen. Ein gleichwertiges 19-V-Laptopnetzteil mit 5,5 × 2,5 mm tut es genauso.
+Gewählt: **Mean Well GST90A19-P1M** (19 V, 4,74 A, 90 W, Hohlstecker 5,5 × 2,5 mm, Netzeingang C14, kurzschluss- und überlastfest; bei Reichelt). Dazu ein Netzkabel Schutzkontakt → C13 (Reichelt NKSK 200 SW). Die Reserve über 65 W schadet nicht. Raspberry Pi empfiehlt das XP Power VEC65US19 (19 V, 3,42 A); das geht genauso. Links in `EINKAUF.md`.
 
 - **Warum 19 V:** Die Lautsprecher (Sharp VSP0010PBS78A) haben 8 Ω und vertragen höchstens 20 W. Die Brückenendstufe schafft an 8 Ω höchstens etwa U² / 16 Ω ohne Verluste, bei 19 V also etwa 22 W, real knapp 20 W vor dem Übersteuern; bei 24 V wären es über 30 W.
 - **Leistung:** Verstärker bei Dauer-Sinus voll aufgedreht bis etwa 45 W, Pi über den DigiAMP+ bis etwa 15 W, LED-Skala bis 12 W (auf 2 A begrenzt, siehe unten). Mit Musik liegt der Mittelwert weit darunter; 65 W reichen.
@@ -82,7 +82,7 @@ Sitzt im Technikfach rechts neben dem Pi auf dem Druckteil `steuer_halter`. Baut
 
 | Teil | Anschluss | Verbindung |
 |---|---|---|
-| Schraubklemme EIN (2-polig, RM 5,08) | + / − | Einbaubuchse hinten (Mittelstift +), 0,75 mm² |
+| Schraubklemme EIN (2-polig, RM 5,08) | + / − | Einbaubuchse hinten (Delock 90188, Mittelstift +), 0,75 mm² |
 | Pololu Big MOSFET Slide Switch HP | VIN, GND | Klemme EIN |
 | | VOUT, GND | Klemme VERST (zum DigiAMP+) und VIN des 5-V-Wandlers |
 | | SW | Anode der ersten BAT85; Kathode an Punkt X |
@@ -90,14 +90,14 @@ Sitzt im Technikfach rechts neben dem Pi auf dem Druckteil `steuer_halter`. Baut
 | | Schiebeschalter auf dem Modul | auf **OFF** stellen, sonst bleibt alles immer an |
 | Schraubklemme A/E (2-polig) | X / GND | Original-A/E-Schalter, beliebige Litze |
 | zweite BAT85 | Anode Pi GPIO10 (Pin 19), Kathode X | |
-| Schraubklemme VERST (2-polig) | + / − | DC-Kabel mit Hohlstecker 5,5 × 2,5 zum DigiAMP+ (Mitte +), 0,75 mm² |
+| Schraubklemme VERST (2-polig) | + / − | selbst gelötetes Kabel: Silikonlitze 0,75 mm² mit Hohlstecker 5,5 × 2,5 (Lumberg 1634 02) zum DigiAMP+, Mitte + |
 | Pololu D36V28F5 | VIN, GND, VOUT | VIN an VOUT des Schaltmoduls; VOUT = 5 V für die LEDs. EN und PG frei lassen |
 | Elko 1000 µF / 10 V | 5 V gegen GND | direkt am 5-V-Ausgang |
-| 74AHCT125 (DIP-14, im Sockel) | 14 = 5 V, 7 = GND, 1 = GND, 2 = Pi GPIO12 (Pin 32), 3 → 330 Ω → LED-Daten | Pins 4, 10, 13 an 5 V; 5, 9, 12 an GND; 100 nF zwischen 14 und 7 |
+| 74HCT245 (DIP-20, im Sockel) | 20 = 5 V, 10 = GND, 1 (DIR) = 5 V, 19 (/OE) = GND, 2 (A1) = Pi GPIO12 (Pin 32), 18 (B1) → 330 Ω → LED-Daten | Pins 3–9 an GND, 11–17 frei; 100 nF zwischen 20 und 10 |
 | Schraubklemme LED (3-polig) | 5 V / Daten / GND | zum Lichtkasten, 3 Adern 0,5 mm² |
 | Stiftleiste 1 × 4 | GPIO9, GPIO10, GPIO12, GND | Dupont-Kabel zum durchgeführten GPIO-Stecker des DigiAMP+ |
 
-Der 74AHCT125 hebt das 3,3-V-Datensignal des Pi auf 5-V-Pegel; WS2812B verlangen mindestens 0,7 × 5 V = 3,5 V.
+Der 74HCT245 hebt das 3,3-V-Datensignal des Pi auf 5-V-Pegel: Er erkennt ab 2,0 V „high“ und gibt volle 5 V aus; WS2812B verlangen mindestens 0,7 × 5 V = 3,5 V. Von den acht Kanälen wird nur einer gebraucht.
 
 ### LED-Skala: Strom und Wärme
 
@@ -125,7 +125,7 @@ Alles kommt mit Dupont-Kabeln (Buchse) an den durchgeführten GPIO-Stecker oben 
 | Drehgeber Sender (A, B, Taster) | GPIO11, GPIO8, GPIO7 | 23, 24, 26 |
 | A/E-Schalter lesen (über BAT85) | GPIO10 | 19 |
 | Selbsthaltung (ON des Schaltmoduls) | GPIO9 | 21 |
-| LED-Daten (über 74AHCT125) | GPIO12 | 32 |
+| LED-Daten (über 74HCT245) | GPIO12 | 32 |
 | 3,3 V für die Pull-ups der Drehgeber | – | 1 oder 17 |
 | GND | – | 6, 9, 14, 20, 25, 30, 34, 39 |
 

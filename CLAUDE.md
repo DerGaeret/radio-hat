@@ -55,9 +55,9 @@ Vom Nutzer festgelegt (18.11.2026): Raspberry Pi 4B, grüner DigiAMP+, Netzteil 
 
 Umgesetzt (18.11.2026, dritter Teil):
 
-- Netzteil 19 V ≥ 3,42 A, 5,5 × 2,5 Mitte Plus, Empfehlung XP Power VEC65US19 (Lautsprecher 8 Ω, max. 20 W). Netzkabel separat.
+- Netzteil Mean Well GST90A19-P1M (19 V, 4,74 A, 5,5 × 2,5, C14; Reichelt), Netzkabel NKSK 200 SW. Alternative XP VEC65US19. Einbaubuchse Delock 90188 (M8 × 0,75), Hohlstecker Lumberg 1634 02 an Silikonlitze 0,75 mm². Bestelllinks in `EINKAUF.md` (fast alles Reichelt, geprüft 18.11.2026).
 - Soft-Off: Einbaubuchse hinten → Pololu Big MOSFET Slide Switch HP (#2815; SW-Pin über Schalter auf GND = an, ON-Pin > 1 V = an; Bordschalter auf OFF) → VOUT an DigiAMP+ (DC-Kabel mit Hohlstecker) und Pololu D36V28F5 (5 V für LEDs). A/E (Original, nur ~0,4 mA) zwischen Punkt X und GND; BAT85 SW→X und GPIO10→X. `gpio-shutdown` GPIO10 (active_low=0, pull-up), `gpio-poweroff` GPIO9 active_low=1 an ON. Schaltplan des Moduls geprüft (pololu.com).
-- LEDs: 112 × WS2812B, 5 V vom D36V28F5, Daten GPIO12 (PWM0, `rpi_ws281x`) über 74AHCT125, Software-Begrenzung ≤ 2 A. RP2040 entfällt, USB des Pi bleibt frei.
+- LEDs: 112 × WS2812B, 5 V vom D36V28F5, Daten GPIO12 (PWM0, `rpi_ws281x`) über 74HCT245, Software-Begrenzung ≤ 2 A. RP2040 entfällt, USB des Pi bleibt frei.
 - GPIO: Taste 3 → GPIO4; Taster Drehgeber Klang GPIO12 → GPIO14 (UART aus). Frei nur GPIO15.
 - Drehgeber ALPS STEC11B03 (30 Rastungen/15 Impulse, Taster, Welle Ø 6 × 25 geschlitzt), Pull-ups 2,7 kΩ/270 Ω auf ihren Lochrasterplatinen; gedruckte Kupplung Ø 11 × 16 mit Zylinderstift Ø 3 × 30 in den Originalknopf; Lager Ø 3,4 in der Trägerwand.
 - A/E-Halteplatte mit Loch Ø 10,5 an zwei Säulen; Maße des RFT-Schalters (`rft_a` 41, Buchse 8, Ø 25, Tiefe 13) nur aus dem Foto geschätzt.

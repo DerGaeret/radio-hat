@@ -70,10 +70,10 @@ Maße ab der linken unteren Ecke der Frontplatte (px nach rechts, pz nach oben).
   - Er sitzt über den Trägern direkt hinter der Skala, liegt auf zwei Auflagen und wird mit 2 Schrauben 2,5 × 10 festgeschraubt.
   - Innen hat er 4 Kammern: U-Band, K-Band, Stationsmarken und L-Band. Trennwände verhindern, dass Licht zwischen den Reihen überspricht.
   - Die LED-Streifen kleben innen auf der Rückwand. Das Kabel geht durch den Schlitz rechts hinten.
-  - Strom und Ansteuerung: README, „LED-Skala: Strom und Wärme“. 5 V aus dem eigenen Wandler auf der Steuerplatine, Daten von GPIO12 über den 74AHCT125.
+  - Strom und Ansteuerung: README, „LED-Skala: Strom und Wärme“. 5 V aus dem eigenen Wandler auf der Steuerplatine, Daten von GPIO12 über den 74HCT245.
 - **Pi-Halter:**
   - Er liegt auf dem Boden des Technikfachs, wird mit 4 Spax 3 × 10 festgeschraubt und hält den Pi.
-  - Vier Sockel (3 mm). Zuerst je einen Abstandsbolzen M2,5 × 6 Innen/Außen mit einer Schraube M2,5 × 6 von unten anschrauben, dann den Pi auf die Außengewinde setzen und die Bolzen des DigiAMP+ (Lieferumfang) darauf schrauben, DigiAMP+ aufstecken und oben verschrauben. Erst danach den Halter in den Boden schrauben.
+  - Vier Sockel (3 mm). Zuerst je einen Abstandsbolzen M2,5 × 6 Innen/Außen mit einer Schraube M2,5 × 8 (beides aus dem Abstandshalter-Sortiment) von unten anschrauben, dann den Pi auf die Außengewinde setzen und die Bolzen des DigiAMP+ (Lieferumfang) darauf schrauben, DigiAMP+ aufstecken und oben verschrauben. Erst danach den Halter in den Boden schrauben.
   - Der Pi liegt mit der GPIO-Kante nach vorne, 65 mm hinter der Frontplatte (hinter den Drehgebern). Hohlbuchse und Lautsprecherklemmen des DigiAMP+ liegen an der gegenüberliegenden Kante und zeigen zur Rückwand, gut erreichbar über den magnetischen Deckel. USB und Ethernet des Pi zeigen nach links.
 - **Steuerplatinen-Halter:**
   - Rechts neben dem Pi, ebenfalls mit 4 Spax 3 × 10 am Boden. Trägt die Lochrasterplatine 70 × 50 mm auf vier 8 mm hohen Säulen.
@@ -105,7 +105,7 @@ Ein Bildschirm hinter der Platte wäre nur durch die drei 5 mm hohen Schlitze zu
 Hinter jedem Schlitz liegt eine eigene Kammer mit einem LED-Streifen. Der weiße 0,8-mm-Diffusor vorne verteilt das Licht gleichmäßig, wie die alten Skalenlampen.
 
 - **Streifen:** WS2812B mit 144 LEDs/m und 10 mm Breite. Etwa 4 × 28 LEDs (4 × 194 mm), zusammen 112 LEDs. Einzeln ansteuerbare LEDs können einen **Senderzeiger** darstellen. An der Position des eingestellten Senders leuchtet in allen Reihen eine LED rot, wie der Zeiger früher. Für das aktive Band leuchtet die passende Reihe heller.
-- **Ansteuerung:** direkt vom Pi über PWM an GPIO12 (dafür ist der Taster des Drehgebers Klang auf GPIO14 gewandert), Pegelwandler 74AHCT125 auf der Steuerplatine. Der früher vorgesehene RP2040-Zero am USB entfällt.
+- **Ansteuerung:** direkt vom Pi über PWM an GPIO12 (dafür ist der Taster des Drehgebers Klang auf GPIO14 gewandert), Pegelwandler 74HCT245 auf der Steuerplatine. Der früher vorgesehene RP2040-Zero am USB entfällt.
 - **Strom:** Bei voller Helligkeit in Weiß bräuchten 112 LEDs fast 7 A. Sie hängen deshalb an einem eigenen 5-V-Wandler (Pololu D36V28F5, 3,2 A) aus den 19 V, nicht am Pi. In der Software auf höchstens 2 A begrenzen; als Hintergrundlicht reichen 10 bis 15 % (0,5 bis 1 A).
 - **Entscheidung (18.11.2026):** WS2812B mit Senderzeiger.
 - **Tasten beleuchten (optional):** Cherry-MX-Schalter haben eine Öffnung für eine 3-mm-LED. Mit durchscheinenden Tastenkappen könnte die gedrückte Bandtaste leuchten. Die Originaltasten sind aber schwarz und undurchsichtig.

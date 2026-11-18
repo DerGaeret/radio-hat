@@ -47,8 +47,8 @@ def blatt1():
           'Retro-Radio, Stand 18.11.2026, ungetestet. Bauteile auf der Steuerplatine (Lochraster 70 × 50) mit * markiert.')
 
     # Netzteil und Einbaubuchse
-    nt = ic(d, (1, 5), 'Netzteil 19 V / ≥ 3,42 A\n(XP Power VEC65US19)', rechts=[('+', 'P'), ('−', 'M')], w=3)
-    j1 = ic(d, (6, 5), 'J1 Einbaubuchse\n5,5 × 2,5 (Rückwand)', links=[('Mitte', 'P1'), ('Hülse', 'M1')],
+    nt = ic(d, (1, 5), 'Netzteil 19 V / 4,74 A\n(Mean Well GST90A19-P1M)', rechts=[('+', 'P'), ('−', 'M')], w=3)
+    j1 = ic(d, (6, 5), 'J1 Einbaubuchse 5,5 × 2,5\nDelock 90188 (Rückwand)', links=[('Mitte', 'P1'), ('Hülse', 'M1')],
             rechts=[('+', 'P2'), ('−', 'M2')], w=2.6)
     d.add(elm.Wire('-').at(nt.P).to(j1.P1).label('Hohlstecker', fontsize=7))
     d.add(elm.Wire('-').at(nt.M).to(j1.M1))
@@ -115,10 +115,11 @@ def blatt1():
     gnd(d, bk.G2, 0.6)
 
     # Pegelwandler
-    u2 = ic(d, (25, -9), '*U2 74AHCT125 (DIP-14)',
-            links=[('1A (2)', 'A'), ('1OE (1)', 'OE'), ('GND (7)', 'G')],
-            rechts=[('1Y (3)', 'Y'), ('VCC (14)', 'V')], w=4)
+    u2 = ic(d, (25, -9), '*U2 74HCT245 (DIP-20)',
+            links=[('A1 (2)', 'A'), ('DIR (1)', 'DIR'), ('/OE (19)', 'OE'), ('GND (10)', 'G')],
+            rechts=[('B1 (18)', 'Y'), ('VCC (20)', 'V')], w=4)
     tag(d, u2.A, 'GPIO12 (Pin 32)', 'left', 1.0)
+    tag(d, u2.DIR, '+5V_LED', 'left', 1.0)
     d.add(elm.Line().at(u2.OE).left().length(0.6)); d.add(elm.Ground())
     d.add(elm.Line().at(u2.G).left().length(0.6)); d.add(elm.Ground())
     d.add(elm.Line().at(u2.V).right().length(1.0))
@@ -127,7 +128,7 @@ def blatt1():
     tag(d, v, '+5V_LED', 'right', 1.0)
     d.add(elm.Resistor().at(u2.Y).right().label('*R1 330 Ω', fontsize=8))
     tag(d, d.here, 'LED_DIN', 'right', 0.6)
-    d.add(elm.Label().at((22.5, -12.6)).label('Pins 4, 10, 13 (2OE–4OE) an +5V_LED; 5, 9, 12 (2A–4A) an GND.', fontsize=7, halign='left'))
+    d.add(elm.Label().at((22.0, -13.4)).label('A2–A8 (Pins 3–9) an GND, B2–B8 (11–17) frei. DIR high = Richtung A → B.', fontsize=7, halign='left'))
 
     # LED-Skala
     y0 = -16.5
