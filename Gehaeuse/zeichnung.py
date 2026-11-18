@@ -187,14 +187,14 @@ for i in range(7):
     for j in range(3):
         ax.add_patch(Circle((rx + (B / 2 - 90 + i * 30) * s, (t + 22 + j * 20) * s), 5 * s, fc="white", ec="k", lw=0.5))
 ax.add_patch(Circle((rx + B / 2 * s, (H - t - 28) * s), griff_d / 2 * s, fc="white", ec="k", lw=0.6))
-ax.add_patch(Circle((rx + (B / 2 + 125) * s, (H - t - 28) * s), 4 * s, fc="white", ec="r", lw=0.6))
+ax.add_patch(Circle((rx + (B / 2 + 125) * s, (H - t - 28) * s), 6 * s, fc="white", ec="r", lw=0.6))
 for x in (B / 2 - 100, B / 2 + 100):
     for z in (t + L / 2, H - t - L / 2):
         ax.add_patch(Circle((rx + x * s, z * s), 5 * s, fc="#9aa", ec="k", lw=0.5))
 ax.text(rx, H * s + 6, f"Rückseite (1:2): Rückwände sitzen innen, hinten bündig.\n"
         f"außen 2 × {kammer_b} × {innen_h} eingeleimt, Mitte {mitte_b - 1:g} × {innen_h - 1:g} magnetisch\n"
         f"grau: 4 Magnete in den Leisten (Plättchen am Deckel), Griffloch Ø{griff_d}\n"
-        "○ Lüftung 21 × Ø10   ○ rot: DC-Buchse", fontsize=8, va="bottom")
+        "○ Lüftung 21 × Ø10   ○ rot: DC-Buchse Ø12", fontsize=8, va="bottom")
 ax.set_xlim(-60, rx + B * s + 10); ax.set_ylim(-fuss_h - 45, H + 45)
 blaetter.append(fig)
 

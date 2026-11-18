@@ -25,9 +25,7 @@ Verglichen wurde Reichelt mit Eckstein: Die Pololu-Module und die Lochrasterplat
 | Anz. | Teil | Wofür | Preis | Link |
 |---|---|---|---|---|
 | 1 | Raspberry Pi DigiAMP+ | Verstärker | 32,40 € | [RPI IQ DIGIAMP+](https://www.reichelt.de/de/de/shop/produkt/raspberry_pi_shield_-_iqaudio_digiamp_-295715) |
-| 1 | Tischnetzteil Mean Well GST90A19-P1M, 19 V, 4,74 A, Stecker 5,5 × 2,5 | Stromversorgung | 32,70 € | [MW GST90A19](https://www.reichelt.de/de/de/shop/produkt/tischnetzteil_90_w_19_v_4_74_a-171060) |
-| 1 | Netzkabel Schutzkontakt → C13 | zum Netzteil | 2,85 € | [NKSK 200 SW](https://www.reichelt.de/de/de/shop/produkt/netzkabel_schutzkontaktstecker_gew_1_8_-_2_0_m_schw_c13-13490) |
-| 1 | Einbaubuchse DC 5,5 × 2,5, M8, Lötanschluss | Rückwanddeckel (Loch Ø 8) | 5,75 € | [DELOCK 90188](https://www.reichelt.de/de/de/shop/produkt/steckverbinder_dc_5_5_x_2_5_mm_buchse_zum_einbau_loetversion-371067) |
+| 1 | Einbaubuchse DC 5,5 × 2,5, M12, Lötanschluss | Rückwanddeckel (Loch Ø 12) | 2,30 € | [DELOCK 65690](https://www.reichelt.de/de/de/shop/produkt/einbaubuchse_dc_2_5_x_5_5_mm_loetversion-371059) |
 | 1 | Hohlstecker 5,5 × 2,5 mit Knickschutz | Kabel zum DigiAMP+ | 1,25 € | [LUM 1634-02](https://www.reichelt.de/de/de/shop/produkt/hohlstecker_knickschutz_aussen_5_5_mm_innen_2_5_mm-139689) |
 | 1 | Silikonkabel 0,75 mm², 2 m, rot/schwarz | 19-V-Leitungen | 3,20 € | [SIK 275 2](https://www.reichelt.de/de/de/shop/produkt/silikonkabel_0_75_mm_2_m_schwarz_rot-149542) |
 | 2 | Schottky-Diode BAT 85 | A/E-Erkennung | 2 × 0,08 € | [BAT 85](https://www.reichelt.de/de/de/shop/produkt/schottkydiode_30_v_0_2_a_do-35-4857) |
@@ -39,12 +37,13 @@ Verglichen wurde Reichelt mit Eckstein: Die Pololu-Module und die Lochrasterplat
 | 1 | Lautsprecherkabel 2 × 0,75 mm², 5 m | Lautsprecher | 0,78 € | [TME KL1-5 GL](https://www.reichelt.de/de/de/shop/produkt/lautsprecherkabel_2x0_75_mm_grau_5m-ring-375320) |
 | 1 | Schrumpfschlauch-Sortiment | Lötstellen | 5,35 € | [DELOCK 86271](https://www.reichelt.de/de/de/shop/produkt/schrumpfschlauch-sortiment_schwarz_100-teilig-152924) |
 
-Netzteil-Alternative: Universal-Laptopnetzteil 90 W (Amazon B09BZ73MP1, Modell SK90B200474, 18,5–20 V / 4,74 A) geht auch. Den Aufsteckstecker 5,5 × 2,5 mm nehmen (nachmessen: Innenstift 2,5 mm), Polung Mitte = Plus vor dem ersten Anschluss mit dem Multimeter prüfen und den Stecker in der Buchse festdrücken. Dann entfällt der Mean Well.
+Netzteil-Alternative (Markengerät): Mean Well GST90A19-P1M, 19 V / 4,74 A, Reichelt [32,70 €](https://www.reichelt.de/de/de/shop/produkt/tischnetzteil_90_w_19_v_4_74_a-171060), dazu Netzkabel [NKSK 200 SW 2,85 €](https://www.reichelt.de/de/de/shop/produkt/netzkabel_schutzkontaktstecker_gew_1_8_-_2_0_m_schw_c13-13490).
 
 ### Sonstiges
 
 | Anz. | Teil | Wofür | Link |
 |---|---|---|---|
+| 1 | Universal-Laptopnetzteil 90 W, 18,5–20 V / 4,74 A, mit Wechselsteckern und Netzkabel | Stromversorgung; Aufsteckstecker **5,5 × 2,5** nehmen, vor dem ersten Anschluss Polung messen (Mitte = Plus), Stecker mit Schrumpfschlauch sichern | [Amazon](https://amzn.eu/d/09DU1uIf) |
 | 3 | Zylinderstift ISO 2338, Ø 3 m6 × 30 mm, Stahl | Achse in den Knopf | [Suche Amazon](https://www.amazon.de/s?k=Zylinderstift+3x30+ISO+2338) |
 | 1 | 2K-Epoxidkleber, beliebige Marke (z. B. UHU Plus schnellfest, Pattex 5 Minuten) | Stift in Kupplung, Tasten auf Adapter | Baumarkt/Drogerie |
 | 8 | Schraube für Kunststoff 2,5 × 8 (Spax 2,5 × 8 geht auch) | Drehgeberplatinen, A/E-Platte | Baumarkt |
@@ -56,7 +55,7 @@ Netzteil-Alternative: Universal-Laptopnetzteil 90 W (Amazon B09BZ73MP1, Modell S
 
 Die Frontplatte wird mit den Originalschrauben und -muttern durch die Frontbretter geschraubt; dafür ist nichts zu kaufen.
 
-Summe Grundausstattung (Eckstein + Reichelt) ohne Sonstiges und Versand: etwa 104 €.
+Summe Grundausstattung (Eckstein + Reichelt) ohne Sonstiges und Versand: etwa 65 €, dazu das Netzteil von Amazon.
 
 ## Optional: Skalenbeleuchtung
 

@@ -47,8 +47,8 @@ def blatt1():
           'Retro-Radio, Stand 18.11.2026, ungetestet. Bauteile auf der Steuerplatine (Lochraster 70 × 50) mit * markiert.')
 
     # Netzteil und Einbaubuchse
-    nt = ic(d, (1, 5), 'Netzteil 19 V / 4,74 A\n(Mean Well GST90A19-P1M)', rechts=[('+', 'P'), ('−', 'M')], w=3)
-    j1 = ic(d, (6, 5), 'J1 Einbaubuchse 5,5 × 2,5\nDelock 90188 (Rückwand)', links=[('Mitte', 'P1'), ('Hülse', 'M1')],
+    nt = ic(d, (1, 5), 'Netzteil 19–20 V / 4,74 A\n(Universal 90 W, Stecker 5,5 × 2,5)', rechts=[('+', 'P'), ('−', 'M')], w=3)
+    j1 = ic(d, (6, 5), 'J1 Einbaubuchse 5,5 × 2,5\nDelock 65690 (Rückwand)', links=[('Mitte', 'P1'), ('Hülse', 'M1')],
             rechts=[('+', 'P2'), ('−', 'M2')], w=2.6)
     d.add(elm.Wire('-').at(nt.P).to(j1.P1).label('Hohlstecker', fontsize=7))
     d.add(elm.Wire('-').at(nt.M).to(j1.M1))

@@ -44,7 +44,7 @@ Gesucht ist ein geregeltes Tischnetzteil wie bei Laptops:
 | Stecker | Hohlstecker 5,5 × 2,5 mm, Mitte Plus |
 | Art | geregeltes Schaltnetzteil, CE-Zeichen |
 
-Gewählt: **Mean Well GST90A19-P1M** (19 V, 4,74 A, 90 W, Hohlstecker 5,5 × 2,5 mm, Netzeingang C14, kurzschluss- und überlastfest; bei Reichelt). Dazu ein Netzkabel Schutzkontakt → C13 (Reichelt NKSK 200 SW). Die Reserve über 65 W schadet nicht. Raspberry Pi empfiehlt das XP Power VEC65US19 (19 V, 3,42 A); das geht genauso. Links in `EINKAUF.md`.
+Gewählt (Nutzer): **Universal-Laptopnetzteil 90 W** von [Amazon](https://amzn.eu/d/09DU1uIf) (18,5–20 V, 4,74 A, Wechselstecker, Netzkabel dabei). Den Aufsteckstecker 5,5 × 2,5 mm verwenden, vor dem ersten Anschluss mit dem Multimeter prüfen, dass die Mitte Plus ist, und den Stecker mit Schrumpfschlauch gegen Abziehen sichern. Markenalternative: Mean Well GST90A19-P1M (19 V, 4,74 A; Reichelt) mit Netzkabel NKSK 200 SW. Links in `EINKAUF.md`.
 
 - **Warum 19 V:** Die Lautsprecher (Sharp VSP0010PBS78A) haben 8 Ω und vertragen höchstens 20 W. Die Brückenendstufe schafft an 8 Ω höchstens etwa U² / 16 Ω ohne Verluste, bei 19 V also etwa 22 W, real knapp 20 W vor dem Übersteuern; bei 24 V wären es über 30 W.
 - **Leistung:** Verstärker bei Dauer-Sinus voll aufgedreht bis etwa 45 W, Pi über den DigiAMP+ bis etwa 15 W, LED-Skala (optional) bis 5 W (auf 0,8 A begrenzt, siehe unten). Mit Musik liegt der Mittelwert weit darunter; 65 W reichen.
@@ -83,7 +83,7 @@ Sitzt im Technikfach rechts neben dem Pi auf dem Druckteil `steuer_halter`. Baut
 
 | Teil | Anschluss | Verbindung |
 |---|---|---|
-| Schraubklemme EIN (2-polig, RM 5,08) | + / − | Einbaubuchse hinten (Delock 90188, Mittelstift +), 0,75 mm² |
+| Schraubklemme EIN (2-polig, RM 5,08) | + / − | Einbaubuchse hinten (Delock 65690, Mittelstift +), 0,75 mm² |
 | Pololu Big MOSFET Slide Switch MP | VIN, GND | Klemme EIN |
 | | VOUT, GND | Klemme VERST (zum DigiAMP+) und, falls Beleuchtung, VIN des 5-V-Wandlers |
 | | SW | Anode der ersten BAT85; Kathode an Punkt X |
