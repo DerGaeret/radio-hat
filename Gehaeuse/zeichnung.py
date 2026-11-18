@@ -194,7 +194,7 @@ for x in (B / 2 - 100, B / 2 + 100):
 ax.text(rx, H * s + 6, f"Rückseite (1:2): Rückwände sitzen innen, hinten bündig.\n"
         f"außen 2 × {kammer_b} × {innen_h} eingeleimt, Mitte {mitte_b - 1:g} × {innen_h - 1:g} magnetisch\n"
         f"grau: 4 Magnete in den Leisten (Plättchen am Deckel), Griffloch Ø{griff_d}\n"
-        "○ Lüftung 21 × Ø10   ○ rot: DC-Buchse Ø8", fontsize=8, va="bottom")
+        "○ Lüftung 21 × Ø10   ○ rot: DC-Buchse Ø8,2, innen Senkung Ø15×4", fontsize=8, va="bottom")
 ax.set_xlim(-60, rx + B * s + 10); ax.set_ylim(-fuss_h - 45, H + 45)
 blaetter.append(fig)
 

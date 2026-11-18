@@ -116,7 +116,7 @@ Die hinteren Leisten sitzen 8 mm vor der Hinterkante, damit die Rückwände bün
 11. Rückwände der Kammern einleimen.
 12. Alu-Vierkantstangen auf 656 mm ablängen, Sichtseite polieren und oben und unten einkleben, Vorderseite 3 mm hinter der Holzkante.
 13. Magnete einkleben, Stahlplättchen auflegen, Kleber auf die Plättchen und Abdeckungen bzw. Rückwanddeckel genau positioniert aufdrücken. Nach dem Aushärten abnehmen.
-14. Rückwanddeckel: Lüftungslöcher, Griffloch Ø 25 mm und Loch Ø 8 für die Netzteilbuchse (Delock 90188, M8 × 0,75) bohren. Reicht ihr Gewinde nicht durch die 8 mm Platte, von innen mit einem Forstnerbohrer Ø 15 auf etwa 3 mm Restdicke ausbohren.
+14. Rückwanddeckel: Lüftungslöcher, Griffloch Ø 25 mm und Netzteilbuchse (Delock 90188): Ihr Gewinde M8 × 0,75 ist nur 8,5 mm lang, außen kommen Scheibe (1 mm) und Mutter (2 mm) drauf; durch die 8-mm-Platte reicht es nicht. Deshalb erst von innen mit einem Forstnerbohrer Ø 15 mm 4 mm tief senken (Restdicke 4 mm), dann mittig Ø 8,2 mm durchbohren. Die Buchse von innen einsetzen (der Sechskant, 12,7 mm über Ecken, liegt in der Senkung), außen Scheibe und Mutter. Vorher an einem Reststück probieren.
 15. Füße mit Spax 3,5 × 16 durch den Boden in die Klötzchen schrauben.
 
 ## Einkaufsliste

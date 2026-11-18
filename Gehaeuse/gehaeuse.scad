@@ -68,7 +68,7 @@ module korpus() {
         cube([mitte_b-2*spiel, t, innen_h-2*spiel]);
       translate([B/2, y_hinten-1+120*ex+(ansicht=="hinten_offen" ? 90 : 0), H-t-28]) rotate([-90,0,0]) cylinder(d=griff_d, h=t+2, $fn=48);
       for (i=[0:6], j=[0:2]) translate([B/2-90+i*30, y_hinten-1+120*ex+(ansicht=="hinten_offen" ? 90 : 0), t+22+j*20]) rotate([-90,0,0]) cylinder(d=10, h=t+2, $fn=24);
-      translate([B/2+125, y_hinten-1+120*ex+(ansicht=="hinten_offen" ? 90 : 0), H-t-28]) rotate([-90,0,0]) cylinder(d=8, h=t+2, $fn=24);  // DC-Buchse Delock 90188 (M8 x 0,75)
+      translate([B/2+125, y_hinten-1+120*ex+(ansicht=="hinten_offen" ? 90 : 0), H-t-28]) rotate([-90,0,0]) union() { cylinder(d=8.2, h=t+2, $fn=24); cylinder(d=15, h=1+4, $fn=32); }  // DC-Buchse Delock 90188: Ø 8,2 durch, innen Senkung Ø 15 x 4 (Gewinde nur 8,5 mm)
     }
   }
   for (x=xw) brett([x, y_wand+40*ex, t], [t, korpus_t-y_wand, innen_h], NUSS2);  // Zwischenwände

@@ -15,25 +15,44 @@ Die Renderings entstehen aus `render/render.py` (POV-Ray) mit dem Dekor Nuss Siz
 
 ## Teile
 
+Ausgelegt für den **Qidi Plus 4** (Bauraum 305 × 305 × 280 mm, Düse 0,4 mm) und **OrcaSlicer**. Die STL-Dateien sind schon richtig gedreht und liegen auf z = 0; in Orca nur importieren, „Anordnen“ drücken und slicen.
+
 | Teil | Datei | Größe (mm) | Material | Anzahl |
 |---|---|---|---|---|
-| Träger links (A/E, Klang, Lautstärke) | `traeger_links.stl` | 122 × 53 × 30 | PETG oder PLA, schwarz | 1 |
-| Träger rechts (6 Tasten, Sender) | `traeger_rechts.stl` | 180 × 53 × 30 | PETG oder PLA, schwarz | 1 |
-| Lichtkasten hinter der Skala (optional) | `lichtkasten.stl` | 200 × 56 × 28 | PLA weiß | 1 |
-| Halter für Pi mit DigiAMP+ | `pi_halter.stl` | 97 × 68 × 5,5 | PETG oder PLA | 1 |
-| Halter für die Steuerplatine | `steuer_halter.stl` | 82 × 62 × 10,5 | PETG oder PLA | 1 |
-| Halteplatte Original-A/E-Schalter | `ae_platte.stl` | 28 × 31 × 3 | PETG oder PLA | 1 |
-| Kupplung Drehgeber → 3-mm-Stift | `kupplung.stl` | Ø 11 × 16 | PETG | 3 (in einer Datei) |
-| Tastenadapter Cherry MX → Taste | `tastenadapter.stl` | 11 × 11 × 8 | PETG oder PLA | 6 (in einer Datei) |
+| Träger, einteilig (A/E, Klang, Lautstärke, 6 Tasten, Sender) | `traeger.stl` | 296 × 53 × 34 | PETG schwarz | 1 |
+| *oder* Träger links / rechts (für Drucker unter 300 mm) | `traeger_links.stl`, `traeger_rechts.stl` | 122 × 53 × 34, 180 × 53 × 34 | PETG schwarz | je 1 |
+| Lichtkasten hinter der Skala (optional) | `lichtkasten.stl` | 200 × 56 × 28 | PETG oder PLA weiß | 1 |
+| Halter für Pi mit DigiAMP+ | `pi_halter.stl` | 97 × 68 × 11,5 | PETG | 1 |
+| Hülsen Pi–DigiAMP+ (nur falls keine Bolzen beiliegen) | `pi_huelsen.stl` | Ø 6 × 11,5 | PETG | 4 (in einer Datei) |
+| Halter für die Steuerplatine | `steuer_halter.stl` | 82 × 62 × 10,5 | PETG | 1 |
+| Halteplatte Original-A/E-Schalter | `ae_platte.stl` | 28 × 31 × 3 | PETG | 1 |
+| Kupplung Drehgeber → 3-mm-Stift | `kupplung.stl` | Ø 11 × 22 | PETG | 3 (in einer Datei) |
+| Tastenadapter Cherry MX → Taste | `tastenadapter.stl` | 11 × 11 × 8 | PETG | 6 (in einer Datei) |
 
-Alle Teile passen auf ein Druckbett von 220 × 220 mm. Die Träger in Schwarz drucken, damit durch die Tasten- und Knopflöcher nichts Helles durchscheint.
+Der einteilige Träger braucht keine Verbindungslasche und sitzt gerader. Er ist 296 mm lang: in Orca gerade (an der x-Achse) platzieren, Skirt aus, passt er wegen des Rands nicht, um 45° drehen. Die Träger in Schwarz drucken, damit durch die Tasten- und Knopflöcher nichts Helles durchscheint.
+
+### OrcaSlicer-Einstellungen (Qidi Plus 4)
+
+Drucker „Qidi Plus4 0.4 nozzle“, Filament-Profil des Herstellers (PETG: Kammerheizung aus, Tür zu reicht; PLA wird im Radio über dem Pi zu weich, nur für den Lichtkasten). ASA/ABS geht auch, dann Kammer 60 °C.
+
+| Einstellung | Wert | Warum |
+|---|---|---|
+| Schichthöhe | 0,2 mm (Tastenadapter 0,12 mm) | Kreuz der Tastenadapter sauber |
+| Wände | 4 | Schrauben 2,5 mm und M2,5 schneiden ins Volle |
+| Decken/Böden | 5 / 4 Schichten | |
+| Füllung | 25 % Gyroid; Kupplung und Tastenadapter 100 % | |
+| Elefantenfuß-Kompensation | 0,15 mm | Lager- und Schraublöcher, die auf dem Bett liegen, bleiben rund |
+| X-Y-Lochkompensation | 0,1 mm | Ø 3 für den Stift, Ø 3,4 Lager, D-Bohrung |
+| Nahtposition | ausgerichtet, hinten | |
+| Stützen | nur Träger: „Baum (automatisch)“, nur auf dem Druckbett, Überhangwinkel 50° | einziger Überhang sind die beiden Schraubflansche |
+| Brim | Träger und Lichtkasten: 5 mm außen | lange, dünne Teile, gegen Ablösen an den Ecken |
 
 **Druckhinweise:**
-- **Träger:** liegen mit der Vorderseite auf dem Bett. Nur der Schraubflansch am Rand braucht Stützmaterial.
-- **Lichtkasten:** liegt mit dem Diffusor (0,8 mm, also 4 Schichten à 0,2 mm) auf dem Bett. Die Kammern sind nach hinten durch die Rückwand geschlossen, die Brücken sind nur 13 mm lang.
-- **Kupplungen:** stehend drucken, 100 % Füllung. Danach die vordere Bohrung mit 3,0 mm und die hintere mit 6,0 mm nachbohren.
-- **A/E-Halteplatte:** liegt flach.
-- **Tastenadapter:** stehen auf der Platte, der Stößel mit dem Kreuz zeigt nach oben. Mit 0,12 mm Schichthöhe drucken, damit das Kreuz sauber wird. Wenn es zu stramm sitzt, im Modell das Spiel vergrößern.
+- **Träger:** liegt mit der Vorderseite auf dem Bett; Rohre, Säulen und Lagerbohrungen stehen senkrecht und werden rund. Stützmaterial nur unter den Schraubflanschen außen.
+- **Lichtkasten:** liegt mit dem Diffusor (0,8 mm, also 4 Schichten à 0,2 mm) auf dem Bett. Brücken nur 13 mm lang.
+- **Kupplungen:** stehen, D-Bohrung oben. Die Stiftbohrung vorne mit 3,0 mm nachbohren; die D-Bohrung nur nacharbeiten, wenn sie klemmt (Flachseite feilen).
+- **A/E-Halteplatte, Pi- und Steuerhalter:** liegen flach, keine Stützen.
+- **Tastenadapter:** stehen auf der Platte, der Stößel mit dem Kreuz zeigt nach oben. Sitzt das Kreuz zu stramm, im Modell das Spiel vergrößern.
 
 ## Aufbau hinter der Frontplatte
 
@@ -48,18 +67,18 @@ Maße ab der linken unteren Ecke der Frontplatte (px nach rechts, pz nach oben).
 | 6 Tasten | 132,5 bis 232,5 (Raster 20) | 13,5 | Cherry MX Blue mit Adapter und Originaltaste |
 
 - **Frontplatte:** wird durch ihre 4 Eckbohrungen (19 mm vom Rand) mit den Originalschrauben und -muttern durch die Frontbretter geschraubt (Mutter hinten). Die Flansche der Träger haben hinter den unteren Bohrungen eine Aussparung 10 × 10 mm für Mutter und Schraubenende (Parameter `fp_schraube`, `fp_mutter_d`); ihre eigenen Befestigungsschrauben sitzen deshalb höher.
-- **Träger:** Die beiden Träger sitzen direkt hinter der Frontplatte (0,3 mm Luft). Je ein Flansch wird mit 2 Spax 2,5 × 8 hinten an das Frontbrett geschraubt. In der Mitte verbindet eine Lasche beide Teile, dort kommt eine Schraube 2,5 × 8 von hinten hinein.
+- **Träger:** sitzt direkt hinter der Frontplatte (0,3 mm Luft). Je ein Flansch links und rechts wird mit 2 Spax 2,5 × 8 hinten an das Frontbrett geschraubt. Nur bei der zweiteiligen Version verbindet in der Mitte eine Lasche beide Teile (Schraube 2,5 × 8 von hinten).
 - **Originalknöpfe:** Bohrung Ø 3 mm, 17 mm tief (gemessen). Die Knopfrückseite steht 0,5 mm vor der Frontplatte; die Achse steckt 16 mm im Knopf (1 mm Reserve).
 - **Drehgeber mit Kupplung:**
   - Die Drehgeberwelle (Ø 6 mm, abgeflacht) passt nicht in den Knopf. Deshalb sitzt auf ihr eine gedruckte Kupplung (Ø 11 × 22 mm) mit einem Stahlstift Ø 3 × 30 mm (Zylinderstift ISO 2338) vorne.
-  - Zusammenbau: Stift 7 mm tief in die Kupplung kleben (2K-Epoxid). Hinten hat die Kupplung eine D-Bohrung (13,5 mm tief), die auf die abgeflachte Welle passt und die Drehung formschlüssig überträgt. Die Kupplung nicht auf die Welle kleben: Sie wird nur aufgesteckt und kann axial gleiten, so stört es nicht, ob die Welle 10 oder 15 mm lang ist. Klemmt die D-Bohrung, mit 6-mm-Bohrer vorsichtig nacharbeiten bzw. die Flachseite feilen.
+  - Zusammenbau: Stift 7 mm tief in die Kupplung kleben (2K-Epoxid). Hinten hat die Kupplung eine D-Bohrung (10 mm tief), die auf den abgeflachten Teil der Welle passt (laut Datenblatt 7 mm lang, Ø 6 auf 4,5 abgeflacht) und die Drehung formschlüssig überträgt. Die Kupplung steckt 6,5 mm auf der Welle und nicht auf dem runden Teil davor. Nicht auf die Welle kleben: Sie wird nur aufgesteckt. Klemmt die D-Bohrung, mit 6-mm-Bohrer vorsichtig nacharbeiten bzw. die Flachseite feilen.
   - Der Turm im Träger ist ein Rohr (Ø 11,8 mm), in dem sich die Kupplung frei dreht. Der Stift läuft vorne in einer Lagerbohrung Ø 3,4 mm in der Trägerwand (mit 3,2 mm nachbohren, wenn er wackelt) und ragt durch das Loch der Frontplatte 16 mm in den Knopf.
-  - Jeder Drehgeber wird auf ein Stück Lochraster 20 × 25 mm gelötet, mit den zwei Pull-up-Widerständen (10 kΩ an A und B). Für die zwei Snap-In-Laschen die Löcher im Lochraster auf Ø 2 mm aufbohren. Die Platine wird mit 2 Schrauben 2,5 × 8 an die Säulen des Turms geschraubt (Säulen 21 mm auseinander) und drückt den Drehgeber gegen das Rohr. Montagefläche des Drehgebers bei y = 38,8 (Welle 10 mm; Körperhöhe 7 mm angenommen, nachmessen, `enc_tief`).
+  - Jeder Drehgeber wird auf ein Stück Lochraster 20 × 25 mm gelötet, mit den zwei Pull-up-Widerständen (10 kΩ an A und B). Für die zwei Snap-In-Laschen die Löcher im Lochraster auf Ø 2 mm aufbohren. Die Platine wird mit 2 Schrauben 2,5 × 8 an die Säulen des Turms geschraubt (Säulen 21 mm auseinander) und drückt den Drehgeber gegen das Rohr. Maße laut ALPS-Datenblatt EC12 (Zeichnung 2, „short shaft“): Welle 15 mm ab Platine, davon 5 mm Gehäuse mit Bund Ø 6,6; Bundoberkante bei y = 39,3.
   - Kupplung, Stift und Drehgeber werden zusammen von hinten in das Rohr geschoben.
 - **A/E-Schalter (Original, RFT):**
   - Der Schalter wird mit seiner eigenen Mutter und Scheibe auf die Halteplatte (Loch Ø 10,5 mm, passt für Gewinde M8 bis M10) geschraubt; der Flansch liegt hinten an der Platte.
-  - Die Platte wird mit 2 Schrauben 2,5 × 8 an zwei Säulen des linken Trägers geschraubt. Die Welle geht durch ein Loch Ø 6 mm in der Trägerwand und durch die Frontplatte in den Originalknopf.
-  - **Maße aus dem Foto geschätzt, vor dem Druck nachmessen** (Parameter oben in `traeger.scad`): `rft_a` = Flansch bis Wellenende (geschätzt 41 mm), `rft_buchse` = Länge der Gewindebuchse (8), `rft_koerper` = Gehäuse-Ø (25), `rft_tief` = Gehäusetiefe (13). Ist die Welle länger als `rft_a`, Platte entsprechend weiter hinten (Parameter anpassen und Träger links neu drucken) oder die Welle kürzen.
+  - Die Platte wird mit 2 Schrauben 2,5 × 8 an zwei Säulen des Trägers geschraubt (Säulen 6,2 mm lang, Bohrung 8,6 mm tief). Gewindebuchse und Welle gehen durch ein Loch Ø 11 mm in der Trägerwand und durch die Frontplatte in den Originalknopf.
+  - Maße (gemessen): Flansch bis Wellenende 32 mm, dünnes Wellenende 18 mm, der Knopf steckt 16 mm darauf. Damit liegt der Flansch 22,5 mm hinter der Frontplatten-Vorderseite, die Platte davor bei 19,5–22,5 mm. Länge der Gewindebuchse (8 mm), Gehäuse-Ø (25) und -tiefe (13) sind weiter aus dem Foto geschätzt; die Buchse darf bis 12 mm lang sein (ab 9 mm ragt sie in das Loch Ø 11 der Trägerwand).
   - Der Schalter führt nur noch 0,4 mA Steuerstrom; die 19 V schaltet das Pololu-Modul auf der Steuerplatine (README, „Stromversorgung und A/E-Schalter“).
 - **Tasten:**
   - Die Cherry-MX-Schalter rasten in eine 1,5 mm dicke Schalterplatte mit 14 × 14 mm Ausschnitten. Die Platte liegt 22,6 mm hinter der Rückseite der Frontplatte.
@@ -113,5 +132,4 @@ Hinter jedem Schlitz liegt eine eigene Kammer mit einem LED-Streifen. Der weiße
 
 ## Noch offen
 
-- **Maße des Original-A/E-Schalters** nachmessen (siehe oben, `rft_a` usw.), dann Träger links und A/E-Platte drucken.
 - **Lochabstand der Lochrasterplatine** für den Steuerplatinen-Halter (angenommen 66 × 46 mm, selbst gebohrt).

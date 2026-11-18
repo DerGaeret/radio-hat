@@ -35,7 +35,7 @@ pip install matplotlib numpy scipy pillow
 
 - Bilder: `cd Gehaeuse && xvfb-run -a openscad -o bilder/ansicht_vorne.png --imgsize=1600,900 --camera=336,95,60,75,0,20,1250 --colorscheme=Tomorrow gehaeuse.scad` (weitere Ansichten: `-D 'ansicht="ohne_deckel"'` Kamera `336,95,60,50,0,200,1250`; `"hinten_offen"` `336,120,60,68,0,215,1400`; `"explosion"` `336,30,60,65,0,25,1900`)
 - Zeichnungen: `cd Gehaeuse && python3 zeichnung.py`
-- STL: `cd Gehaeuse && openscad -o stl/TEIL.stl -D 'teil="TEIL"' traeger.scad` (TEIL = traeger_links, traeger_rechts, lichtkasten, pi_halter, steuer_halter, ae_platte, kupplung, tastenadapter, pi_huelsen)
+- STL: `cd Gehaeuse && openscad -o stl/TEIL.stl -D 'teil="TEIL"' traeger.scad` (TEIL = traeger, traeger_links, traeger_rechts, lichtkasten, pi_halter, steuer_halter, ae_platte, kupplung, tastenadapter, pi_huelsen)
 - Renderings: `cd Gehaeuse/render && python3 render.py 1600 1000 gut` (ca. 1 min)
 - Maße stehen doppelt in `gehaeuse.scad` und `zeichnung.py` (und teils `render.py`) – bei Änderungen alle anpassen.
 
@@ -55,12 +55,12 @@ Vom Nutzer festgelegt (18.11.2026): Raspberry Pi 4B (vorhanden, mit Kühlkörper
 
 Umgesetzt (18.11.2026, dritter Teil):
 
-- Netzteil (Nutzer 18.11.): Universal-Laptopnetzteil 90 W, 18,5–20 V / 4,74 A, Amazon https://amzn.eu/d/09DU1uIf (Stecker 5,5 × 2,5 aufstecken, Polung messen). Alternative Mean Well GST90A19-P1M + NKSK 200 SW. Einbaubuchse Delock 90188 (9 A, Metall, M8 × 0,75, Loch Ø 8; Reichelt 5,75 €; Nutzer will sicher gerated, Delock 65690 ohne Stromangabe verworfen), Hohlstecker Lumberg 1634 02 an Silikonlitze 0,75 mm². Bestelllinks in `EINKAUF.md` (fast alles Reichelt, geprüft 18.11.2026).
+- Netzteil (Nutzer 18.11.): Universal-Laptopnetzteil 90 W, 18,5–20 V / 4,74 A, Amazon https://amzn.eu/d/09DU1uIf (Stecker 5,5 × 2,5 aufstecken, Polung messen). Alternative Mean Well GST90A19-P1M + NKSK 200 SW. Einbaubuchse Delock 90188 (9 A, 20 V, Metall; Gewinde M8 × 0,75 nur 8,5 mm lang → im 8-mm-Deckel von innen Senkung Ø 15 × 4, dann Ø 8,2 durch; Technische Zeichnung DELOCK_90188_TZ.pdf von Reichelt; Delock 65690 ohne Stromangabe verworfen), Hohlstecker Lumberg 1634 02 an Silikonlitze 0,75 mm². Bestelllinks in `EINKAUF.md` (fast alles Reichelt, geprüft 18.11.2026).
 - Soft-Off: Einbaubuchse hinten → Pololu Big MOSFET Slide Switch MP (#2814, Eckstein 6,53 €; seit 18.11. statt HP, reicht für max. ~3,5 A; SW-Pin über Schalter auf GND = an, ON-Pin > 1 V = an; Bordschalter auf OFF) → VOUT an DigiAMP+ (DC-Kabel mit Hohlstecker) und optional Pololu D24V10F5 (5 V / 1 A für LEDs, Eckstein 15,41 €). A/E (Original, nur ~0,4 mA) zwischen Punkt X und GND; BAT85 SW→X und GPIO10→X. `gpio-shutdown` GPIO10 (active_low=0, pull-up), `gpio-poweroff` GPIO9 active_low=1 an ON. Schaltplan des Moduls geprüft (pololu.com).
 - Beleuchtung ist **optional** (Nutzer 18.11.): 112 × WS2812B, 5 V vom D24V10F5, Daten GPIO12 (PWM0, `rpi_ws281x`) über 74HCT245, Software-Begrenzung ≤ 0,8 A. Stationsmarken: ein gemeinsamer Streifen hinter beiden Markenreihen, je Marke 1–2 LEDs → aktive Marke kann hervorgehoben werden (Lage der Marken noch nicht gemessen).
 - GPIO: Taste 3 → GPIO4. Drehgeber nur drehen, Taster unbenutzt (Nutzer 18.11.). Frei: GPIO7, 14, 15, 26.
-- Drehgeber ALPS STEC12E07 (Nutzer 18.11.; EC12E, 24 Rastungen/24 Impulse, ohne Taster, Snap-In, Welle Ø 6 abgeflacht, laut Reichelt 10 mm, Datenblatt 10–15; Belastung max. 0,5 mA → Pull-ups 2 × 10 kΩ, `steps-per-period=4`), 4 Adern; gedruckte Kupplung Ø 11 × 22 mit D-Bohrung (gleitet, nicht geklebt) mit Zylinderstift Ø 3 × 30 in den Originalknopf; Lager Ø 3,4 in der Trägerwand.
-- A/E-Halteplatte mit Loch Ø 10,5 an zwei Säulen; Maße des RFT-Schalters (`rft_a` 41, Buchse 8, Ø 25, Tiefe 13) nur aus dem Foto geschätzt.
+- Drehgeber ALPS STEC12E07 (Nutzer 18.11.; EC12E Zeichnung 2 „short shaft“: Welle 15 mm ab Platine, 5 mm Gehäuse+Bund Ø 6,6, vorn 7 mm abgeflacht auf 4,5; 24 Rastungen/24 Impulse, ohne Taster, Snap-In; Belastung max. 0,5 mA → Pull-ups 2 × 10 kΩ, `steps-per-period=4`), 4 Adern; gedruckte Kupplung Ø 11 × 22 mit D-Bohrung (gleitet, nicht geklebt) mit Zylinderstift Ø 3 × 30 in den Originalknopf; Lager Ø 3,4 in der Trägerwand.
+- A/E-Halteplatte mit Loch Ø 10,5 an zwei Säulen; RFT-Schalter gemessen: Flansch bis Wellenende 32 (`rft_a`), dünnes Ende 18, Knopf 16 drauf; Buchse 8, Ø 25, Tiefe 13 weiter geschätzt. Loch in der Trägerwand Ø 11.
 - Pi-Halter: Pi 65 mm hinter der Frontplatte (hinter den Drehgebern), GPIO-Kante vorne, 4 gedruckte Säulen 9 mm mit Bohrung Ø 2,2 (Bolzen des DigiAMP+ schneiden ihr Gewinde selbst; keine gekauften Abstandshalter, Nutzer 18.11.), Ersatz-Hülsen `pi_huelsen`. Neuer Steuerplatinen-Halter (Lochraster 70 × 50) rechts daneben.
 - Hochpass 50 Hz per ALSA/LADSPA.
 
@@ -86,12 +86,11 @@ Nichts davon ist am Gerät getestet.
 
 ## Stand 3D-Druck
 
-Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt: Träger mit Kupplungsrohren, A/E-Säulen und Aussparung für die Original-Frontplattenmuttern, Kupplungen, A/E-Platte, Pi- und Steuerplatinen-Halter. Tasten 8 mm vor der Frontplatte, Adapter flach zum Aufkleben.
+Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt. Drucker des Nutzers: Qidi Plus 4 (305 × 305 × 280) mit OrcaSlicer → Träger einteilig `traeger.stl` (296 mm), Orca-Einstellungen in `DRUCKTEILE.md`. Träger mit Kupplungsrohren, A/E-Säulen und Aussparung für die Original-Frontplattenmuttern, Kupplungen, A/E-Platte, Pi- und Steuerplatinen-Halter. Tasten 8 mm vor der Frontplatte, Adapter flach zum Aufkleben.
 
 ## Offene Fragen an den Nutzer (Antworten stehen noch aus)
 
-1. Maße des Original-A/E-Schalters: Flansch bis Wellenende, Länge und Ø der Gewindebuchse, Gehäuse-Ø und -tiefe, Ø des dünnen Wellenendes.
-2. Druckbettgröße (Teile sind auf ≤ 200 mm ausgelegt).
+1. Optional: Länge und Ø der Gewindebuchse des A/E-Schalters (geschätzt 8 mm, bis 12 mm passt es).
 
 ## Nächste Schritte (Stand 18.11.2026)
 
@@ -101,7 +100,7 @@ Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt: Tr
 - 18.11.2026, vierter Teil: Drehgeber ohne Taster, Beleuchtung optional, Pololu MP + D24V10F5 (Eckstein), Preise in `EINKAUF.md`, Frontplatte mit Originalschrauben (Aussparung im Flansch).
 - 18.11.2026, fünfter Teil: microSD und 3 Anschlussklemmen vorhanden, Kontaktspray und Abstandshalter gestrichen, Kleber beliebig, Drehgeber STEC12E07. Netzteil vom Nutzer (Amazon, Universal 90 W, 18,5–20 V / 4,74 A, Wechselstecker) per Foto geprüft: geeignet mit Stecker 5,5 × 2,5.
 - 18.11.2026, sechster Teil: Einbaubuchse wieder Delock 90188 (9 A), Erklärseite aktualisiert (Drehgeberschnitt neu), Lautstärke-Grenze −1 dB wegen 20 V.
-- Maße des A/E-Schalters abwarten, Parameter `rft_*` anpassen, STL neu.
+- 18.11.2026, siebter Teil: Drehgeber nach Datenblatt (Bund 5 mm, Abflachung 7 mm), A/E gemessen (32/18/16), Träger einteilig für Qidi Plus 4, Orca-Einstellungen, Buchse mit Senkung im Deckel.
 
 ## Hinweise
 

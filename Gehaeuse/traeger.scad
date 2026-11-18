@@ -1,7 +1,7 @@
 // 3D-Druckteile für das Technikfach – alle Maße in mm
 // Koordinaten der Frontteile: px = ab linker Kante der Frontplatte, pz = ab Unterkante der Frontplatte,
 // y = Tiefe wie im Gehäuse (Frontplatte vorne y=7, hinten y=10).
-// Ansicht/Export: teil = "alle" | "traeger_links" | "traeger_rechts" | "lichtkasten" | "pi_halter" | "tastenadapter" | "kupplung" | "ae_platte" | "steuer_halter" | "pi_huelsen"
+// Ansicht/Export: teil = "alle" | "traeger" (einteilig) | "traeger_links" | "traeger_rechts" | "lichtkasten" | "pi_halter" | "tastenadapter" | "kupplung" | "ae_platte" | "steuer_halter" | "pi_huelsen"
 //                  | "kupplung" | "ae_platte" | "steuer_halter"
 teil = "alle";
 $fn = 40;
@@ -35,29 +35,32 @@ knopf_hinten = pl_vorne - 0.5;          // 6.5: Rückseite des Knopfs, 0,5 mm vo
 knopf_bohr   = 17;
 stift_tief   = 16;                      // so weit steckt die Achse im Knopf (1 mm Reserve)
 stift_spitze = knopf_hinten - stift_tief;   // -9.5
-// Drehgeber ALPS STEC12E07 (EC12E, 24 Impulse/24 Rastungen, ohne Taster, Snap-In): Körper ca. 12,4 x 13,2,
-// Welle Ø 6 mit Abflachung auf 4,5 mm, laut Reichelt 10 mm lang ab Montagefläche (Datenblatt: je nach
-// Variante 10–15 mm). Die Kupplung gleitet auf der Welle; bei 15 mm Welle steckt sie einfach tiefer.
-enc_welle  = 10;
-enc_tief   = 7;      // Körperhöhe Montagefläche bis Platine (ca., nachmessen)
+// Drehgeber ALPS STEC12E07 = EC12E-Zeichnung 2 "short shaft" (Datenblatt ALPS EC12): Gehäuse 12,4 x 12,4
+// (mit Laschen 14 x 13,2), Welle 15 mm ab Platine; davon 5 mm Gehäuse + Bund Ø 6,6, dann Welle Ø 6,
+// die vorderen 7 mm abgeflacht auf 4,5 mm. "enc_vorne" = Oberkante Bund.
+enc_welle  = 10;     // Welle vor dem Bund
+enc_tief   = 5;      // Platine bis Oberkante Bund
 enc_flach  = 4.5;    // Wellendicke an der Abflachung
+enc_flach_l = 7;     // Länge der Abflachung
 // Kupplung: Zylinderstift ISO 2338 Ø 3 x 30 (Stahl) vorne, Drehgeberwelle hinten
 stift_l    = 30;
 kup_d      = 11;  kup_vorne = 13.8;  kup_l = 22;
 kup_stift  = stift_spitze + stift_l - kup_vorne + 0.5;   // 7.2: Tiefe der Stiftbohrung
-kup_welle_tief = 7;                                       // Welle (10 mm) steckt 7 mm in der Kupplung
-kup_bohr_tief  = 13.5;                                    // D-Bohrung, reicht auch für 15 mm Welle
-enc_vorne  = kup_vorne + kup_l - kup_welle_tief + enc_welle;   // 38.8: Montagefläche Drehgeber
+kup_welle_tief = enc_flach_l - 0.5;                       // 6,5: Kupplung sitzt nur auf dem abgeflachten Teil
+kup_bohr_tief  = 10;                                      // D-Bohrung, 3,5 mm Luft vor der Wellenspitze
+enc_vorne  = kup_vorne + kup_l - kup_welle_tief + enc_welle;   // 39.3: Oberkante Bund
 lr_b = 20;  lr_h = 25;  lr_t = 1.6;      // Lochrasterplatine je Drehgeber
-// Original-A/E-Schalter (RFT): Maße aus dem Foto GESCHÄTZT, vor dem Druck nachmessen.
-rft_a       = 41;    // Anlagefläche (Flansch) bis Wellenende
+// Original-A/E-Schalter (RFT): Flansch bis Wellenende 32 mm, dünnes Wellenende 18 mm, Knopf steckt 16 mm
+// darauf (Nutzer, 18.11.2026). Buchse, Gehäuse-Ø und -tiefe weiter aus dem Foto geschätzt.
+rft_a       = 32;    // Anlagefläche (Flansch) bis Wellenende
+rft_duenn   = 18;    // dünnes Wellenende
 rft_buchse  = 8;     // Gewindebuchse ab Flansch
 rft_loch    = 10.5;  // Loch in der Halteplatte (passt für Gewinde M8 bis M10)
 rft_koerper = 25;    // Gehäuse-Ø
 rft_tief    = 13;    // Gehäusetiefe hinter dem Flansch
 ae_platte_t = 3;
-ae_flansch_y = stift_spitze + rft_a;          // 31.5: Flansch liegt an der Rückseite der Halteplatte
-ae_platte_y  = ae_flansch_y - ae_platte_t;    // 28.5
+ae_flansch_y = stift_spitze + rft_a;          // 22.5: Flansch liegt an der Rückseite der Halteplatte
+ae_platte_y  = ae_flansch_y - ae_platte_t;    // 19.5
 ae_saeulen   = [[0,-13],[13,0]];             // Schraubsäulen relativ zur Achse (dx, dz)
 // Cherry MX: Montageplatte 1,5 mm, Ausschnitt 14 x 14
 mx_ausschnitt = 14;  mx_platte = 1.5;
@@ -78,7 +81,7 @@ module frontwand(x0, x1) {
   difference() {
     translate([x0, wand_y0, tr_unten]) cube([x1-x0, wand_t, tr_oben-tr_unten]);
     for (i=[0:3]) translate([knoepfe[i][0], wand_y0-1, knoepfe[i][1]]) rotate([-90,0,0])
-      cylinder(d=(i==0 ? 6 : 3.4), h=wand_t+2);   // A/E: Welle frei; Drehgeber: Lager für den 3-mm-Stift
+      cylinder(d=(i==0 ? 11 : 3.4), h=wand_t+2);   // A/E: Welle und Gewindebuchse frei; Drehgeber: Lager für den 3-mm-Stift
     for (x=tasten_x) translate([x-(fenster+0.6)/2, wand_y0-1, tasten_z-(fenster+0.6)/2]) cube([fenster+0.6, wand_t+2, fenster+0.6]);
   }
 }
@@ -99,7 +102,7 @@ module drehgeber_turm(k) {   // Rohr für die Kupplung, zwei Säulen für die Lo
 module ae_turm(k) {   // zwei Säulen für die Halteplatte des Original-A/E-Schalters
   for (d=ae_saeulen) difference() {
     translate([k[0]+d[0], wand_y1, k[1]+d[1]]) rotate([-90,0,0]) cylinder(d=6, h=ae_platte_y-wand_y1);
-    translate([k[0]+d[0], wand_y1+2, k[1]+d[1]]) rotate([-90,0,0]) cylinder(d=2.2, h=40);
+    translate([k[0]+d[0], wand_y0+0.6, k[1]+d[1]]) rotate([-90,0,0]) cylinder(d=2.2, h=40);   // 8,6 mm tief für 2,5 x 8
   }
 }
 
@@ -184,6 +187,12 @@ module traeger_rechts() {
     translate([teilung+3, wand_y0-1, 4.5]) rotate([-90,0,0]) cylinder(d=2.5, h=10);
     translate([195, 35, tr_oben-10]) cylinder(d=2.5, h=20);
   }
+}
+
+module traeger_komplett() {   // beide Träger in einem Stück (passt auf 305 x 305, z. B. Qidi Plus 4)
+  traeger_links(); traeger_rechts();
+  x0 = teilung - 1; x1 = teilung + 1;
+  frontwand(x0, x1); leiste_oben(x0, x1); leiste_unten(x0, x1);
 }
 
 /* ---------- Lichtkasten hinter der Skala ---------- */
@@ -337,6 +346,7 @@ module traeger_einbau(mit_bauteilen=true) {
 /* ---------- Druckausrichtung ---------- */
 if (teil == "alle") traeger_einbau();
 if (teil == "traeger_links")  rotate([90,0,0]) translate([0,-wand_y0,0]) traeger_links();
+if (teil == "traeger")        rotate([90,0,0]) translate([0,-wand_y0,0]) traeger_komplett();
 if (teil == "traeger_rechts") rotate([90,0,0]) translate([0,-wand_y0,0]) traeger_rechts();
 if (teil == "lichtkasten")    rotate([90,0,0]) translate([0,-wand_y0,0]) lichtkasten();
 if (teil == "pi_halter")      translate([0,0,-boden_z]) pi_halter();
