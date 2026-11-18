@@ -6,7 +6,8 @@ Verglichen wurde Reichelt mit Eckstein: Die Pololu-Module und die Lochrasterplat
 
 ## Vorhanden
 
-- Raspberry Pi 4B mit Kühlkörper
+- Raspberry Pi 4B mit Kühlkörper, microSD-Karte
+- 3 Anschlussklemmen 2-polig (EIN, VERST, A/E auf der Steuerplatine)
 - Vom Originalradio: Frontplatte mit Originalschrauben und -muttern, 2 Lautsprecherabdeckungen, 4 Knöpfe (Bohrung Ø 3 × 17 mm), 6 Tasten, A/E-Schalter (RFT) mit Mutter und Scheibe
 - Lautsprecher Sharp VSP0010PBS78A (2 ×)
 
@@ -23,7 +24,6 @@ Verglichen wurde Reichelt mit Eckstein: Die Pololu-Module und die Lochrasterplat
 
 | Anz. | Teil | Wofür | Preis | Link |
 |---|---|---|---|---|
-| 1 | microSDHC 32 GB SanDisk Ultra | System | 16,95 € | [SDSQUA4032GGN6MA](https://www.reichelt.de/de/de/shop/produkt/microsdhc-speicherkarte_32gb_sandisk_ultra-297179) |
 | 1 | Raspberry Pi DigiAMP+ | Verstärker | 32,40 € | [RPI IQ DIGIAMP+](https://www.reichelt.de/de/de/shop/produkt/raspberry_pi_shield_-_iqaudio_digiamp_-295715) |
 | 1 | Tischnetzteil Mean Well GST90A19-P1M, 19 V, 4,74 A, Stecker 5,5 × 2,5 | Stromversorgung | 32,70 € | [MW GST90A19](https://www.reichelt.de/de/de/shop/produkt/tischnetzteil_90_w_19_v_4_74_a-171060) |
 | 1 | Netzkabel Schutzkontakt → C13 | zum Netzteil | 2,85 € | [NKSK 200 SW](https://www.reichelt.de/de/de/shop/produkt/netzkabel_schutzkontaktstecker_gew_1_8_-_2_0_m_schw_c13-13490) |
@@ -31,32 +31,30 @@ Verglichen wurde Reichelt mit Eckstein: Die Pololu-Module und die Lochrasterplat
 | 1 | Hohlstecker 5,5 × 2,5 mit Knickschutz | Kabel zum DigiAMP+ | 1,25 € | [LUM 1634-02](https://www.reichelt.de/de/de/shop/produkt/hohlstecker_knickschutz_aussen_5_5_mm_innen_2_5_mm-139689) |
 | 1 | Silikonkabel 0,75 mm², 2 m, rot/schwarz | 19-V-Leitungen | 3,20 € | [SIK 275 2](https://www.reichelt.de/de/de/shop/produkt/silikonkabel_0_75_mm_2_m_schwarz_rot-149542) |
 | 2 | Schottky-Diode BAT 85 | A/E-Erkennung | 2 × 0,08 € | [BAT 85](https://www.reichelt.de/de/de/shop/produkt/schottkydiode_30_v_0_2_a_do-35-4857) |
-| 6 | Widerstand 2,7 kΩ | Drehgeber A und B | 6 × 0,07 € | [METALL 2,70K](https://www.reichelt.de/de/de/shop/produkt/widerstand_metallschicht_2_70_kohm_0207_0_6_w_1_-11599) |
-| 3 | Anschlussklemme 2-polig, RM 5,08 | EIN, VERST, A/E | 3 × 0,26 € | [AKL 101-02](https://www.reichelt.de/de/de/shop/produkt/anschlussklemme_2-pol_2_mm_rm_5_08-36605) |
+| 6 | Widerstand 10 kΩ | Drehgeber A und B | 6 × 0,07 € | [METALL 10,0K](https://www.reichelt.de/de/de/shop/produkt/widerstand_metallschicht_10_0_kohm_0207_0_6_w_1_-11449) |
 | 1 | Stiftleiste 1 × 40, 2,54 mm | Pololu-Modul, Anschluss zum Pi | 0,78 € | [SL40G1B](https://www.reichelt.de/de/de/shop/produkt/stiftleiste_1x40_polig_gerade_2_54_mm_laenge_12_6_mm-404318) |
-| 3 | ALPS STEC11B03 (15 Impulse, 30 Rastungen) | Klang, Lautstärke, Sender (Taster unbenutzt) | 3 × 4,65 € | [STEC11B03](https://www.reichelt.de/de/de/shop/produkt/drehimpulsegeber_15_impulse_30_rastungen_vertikal-73913) |
+| 3 | ALPS STEC12E07 (24 Impulse, 24 Rastungen, ohne Taster) | Klang, Lautstärke, Sender | 3 × 1,80 € | [STEC12E07](https://www.reichelt.de/de/de/shop/produkt/drehimpulsegeber_24_impulse_24_rastungen_vertikal-73922) |
 | 6 | Cherry MX Blue, Schnappbefestigung | Tasten | 6 × 0,55 € | [MX2A-E1NN](https://www.reichelt.de/de/de/shop/produkt/cherry_mx_blue_-_tastenmodul_-_schnappbefestigung-401639) |
 | 1 | Steckbrückenkabel 40-polig, Buchse–Buchse, 20 cm | Tasten, Drehgeber, Steuerplatine an den GPIO-Stecker (ein Ende abschneiden und anlöten) | 1,60 € | [DEBO KABELSET12](https://www.reichelt.de/de/de/shop/produkt/entwicklerboards_-_steckbrueckenkabel_40_pole_f_f_20_cm-282700) |
-| 1 | Abstandshalter-Sortiment M2,5 (6 mm Innen/Außen, Schrauben M2,5 × 8) | Pi auf dem Halter | 13,40 € | [RPI MOUNTINGKIT4](https://www.reichelt.de/de/de/shop/produkt/raspberry_pi_-_abstandshalter-sortiment_m2_5-223625) |
 | 1 | Lautsprecherkabel 2 × 0,75 mm², 5 m | Lautsprecher | 0,78 € | [TME KL1-5 GL](https://www.reichelt.de/de/de/shop/produkt/lautsprecherkabel_2x0_75_mm_grau_5m-ring-375320) |
-| 1 | Epoxid-Minutenkleber, 24 ml | Stift, Kupplung, Tasten | 11,99 € | [WEICON 10553024](https://www.reichelt.de/de/de/shop/produkt/epoxid_minutenkleber_gelb_24_ml-343360) |
 | 1 | Schrumpfschlauch-Sortiment | Lötstellen | 5,35 € | [DELOCK 86271](https://www.reichelt.de/de/de/shop/produkt/schrumpfschlauch-sortiment_schwarz_100-teilig-152924) |
-| 1 | Kontaktspray Kontakt 60 *(nur falls der A/E-Schalter wackelt)* | alter A/E-Schalter | 12,50 € | [KONTAKT 202](https://www.reichelt.de/de/de/shop/produkt/kontaktspray_kontakt_60_200_ml_oxid-_und_sulfidloesend-9463) |
 
 ### Sonstiges
 
 | Anz. | Teil | Wofür | Link |
 |---|---|---|---|
 | 3 | Zylinderstift ISO 2338, Ø 3 m6 × 30 mm, Stahl | Achse in den Knopf | [Suche Amazon](https://www.amazon.de/s?k=Zylinderstift+3x30+ISO+2338) |
+| 1 | 2K-Epoxidkleber, beliebige Marke (z. B. UHU Plus schnellfest, Pattex 5 Minuten) | Stift in Kupplung, Tasten auf Adapter | Baumarkt/Drogerie |
 | 8 | Schraube für Kunststoff 2,5 × 8 (Spax 2,5 × 8 geht auch) | Drehgeberplatinen, A/E-Platte | Baumarkt |
 | 4 | Schraube 2,2 × 6,5 (oder M2 × 6 selbstschneidend) | Steuerplatine | Baumarkt |
 | 8 | Spax 3 × 10 | Pi- und Steuerplatinen-Halter in den Boden | Baumarkt |
 | 6 | Spax 2,5 × 8 / 2,5 × 10 | Träger, Lichtkasten | Baumarkt |
+| (4) | Schraube M2,5 × 25 *(nur falls beim DigiAMP+ keine Abstandsbolzen liegen; dann die Hülsen `pi_huelsen` drucken)* | DigiAMP+ und Pi auf den Halter | Baumarkt |
 | je 1 | Bohrer 3,0 und 6,0 mm | Kupplungen nachbohren | Baumarkt |
 
 Die Frontplatte wird mit den Originalschrauben und -muttern durch die Frontbretter geschraubt; dafür ist nichts zu kaufen.
 
-Summe Grundausstattung (Eckstein + Reichelt) ohne Sonstiges und Versand: etwa 168 €, ohne Kontaktspray etwa 155 €.
+Summe Grundausstattung (Eckstein + Reichelt) ohne Sonstiges und Versand: etwa 104 €.
 
 ## Optional: Skalenbeleuchtung
 
@@ -78,7 +76,7 @@ Heller: statt D24V10F5 den Pololu D36V28F5 (3,2 A, [Eckstein 26,12 €](https://
 
 ## 3D-Druck
 
-Siehe `Gehaeuse/DRUCKTEILE.md`: Träger links und rechts, Pi-Halter, Steuerplatinen-Halter, A/E-Halteplatte, 3 Kupplungen, 6 Tastenadapter; optional Lichtkasten. PETG oder PLA, Träger schwarz, Lichtkasten weiß.
+Siehe `Gehaeuse/DRUCKTEILE.md`: Träger links und rechts, Pi-Halter, Steuerplatinen-Halter, A/E-Halteplatte, 3 Kupplungen, ggf. 4 Hülsen, 6 Tastenadapter; optional Lichtkasten. PETG oder PLA, Träger schwarz, Lichtkasten weiß.
 
 ## Gehäuse
 

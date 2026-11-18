@@ -1,7 +1,7 @@
 // 3D-Druckteile für das Technikfach – alle Maße in mm
 // Koordinaten der Frontteile: px = ab linker Kante der Frontplatte, pz = ab Unterkante der Frontplatte,
 // y = Tiefe wie im Gehäuse (Frontplatte vorne y=7, hinten y=10).
-// Ansicht/Export: teil = "alle" | "traeger_links" | "traeger_rechts" | "lichtkasten" | "pi_halter" | "tastenadapter"
+// Ansicht/Export: teil = "alle" | "traeger_links" | "traeger_rechts" | "lichtkasten" | "pi_halter" | "tastenadapter" | "kupplung" | "ae_platte" | "steuer_halter" | "pi_huelsen"
 //                  | "kupplung" | "ae_platte" | "steuer_halter"
 teil = "alle";
 $fn = 40;
@@ -35,15 +35,19 @@ knopf_hinten = pl_vorne - 0.5;          // 6.5: Rückseite des Knopfs, 0,5 mm vo
 knopf_bohr   = 17;
 stift_tief   = 16;                      // so weit steckt die Achse im Knopf (1 mm Reserve)
 stift_spitze = knopf_hinten - stift_tief;   // -9.5
-// Drehgeber ALPS STEC11B03: Körper 11,6 x 12 x 6,5, runde geschlitzte Welle Ø 6 x 25 mm ab Montagefläche
-enc_welle  = 25;
-enc_tief   = 6.5;
+// Drehgeber ALPS STEC12E07 (EC12E, 24 Impulse/24 Rastungen, ohne Taster, Snap-In): Körper ca. 12,4 x 13,2,
+// Welle Ø 6 mit Abflachung auf 4,5 mm, laut Reichelt 10 mm lang ab Montagefläche (Datenblatt: je nach
+// Variante 10–15 mm). Die Kupplung gleitet auf der Welle; bei 15 mm Welle steckt sie einfach tiefer.
+enc_welle  = 10;
+enc_tief   = 7;      // Körperhöhe Montagefläche bis Platine (ca., nachmessen)
+enc_flach  = 4.5;    // Wellendicke an der Abflachung
 // Kupplung: Zylinderstift ISO 2338 Ø 3 x 30 (Stahl) vorne, Drehgeberwelle hinten
 stift_l    = 30;
-kup_d      = 11;  kup_vorne = 13.8;  kup_l = 16;
+kup_d      = 11;  kup_vorne = 13.8;  kup_l = 22;
 kup_stift  = stift_spitze + stift_l - kup_vorne + 0.5;   // 7.2: Tiefe der Stiftbohrung
-kup_welle_tief = 8;                                       // Welle steckt 8 mm in der Kupplung
-enc_vorne  = kup_vorne + kup_l - kup_welle_tief + enc_welle;   // 46.8: Montagefläche Drehgeber
+kup_welle_tief = 7;                                       // Welle (10 mm) steckt 7 mm in der Kupplung
+kup_bohr_tief  = 13.5;                                    // D-Bohrung, reicht auch für 15 mm Welle
+enc_vorne  = kup_vorne + kup_l - kup_welle_tief + enc_welle;   // 38.8: Montagefläche Drehgeber
 lr_b = 20;  lr_h = 25;  lr_t = 1.6;      // Lochrasterplatine je Drehgeber
 // Original-A/E-Schalter (RFT): Maße aus dem Foto GESCHÄTZT, vor dem Druck nachmessen.
 rft_a       = 41;    // Anlagefläche (Flansch) bis Wellenende
@@ -84,11 +88,11 @@ module drehgeber_turm(k) {   // Rohr für die Kupplung, zwei Säulen für die Lo
   difference() {
     union() {
       translate([x-8, wand_y1, z-8]) cube([16, enc_vorne-wand_y1, 16]);
-      for (dz=[-9.5,9.5]) translate([x, wand_y1, z+dz]) rotate([-90,0,0])
+      for (dz=[-10.5,10.5]) translate([x, wand_y1, z+dz]) rotate([-90,0,0])
         cylinder(d=6, h=enc_vorne+enc_tief-wand_y1);
     }
     translate([x, wand_y1-0.01, z]) rotate([-90,0,0]) cylinder(d=kup_d+0.8, h=60);
-    for (dz=[-9.5,9.5]) translate([x, enc_vorne, z+dz]) rotate([-90,0,0]) cylinder(d=2.2, h=20);
+    for (dz=[-10.5,10.5]) translate([x, enc_vorne, z+dz]) rotate([-90,0,0]) cylinder(d=2.2, h=20);
   }
 }
 
@@ -108,11 +112,14 @@ module ae_platte() {   // in Gehäusekoordinaten um die A/E-Achse; Schalter mit 
   }
 }
 
-module kupplung() {   // Achse z: vorne (z=0) Stiftbohrung Ø 3, hinten Bohrung Ø 6 für die Drehgeberwelle
+module kupplung() {   // Achse z: vorne (z=0) Stiftbohrung Ø 3, hinten D-Bohrung für die abgeflachte Welle
   difference() {
     cylinder(d=kup_d, h=kup_l);
     translate([0,0,-1]) cylinder(d=3.0, h=kup_stift+1);
-    translate([0,0,kup_l-kup_welle_tief]) cylinder(d=6.0, h=kup_welle_tief+1);
+    translate([0,0,kup_l-kup_bohr_tief]) intersection() {
+      cylinder(d=6.2, h=kup_bohr_tief+1);
+      translate([-3.1, -3.1, 0]) cube([6.2, 3.1 + enc_flach - 3 + 0.15, kup_bohr_tief+1]);
+    }
   }
 }
 
@@ -203,17 +210,18 @@ module lichtkasten() {
 
 /* ---------- Halter für Raspberry Pi + DigiAMP+ (Gehäusekoordinaten) ---------- */
 // Der DigiAMP+ (58 x 65 mm) sitzt direkt auf dem Pi, mit den Abstandsbolzen aus seinem Lieferumfang
-// auf den vier Pi-Löchern. Der Halter trägt nur den Pi: auf jedem Sockel ein Abstandsbolzen M2,5 x 6
-// Innen/Außen, von unten mit M2,5 x 8 angeschraubt; sein Außengewinde geht durch den Pi in den Bolzen zum DigiAMP+.
+// auf den vier Pi-Löchern. Der Halter braucht keine gekauften Abstandshalter: vier gedruckte Säulen
+// (9 mm) mit Bohrung Ø 2,2, in die sich M2,5 selbst ein Gewinde schneidet. Hineingeschraubt wird das
+// Außengewinde der DigiAMP+-Bolzen (durch das Pi-Loch) oder, falls keine dabei sind, eine Schraube
+// M2,5 x 25 von oben durch DigiAMP+, gedruckte Hülse (teil = "pi_huelsen") und Pi.
 // Der Pi liegt mit der GPIO-Kante nach vorne: Hohlbuchse und Lautsprecherklemmen des DigiAMP+ sitzen
 // an der gegenüberliegenden Kante und zeigen so zur Rückwand. USB/Ethernet zeigen nach links (-x).
 pi_gpio_y = 65;    // GPIO-Kante des Pi (Gehäuse-y), Pi reicht nach hinten bis y = 121 (hinter den Drehgebern)
 pi_x0     = 290;   // linke Kante des Pi (Gehäuse-x, USB-Seite)
 boden_z   = 8;
-sockel_h  = 3;     // Sockel auf der Halterplatte
-bolzen_h  = 6;     // Abstandsbolzen M2,5 x 6 Innen/Außen
-pi_hoehe  = sockel_h + bolzen_h;   // Pi-Unterseite über der Halterplatte
-amp_abst  = 9;     // Abstand Pi-Platine zu DigiAMP+-Platine, nur für die Vorschau (Bolzen aus dem Lieferumfang)
+sockel_h  = 9;     // gedruckte Säule auf der Halterplatte
+pi_hoehe  = sockel_h;   // Pi-Unterseite über der Halterplatte
+amp_abst  = 11.5;  // Abstand Pi-Platine zu DigiAMP+-Platine (Bolzen aus dem Lieferumfang bzw. gedruckte Hülse)
 ph_t      = 2.5;
 pi_loecher  = [[3.5,3.5],[61.5,3.5],[3.5,52.5],[61.5,52.5]];   // Pi-Koordinaten (y ab GPIO-Kante Richtung Pi)
 function pi2g(p) = [pi_x0 + 85 - p[0], pi_gpio_y + p[1]];   // um 180° gedreht
@@ -223,15 +231,22 @@ module pi_halter() {
   difference() {
     union() {
       translate([x0, y0, boden_z]) cube([x1-x0, y1-y0, ph_t]);
-      for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z]) cylinder(d=8, h=ph_t+sockel_h);
+      for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z]) {
+        cylinder(d=9, h=ph_t+2); cylinder(d=6, h=ph_t+sockel_h);          // Fuß + Säule (Pi liegt auf Ø 6)
+      }
     }
-    for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z-1]) {      // M2,5 x 8 von unten
-      cylinder(d=2.8, h=20); cylinder(d=5.5, h=1+2.5);
-    }
+    for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z+ph_t+1]) // Ø 2,2 für M2,5, 10 mm tief
+      cylinder(d=2.2, h=sockel_h+1);
     for (x=[x0+5, x1-5], y=[y0+5, y1-5]) translate([x, y, boden_z-1]) {   // Spax 3 x 10 in den Boden
       cylinder(d=3.2, h=10); translate([0,0,ph_t-0.5]) cylinder(d=6.5, h=10);
     }
     translate([x0+20, y0+14, boden_z-1]) cube([x1-x0-40, y1-y0-28, 5]);       // Material sparen
+  }
+}
+
+module pi_huelsen() {   // nur falls beim DigiAMP+ keine Abstandsbolzen liegen: 4 Hülsen Pi–DigiAMP+
+  for (i=[0:3]) translate([i*9, 0, 0]) difference() {
+    cylinder(d=6, h=amp_abst); translate([0,0,-1]) cylinder(d=2.9, h=amp_abst+2);
   }
 }
 
@@ -276,7 +291,7 @@ module bauteile_vorschau() {
     if (i > 0) {
       color("LightGray") translate([k[0], stift_spitze, k[1]]) rotate([-90,0,0]) cylinder(d=3, h=stift_l);
       color("Orange") translate([k[0], kup_vorne, k[1]]) rotate([-90,0,0]) kupplung();
-      color("DarkSlateGray") translate([k[0]-6, enc_vorne, k[1]-6]) cube([12, enc_tief, 12]);
+      color("DarkSlateGray") translate([k[0]-6.5, enc_vorne, k[1]-6.5]) cube([13, enc_tief, 13]);
       color("SeaGreen") translate([k[0]-lr_b/2, enc_vorne+enc_tief, k[1]-lr_h/2]) cube([lr_b, lr_t, lr_h]);
     }
   }
@@ -329,3 +344,4 @@ if (teil == "kupplung")       for (i=[0:2]) translate([i*15,0,0]) kupplung();
 if (teil == "ae_platte")      rotate([90,0,0]) translate([0,-ae_platte_y,0]) ae_platte();
 if (teil == "steuer_halter")  translate([0,0,-boden_z]) steuer_halter();
 if (teil == "tastenadapter")  for (i=[0:5]) translate([i*15,0,0]) tastenadapter();
+if (teil == "pi_huelsen")     pi_huelsen();

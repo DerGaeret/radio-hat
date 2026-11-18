@@ -20,7 +20,7 @@ Quellen: [Produktseite](https://www.raspberrypi.com/products/digiamp-plus/), [Do
 - Versorgung 12 bis 24 V Gleichspannung, 3 A, über Hohlbuchse 5,5 × 2,5 mm (Stecker 2,5 mm innen, 5,5 mm außen, 11 mm lang). Alternativ fest verdrahtet an P5 (Polung beachten).
 - Versorgt den Pi über den GPIO-Stecker mit 5,1 V, 2,5 A. **Den Pi nie zusätzlich über seinen eigenen USB-C-Anschluss versorgen.**
 - Belegt GPIO2/3 (I²C), GPIO18 bis 21 (I²S), GPIO22 (Stummschaltung und Mute-LED), dazu GPIO0/1 für das HAT-EEPROM.
-- 58 × 65 mm, steckt direkt auf dem Pi, Befestigung mit den mitgelieferten Abstandsbolzen auf den vier Pi-Löchern. Der GPIO-Stecker wird nach oben durchgeführt.
+- 58 × 65 mm, steckt direkt auf dem Pi, Befestigung mit den mitgelieferten Abstandsbolzen auf den vier Pi-Löchern. Deren Außengewinde geht durch den Pi in die gedruckten Säulen des Pi-Halters (Bohrung Ø 2,2, M2,5 schneidet sich selbst ein); gekaufte Abstandshalter braucht es nicht. Liegen keine Bolzen bei: gedruckte Hülsen (11,5 mm) und Schrauben M2,5 × 25 von oben. Der GPIO-Stecker wird nach oben durchgeführt.
 - Startet stummgeschaltet (Mute-LED leuchtet). Der Treiber schaltet beim Abspielen ein und 5 s nach dem Ende wieder stumm.
 - Betrieb 0 bis 50 °C.
 - Lage (Bild in der Doku, GPIO-Stecker oben): Hohlbuchse links unten an der Kante gegenüber dem GPIO-Stecker, rechts daneben die Klemmen LEFT und RIGHT, ganz links P5 (2 Pins, „−“ „+“). Diese Kante liegt über der USB-C/HDMI-Seite des Pi; die Hohlbuchse sitzt auf der Seite von Pin 1 (SD-Karten-Ende).
@@ -72,7 +72,6 @@ So funktioniert es:
 - **Neustart** (`sudo reboot`) bei geschlossenem Schalter geht normal. `sudo poweroff` bei geschlossenem Schalter hält den Pi nur an, der Strom bleibt an; dann A/E aus- und wieder einschalten. Im Alltag nur mit A/E ausschalten.
 - Hängt der Pi einmal, bleibt der Strom an, auch wenn A/E aus ist. Dann den Netzstecker ziehen.
 - Ohne Strom vom Netzteil verbraucht das Modul im Aus weniger als 0,2 µA; was im Aus bleibt, ist der Leerlauf des Netzteils.
-- Wackelt der alte Schalter bei dem kleinen Strom (oxidierte Kontakte), mit Kontaktspray behandeln und ein paarmal durchschalten.
 
 ### Steuerplatine (Lochraster 70 × 50 mm)
 
@@ -134,16 +133,16 @@ Alles kommt mit Dupont-Kabeln (Buchse) an den durchgeführten GPIO-Stecker oben 
 | 3,3 V für die Pull-ups der Drehgeber | – | 1 oder 17 |
 | GND | – | 6, 9, 14, 20, 25, 30, 34, 39 |
 
-Vom DigiAMP+ belegt: GPIO0/1, 2/3, 18 bis 21, 22. Frei bleiben GPIO7, 14, 15 und 26 (Pins 26, 8, 10, 37). Geändert gegenüber dem Entwurf mit eigener Platine: Taste 3 von GPIO22 auf GPIO4; die Drehgeber-Taster werden nicht benutzt.
+Vom DigiAMP+ belegt: GPIO0/1, 2/3, 18 bis 21, 22. Frei bleiben GPIO7, 14, 15 und 26 (Pins 26, 8, 10, 37). Geändert gegenüber dem Entwurf mit eigener Platine: Taste 3 von GPIO22 auf GPIO4; Drehgeber ohne Taster.
 
 - **Tasten (Cherry MX Blue):** Pull-ups im Pi, in der Software einschalten, 20 ms entprellen.
-- **Drehgeber (ALPS STEC11B03, 30 Rastungen, 15 Impulse):** nur zum Drehen; der eingebaute Taster bleibt unbenutzt (seine zwei Pins nicht anschließen). Der Drehgeber verlangt laut Datenblatt mindestens 1 mA an A und B; die Pull-ups im Pi (etwa 50 kΩ) liefern nur rund 0,07 mA. Deshalb auf jede Lochrasterplatine der Drehgeber zwei Widerstände löten: 2,7 kΩ von A nach 3,3 V und 2,7 kΩ von B nach 3,3 V (je 1,2 mA). Pin C (Mitte) an GND. Pro Drehgeber ein Kabel mit 4 Adern: A, B, 3,3 V, GND.
+- **Drehgeber (ALPS STEC12E07, 24 Rastungen, 24 Impulse, ohne Taster):** 12-mm-Bauform zum Einschnappen in die Platine, Welle Ø 6 abgeflacht (laut Reichelt 10 mm lang). Pins A, C, B im Raster 2,5 mm passen ins Lochraster; für die zwei Haltelaschen die Löcher auf Ø 2 aufbohren. Belastbarkeit laut Datenblatt 0,5 mA bei 5 V. Die Pull-ups im Pi (etwa 50 kΩ, 0,07 mA) sind für Dauerbetrieb knapp; deshalb auf jede Lochrasterplatine zwei Widerstände: 10 kΩ von A nach 3,3 V und 10 kΩ von B nach 3,3 V (je 0,33 mA). Pin C (Mitte) an GND. Pro Drehgeber ein Kabel mit 4 Adern: A, B, 3,3 V, GND.
 
 ```
-          Drehgeber, Pins von hinten:   A    C    B        (Taster-Pins frei)
+          Drehgeber, Pins von hinten:   A    C    B
                                         │    │    │
    Pi GPIO (A) ◄────────────────────────┤    │    ├────────────────────────► Pi GPIO (B)
-                                      2,7 kΩ │  2,7 kΩ
+                                      10 kΩ  │  10 kΩ
                                         │    │    │
    Pi 3,3 V (Pin 1/17) ─────────────────┴────┼────┘
    Pi GND ───────────────────────────────────┘
@@ -172,9 +171,9 @@ Außerdem in `/boot/firmware/config.txt`:
 dtparam=audio=off
 dtoverlay=gpio-shutdown,gpio_pin=10,active_low=0,gpio_pull=up,debounce=200
 dtoverlay=gpio-poweroff,gpiopin=9,active_low=1
-dtoverlay=rotary-encoder,pin_a=5,pin_b=6,relative_axis=1,steps-per-period=2
-dtoverlay=rotary-encoder,pin_a=13,pin_b=16,relative_axis=1,steps-per-period=2
-dtoverlay=rotary-encoder,pin_a=11,pin_b=8,relative_axis=1,steps-per-period=2
+dtoverlay=rotary-encoder,pin_a=5,pin_b=6,relative_axis=1,steps-per-period=4
+dtoverlay=rotary-encoder,pin_a=13,pin_b=16,relative_axis=1,steps-per-period=4
+dtoverlay=rotary-encoder,pin_a=11,pin_b=8,relative_axis=1,steps-per-period=4
 ```
 
 und die vorhandene Zeile `dtoverlay=vc4-kms-v3d` zu `dtoverlay=vc4-kms-v3d,noaudio` ändern. Dann ist der DigiAMP+ die einzige Soundkarte (Karte 0).
@@ -183,7 +182,7 @@ und die vorhandene Zeile `dtoverlay=vc4-kms-v3d` zu `dtoverlay=vc4-kms-v3d,noaud
 - SPI ausgeschaltet lassen (`dtparam=spi=on` darf nicht aktiv sein), weil GPIO8 und 11 für den Drehgeber Sender gebraucht werden.
 - `gpio-shutdown` an GPIO10: Öffnen des A/E-Schalters (GPIO10 wird high) fährt den Pi herunter. `gpio-poweroff` an GPIO9 mit `active_low`: GPIO9 ist im Betrieb high und geht am Ende des Herunterfahrens (und bei jedem Neustart kurz) auf low; dann schaltet das Pololu-Modul ab, sofern A/E offen ist.
 - Die alten Einträge der eigenen Platine (`hifiberry-dac`, `gpio-poweroff,gpiopin=4`) dürfen nicht mehr drinstehen; GPIO4 ist jetzt Taste 3.
-- Beim Drehgeber ergeben zwei Rastungen einen vollen Impulszyklus, daher `steps-per-period=2`. Stimmt die Drehrichtung nicht, A und B tauschen.
+- Beim STEC12E07 ergibt jede Rastung einen vollen Impulszyklus, daher `steps-per-period=4`. Stimmt die Drehrichtung nicht, A und B tauschen.
 
 Neu starten und prüfen:
 

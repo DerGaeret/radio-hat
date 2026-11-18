@@ -188,23 +188,23 @@ def blatt2():
     d.add(elm.Label().at((0, -2.6)).label('Tasten S1–S6: Reihenfolge von links nach rechts in der Frontplatte (L, M, K, U, TA-TB, AFC-AUS). '
                                          'Frei: GPIO7, 14, 15, 26.', fontsize=7, halign='left'))
 
-    # Drehgeber: nur Drehen, Taster bleibt frei. Pins von vorne gesehen A, C, B nebeneinander.
+    # Drehgeber ohne Taster. Pins von vorne gesehen A, C, B nebeneinander.
     for i, (n, name) in enumerate((('E1', 'Klang'), ('E2', 'Lautstärke'), ('E3', 'Sender'))):
         x0 = i * 10.5 - 0.5
         y0 = -5.5
-        e = ic(d, (x0 + 5, y0), f'{n} {name}: ALPS STEC11B03\n(Taster-Pins frei lassen)',
+        e = ic(d, (x0 + 5, y0), f'{n} {name}: ALPS STEC12E07\n(24 Rastungen, ohne Taster)',
                unten=[('A', 'A'), ('C', 'C'), ('B', 'B')], w=4, h=1.6, ps=1.4)
         for a, seite in (('A', 'left'), ('B', 'right')):
             d.add(elm.Line().at(getattr(e, a)).down().length(0.9))
             k = d.here
             d.add(elm.Dot())
             tag(d, k, f'{n}_{a} → Pi', seite, 1.6)
-            d.add(elm.Resistor().at(k).down().label('2,7 kΩ', fontsize=8, loc='bottom' if seite == 'right' else 'top'))
+            d.add(elm.Resistor().at(k).down().label('10 kΩ', fontsize=8, loc='bottom' if seite == 'right' else 'top'))
             tag(d, d.here, '+3V3', 'down', 0.3)
         d.add(elm.Line().at(e.C).down().length(0.9)); d.add(elm.Ground())
     d.add(elm.Label().at((0, -12.8)).label(
-        'Drehgeber: mindestens 1 mA an A und B (Datenblatt) → je 2,7 kΩ nach 3,3 V auf der Drehgeberplatine (1,2 mA). '
-        'Pro Drehgeber 4 Adern: A, B, 3,3 V, GND. Die Taster werden nicht benutzt.\nKernel: dtoverlay=rotary-encoder, steps-per-period=2 (30 Rastungen, 15 Impulse).', fontsize=7, halign='left'))
+        'Drehgeber: je 10 kΩ von A und B nach 3,3 V auf der Drehgeberplatine (0,33 mA, Datenblatt max. 0,5 mA). '
+        'Pro Drehgeber 4 Adern: A, B, 3,3 V, GND.\nKernel: dtoverlay=rotary-encoder, steps-per-period=4 (24 Rastungen, 24 Impulse).', fontsize=7, halign='left'))
     return d
 
 if __name__ == '__main__':

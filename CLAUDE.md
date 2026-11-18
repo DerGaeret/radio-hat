@@ -35,7 +35,7 @@ pip install matplotlib numpy scipy pillow
 
 - Bilder: `cd Gehaeuse && xvfb-run -a openscad -o bilder/ansicht_vorne.png --imgsize=1600,900 --camera=336,95,60,75,0,20,1250 --colorscheme=Tomorrow gehaeuse.scad` (weitere Ansichten: `-D 'ansicht="ohne_deckel"'` Kamera `336,95,60,50,0,200,1250`; `"hinten_offen"` `336,120,60,68,0,215,1400`; `"explosion"` `336,30,60,65,0,25,1900`)
 - Zeichnungen: `cd Gehaeuse && python3 zeichnung.py`
-- STL: `cd Gehaeuse && openscad -o stl/TEIL.stl -D 'teil="TEIL"' traeger.scad` (TEIL = traeger_links, traeger_rechts, lichtkasten, pi_halter, steuer_halter, ae_platte, kupplung, tastenadapter)
+- STL: `cd Gehaeuse && openscad -o stl/TEIL.stl -D 'teil="TEIL"' traeger.scad` (TEIL = traeger_links, traeger_rechts, lichtkasten, pi_halter, steuer_halter, ae_platte, kupplung, tastenadapter, pi_huelsen)
 - Renderings: `cd Gehaeuse/render && python3 render.py 1600 1000 gut` (ca. 1 min)
 - Maße stehen doppelt in `gehaeuse.scad` und `zeichnung.py` (und teils `render.py`) – bei Änderungen alle anpassen.
 
@@ -59,9 +59,9 @@ Umgesetzt (18.11.2026, dritter Teil):
 - Soft-Off: Einbaubuchse hinten → Pololu Big MOSFET Slide Switch MP (#2814, Eckstein 6,53 €; seit 18.11. statt HP, reicht für max. ~3,5 A; SW-Pin über Schalter auf GND = an, ON-Pin > 1 V = an; Bordschalter auf OFF) → VOUT an DigiAMP+ (DC-Kabel mit Hohlstecker) und optional Pololu D24V10F5 (5 V / 1 A für LEDs, Eckstein 15,41 €). A/E (Original, nur ~0,4 mA) zwischen Punkt X und GND; BAT85 SW→X und GPIO10→X. `gpio-shutdown` GPIO10 (active_low=0, pull-up), `gpio-poweroff` GPIO9 active_low=1 an ON. Schaltplan des Moduls geprüft (pololu.com).
 - Beleuchtung ist **optional** (Nutzer 18.11.): 112 × WS2812B, 5 V vom D24V10F5, Daten GPIO12 (PWM0, `rpi_ws281x`) über 74HCT245, Software-Begrenzung ≤ 0,8 A. Stationsmarken: ein gemeinsamer Streifen hinter beiden Markenreihen, je Marke 1–2 LEDs → aktive Marke kann hervorgehoben werden (Lage der Marken noch nicht gemessen).
 - GPIO: Taste 3 → GPIO4. Drehgeber nur drehen, Taster unbenutzt (Nutzer 18.11.). Frei: GPIO7, 14, 15, 26.
-- Drehgeber ALPS STEC11B03 (30 Rastungen/15 Impulse, Taster, Welle Ø 6 × 25 geschlitzt), Pull-ups 2 × 2,7 kΩ (A, B) auf ihren Lochrasterplatinen, 4 Adern; gedruckte Kupplung Ø 11 × 16 mit Zylinderstift Ø 3 × 30 in den Originalknopf; Lager Ø 3,4 in der Trägerwand.
+- Drehgeber ALPS STEC12E07 (Nutzer 18.11.; EC12E, 24 Rastungen/24 Impulse, ohne Taster, Snap-In, Welle Ø 6 abgeflacht, laut Reichelt 10 mm, Datenblatt 10–15; Belastung max. 0,5 mA → Pull-ups 2 × 10 kΩ, `steps-per-period=4`), 4 Adern; gedruckte Kupplung Ø 11 × 22 mit D-Bohrung (gleitet, nicht geklebt) mit Zylinderstift Ø 3 × 30 in den Originalknopf; Lager Ø 3,4 in der Trägerwand.
 - A/E-Halteplatte mit Loch Ø 10,5 an zwei Säulen; Maße des RFT-Schalters (`rft_a` 41, Buchse 8, Ø 25, Tiefe 13) nur aus dem Foto geschätzt.
-- Pi-Halter: Pi 65 mm hinter der Frontplatte (hinter den Drehgebern), GPIO-Kante vorne, 4 Sockel mit Bolzen M2,5 × 6 I/A von unten verschraubt. Neuer Steuerplatinen-Halter (Lochraster 70 × 50) rechts daneben.
+- Pi-Halter: Pi 65 mm hinter der Frontplatte (hinter den Drehgebern), GPIO-Kante vorne, 4 gedruckte Säulen 9 mm mit Bohrung Ø 2,2 (Bolzen des DigiAMP+ schneiden ihr Gewinde selbst; keine gekauften Abstandshalter, Nutzer 18.11.), Ersatz-Hülsen `pi_huelsen`. Neuer Steuerplatinen-Halter (Lochraster 70 × 50) rechts daneben.
 - Hochpass 50 Hz per ALSA/LADSPA.
 
 Nichts davon ist am Gerät getestet.
@@ -99,6 +99,7 @@ Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt: Tr
 - 18.11.2026, zweiter Teil: Pi 4B, grün, harte Trennung über A/E, Netzteilvorgabe, Buchse hinten, Pi im Halter gedreht, Einkaufsliste Elektronik in README.
 - 18.11.2026, dritter Teil: Soft-Off mit Original-A/E und Pololu-Modulen, LEDs mit eigenem 5-V-Wandler an GPIO12, Kupplungen für die Originalknöpfe, `EINKAUF.md`, Druckteile v2.
 - 18.11.2026, vierter Teil: Drehgeber ohne Taster, Beleuchtung optional, Pololu MP + D24V10F5 (Eckstein), Preise in `EINKAUF.md`, Frontplatte mit Originalschrauben (Aussparung im Flansch).
+- 18.11.2026, fünfter Teil: microSD und 3 Anschlussklemmen vorhanden, Kontaktspray und Abstandshalter gestrichen, Kleber beliebig, Drehgeber STEC12E07. Netzteil vom Nutzer (Amazon B09BZ73MP1) nicht prüfbar, Daten erfragt.
 - Maße des A/E-Schalters abwarten, Parameter `rft_*` anpassen, STL neu.
 
 ## Hinweise

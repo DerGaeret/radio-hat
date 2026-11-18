@@ -42,19 +42,19 @@ Maße ab der linken unteren Ecke der Frontplatte (px nach rechts, pz nach oben).
 | Element | px | pz | Bauteil |
 |---|---|---|---|
 | A/E | 29 | 33 | Original-A/E-Schalter (RFT) auf Halteplatte |
-| Klang | 54 | 33 | Drehgeber STEC11B03 mit Kupplung |
-| Lautstärke | 104 | 33 | Drehgeber STEC11B03 mit Kupplung |
-| Sender | 264 | 33 | Drehgeber STEC11B03 mit Kupplung |
+| Klang | 54 | 33 | Drehgeber STEC12E07 mit Kupplung |
+| Lautstärke | 104 | 33 | Drehgeber STEC12E07 mit Kupplung |
+| Sender | 264 | 33 | Drehgeber STEC12E07 mit Kupplung |
 | 6 Tasten | 132,5 bis 232,5 (Raster 20) | 13,5 | Cherry MX Blue mit Adapter und Originaltaste |
 
 - **Frontplatte:** wird durch ihre 4 Eckbohrungen (19 mm vom Rand) mit den Originalschrauben und -muttern durch die Frontbretter geschraubt (Mutter hinten). Die Flansche der Träger haben hinter den unteren Bohrungen eine Aussparung 10 × 10 mm für Mutter und Schraubenende (Parameter `fp_schraube`, `fp_mutter_d`); ihre eigenen Befestigungsschrauben sitzen deshalb höher.
 - **Träger:** Die beiden Träger sitzen direkt hinter der Frontplatte (0,3 mm Luft). Je ein Flansch wird mit 2 Spax 2,5 × 8 hinten an das Frontbrett geschraubt. In der Mitte verbindet eine Lasche beide Teile, dort kommt eine Schraube 2,5 × 8 von hinten hinein.
 - **Originalknöpfe:** Bohrung Ø 3 mm, 17 mm tief (gemessen). Die Knopfrückseite steht 0,5 mm vor der Frontplatte; die Achse steckt 16 mm im Knopf (1 mm Reserve).
 - **Drehgeber mit Kupplung:**
-  - Die Drehgeberwelle (Ø 6 mm) passt nicht in den Knopf. Deshalb sitzt auf ihr eine gedruckte Kupplung (Ø 11 × 16 mm) mit einem Stahlstift Ø 3 × 30 mm (Zylinderstift ISO 2338) vorne.
-  - Zusammenbau: Stift 7 mm tief in die Kupplung kleben (2K-Epoxid), Kupplung 8 mm tief auf die geschlitzte Welle schieben und kleben. Stift und Welle müssen genau fluchten; vor dem Aushärten auf einer ebenen Fläche rollen.
+  - Die Drehgeberwelle (Ø 6 mm, abgeflacht) passt nicht in den Knopf. Deshalb sitzt auf ihr eine gedruckte Kupplung (Ø 11 × 22 mm) mit einem Stahlstift Ø 3 × 30 mm (Zylinderstift ISO 2338) vorne.
+  - Zusammenbau: Stift 7 mm tief in die Kupplung kleben (2K-Epoxid). Hinten hat die Kupplung eine D-Bohrung (13,5 mm tief), die auf die abgeflachte Welle passt und die Drehung formschlüssig überträgt. Die Kupplung nicht auf die Welle kleben: Sie wird nur aufgesteckt und kann axial gleiten, so stört es nicht, ob die Welle 10 oder 15 mm lang ist. Klemmt die D-Bohrung, mit 6-mm-Bohrer vorsichtig nacharbeiten bzw. die Flachseite feilen.
   - Der Turm im Träger ist ein Rohr (Ø 11,8 mm), in dem sich die Kupplung frei dreht. Der Stift läuft vorne in einer Lagerbohrung Ø 3,4 mm in der Trägerwand (mit 3,2 mm nachbohren, wenn er wackelt) und ragt durch das Loch der Frontplatte 16 mm in den Knopf.
-  - Jeder Drehgeber wird auf ein Stück Lochraster 20 × 25 mm gelötet, mit den zwei Pull-up-Widerständen (2,7 kΩ an A und B); die Taster-Pins bleiben frei. Die Platine wird mit 2 Schrauben 2,5 × 8 an die Säulen des Turms geschraubt und drückt den Drehgeber gegen das Rohr. Montagefläche des Drehgebers bei y = 46,8 (Welle 25 mm, nicht kürzen).
+  - Jeder Drehgeber wird auf ein Stück Lochraster 20 × 25 mm gelötet, mit den zwei Pull-up-Widerständen (10 kΩ an A und B). Für die zwei Snap-In-Laschen die Löcher im Lochraster auf Ø 2 mm aufbohren. Die Platine wird mit 2 Schrauben 2,5 × 8 an die Säulen des Turms geschraubt (Säulen 21 mm auseinander) und drückt den Drehgeber gegen das Rohr. Montagefläche des Drehgebers bei y = 38,8 (Welle 10 mm; Körperhöhe 7 mm angenommen, nachmessen, `enc_tief`).
   - Kupplung, Stift und Drehgeber werden zusammen von hinten in das Rohr geschoben.
 - **A/E-Schalter (Original, RFT):**
   - Der Schalter wird mit seiner eigenen Mutter und Scheibe auf die Halteplatte (Loch Ø 10,5 mm, passt für Gewinde M8 bis M10) geschraubt; der Flansch liegt hinten an der Platte.
@@ -73,7 +73,8 @@ Maße ab der linken unteren Ecke der Frontplatte (px nach rechts, pz nach oben).
   - Strom und Ansteuerung: README, „LED-Skala (optional)“. 5 V aus dem eigenen Wandler (Pololu D24V10F5) auf der Steuerplatine, Daten von GPIO12 über den 74HCT245.
 - **Pi-Halter:**
   - Er liegt auf dem Boden des Technikfachs, wird mit 4 Spax 3 × 10 festgeschraubt und hält den Pi.
-  - Vier Sockel (3 mm). Zuerst je einen Abstandsbolzen M2,5 × 6 Innen/Außen mit einer Schraube M2,5 × 8 (beides aus dem Abstandshalter-Sortiment) von unten anschrauben, dann den Pi auf die Außengewinde setzen und die Bolzen des DigiAMP+ (Lieferumfang) darauf schrauben, DigiAMP+ aufstecken und oben verschrauben. Erst danach den Halter in den Boden schrauben.
+  - Vier gedruckte Säulen (9 mm hoch, Ø 6, Bohrung Ø 2,2 × 10 mm); keine gekauften Abstandshalter nötig. Pi auflegen, die Abstandsbolzen des DigiAMP+ (Lieferumfang, Außengewinde nach unten) durch die Pi-Löcher in die Säulen drehen; das M2,5-Gewinde schneidet sich in den Kunststoff. Nicht zu fest anziehen. DigiAMP+ aufstecken und oben mit den mitgelieferten Schrauben verschrauben. Erst danach den Halter in den Boden schrauben.
+  - Liegen beim DigiAMP+ keine Bolzen bei: 4 Hülsen drucken (`teil = "pi_huelsen"`, Ø 6 × 11,5 mm) und mit 4 Schrauben M2,5 × 25 von oben durch DigiAMP+, Hülse und Pi in die Säulen schrauben.
   - Der Pi liegt mit der GPIO-Kante nach vorne, 65 mm hinter der Frontplatte (hinter den Drehgebern). Hohlbuchse und Lautsprecherklemmen des DigiAMP+ liegen an der gegenüberliegenden Kante und zeigen zur Rückwand, gut erreichbar über den magnetischen Deckel. USB und Ethernet des Pi zeigen nach links.
 - **Steuerplatinen-Halter:**
   - Rechts neben dem Pi, ebenfalls mit 4 Spax 3 × 10 am Boden. Trägt die Lochrasterplatine 70 × 50 mm auf vier 8 mm hohen Säulen.
