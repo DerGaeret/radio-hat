@@ -46,7 +46,7 @@ Gesucht ist ein geregeltes Tischnetzteil wie bei Laptops:
 
 Gewählt (Nutzer): **Universal-Laptopnetzteil 90 W** von [Amazon](https://amzn.eu/d/09DU1uIf) (18,5–20 V, 4,74 A, Wechselstecker, Netzkabel dabei). Den Aufsteckstecker 5,5 × 2,5 mm verwenden, vor dem ersten Anschluss mit dem Multimeter prüfen, dass die Mitte Plus ist, und den Stecker mit Schrumpfschlauch gegen Abziehen sichern. Markenalternative: Mean Well GST90A19-P1M (19 V, 4,74 A; Reichelt) mit Netzkabel NKSK 200 SW. Links in `EINKAUF.md`.
 
-- **Warum 19 V:** Die Lautsprecher (Sharp VSP0010PBS78A) haben 8 Ω und vertragen höchstens 20 W. Die Brückenendstufe schafft an 8 Ω höchstens etwa U² / 16 Ω ohne Verluste, bei 19 V also etwa 22 W, real knapp 20 W vor dem Übersteuern; bei 24 V wären es über 30 W.
+- **Warum 19 V:** Die Lautsprecher (Sharp VSP0010PBS78A) haben 8 Ω und vertragen höchstens 20 W. Die Brückenendstufe schafft an 8 Ω höchstens etwa U² / 16 Ω ohne Verluste, bei 19 V also etwa 22 W, real knapp 20 W vor dem Übersteuern; bei 24 V wären es über 30 W. Das gewählte Universalnetzteil liefert 18,5–20 V; bei 20 V sind es real etwa 22 W. Deshalb in der Software die Lautstärke auf etwa −1 dB begrenzen (ALSA „Digital“ höchstens etwa 205 statt 207), dann bleiben die Lautsprecher unter 20 W.
 - **Leistung:** Verstärker bei Dauer-Sinus voll aufgedreht bis etwa 45 W, Pi über den DigiAMP+ bis etwa 15 W, LED-Skala (optional) bis 5 W (auf 0,8 A begrenzt, siehe unten). Mit Musik liegt der Mittelwert weit darunter; 65 W reichen.
 
 ## Stromversorgung und A/E-Schalter (softes Ausschalten)
@@ -218,7 +218,7 @@ LED-Skala (falls eingebaut): Bibliothek `rpi_ws281x` (Python: `sudo pip3 install
 
 ## Erster Test
 
-1. Steuerplatine ohne Pi, DigiAMP+ und LEDs: Netzteil hinten einstecken. A/E aus: grüne LED am Modul aus, 0 V an VERST. A/E ein: LED an, am Hohlstecker des Kabels zum DigiAMP+ innen +19 V, außen Minus; am 5-V-Ausgang (falls Beleuchtung) 4,8 bis 5,2 V.
+1. Steuerplatine ohne Pi, DigiAMP+ und LEDs: Netzteil hinten einstecken. A/E aus: grüne LED am Modul aus, 0 V an VERST. A/E ein: LED an, am Hohlstecker des Kabels zum DigiAMP+ innen +19 bis +20 V, außen Minus; am 5-V-Ausgang (falls Beleuchtung) 4,8 bis 5,2 V.
 2. Lautsprecher abklemmen, DigiAMP+ auf den Pi, Hohlstecker und Dupont-Kabel (GPIO9, 10, 12, GND) stecken, A/E ein. Power-LED am DigiAMP+ an, Mute-LED an.
 3. Pi bootet. `aplay -l` zeigt „RPi DigiAMP+“.
 4. Lautsprecher anklemmen. `speaker-test -c 2 -t wav` spielt abwechselnd links und rechts; die Mute-LED geht beim Abspielen aus.

@@ -99,7 +99,8 @@ Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt: Tr
 - 18.11.2026, zweiter Teil: Pi 4B, grün, harte Trennung über A/E, Netzteilvorgabe, Buchse hinten, Pi im Halter gedreht, Einkaufsliste Elektronik in README.
 - 18.11.2026, dritter Teil: Soft-Off mit Original-A/E und Pololu-Modulen, LEDs mit eigenem 5-V-Wandler an GPIO12, Kupplungen für die Originalknöpfe, `EINKAUF.md`, Druckteile v2.
 - 18.11.2026, vierter Teil: Drehgeber ohne Taster, Beleuchtung optional, Pololu MP + D24V10F5 (Eckstein), Preise in `EINKAUF.md`, Frontplatte mit Originalschrauben (Aussparung im Flansch).
-- 18.11.2026, fünfter Teil: microSD und 3 Anschlussklemmen vorhanden, Kontaktspray und Abstandshalter gestrichen, Kleber beliebig, Drehgeber STEC12E07. Netzteil vom Nutzer (Amazon B09BZ73MP1 = Universal 90 W, 18,5–20 V / 4,74 A, Wechselstecker) per Foto geprüft: geeignet mit Stecker 5,5 × 2,5.
+- 18.11.2026, fünfter Teil: microSD und 3 Anschlussklemmen vorhanden, Kontaktspray und Abstandshalter gestrichen, Kleber beliebig, Drehgeber STEC12E07. Netzteil vom Nutzer (Amazon, Universal 90 W, 18,5–20 V / 4,74 A, Wechselstecker) per Foto geprüft: geeignet mit Stecker 5,5 × 2,5.
+- 18.11.2026, sechster Teil: Einbaubuchse wieder Delock 90188 (9 A), Erklärseite aktualisiert (Drehgeberschnitt neu), Lautstärke-Grenze −1 dB wegen 20 V.
 - Maße des A/E-Schalters abwarten, Parameter `rft_*` anpassen, STL neu.
 
 ## Hinweise
