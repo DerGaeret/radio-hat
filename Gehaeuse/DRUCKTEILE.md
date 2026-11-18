@@ -20,7 +20,7 @@ Die Renderings entstehen aus `render/render.py` (POV-Ray) mit dem Dekor Nuss Siz
 | Träger links (A/E, Klang, Lautstärke) | `traeger_links.stl` | 122 × 53 × 30 | PETG oder PLA, schwarz | 1 |
 | Träger rechts (6 Tasten, Sender) | `traeger_rechts.stl` | 180 × 53 × 30 | PETG oder PLA, schwarz | 1 |
 | Lichtkasten hinter der Skala | `lichtkasten.stl` | 200 × 56 × 28 | PLA weiß | 1 |
-| Halter für Pi und Radio HAT | `pi_halter.stl` | 97 × 122 × 21 | PETG oder PLA | 1 |
+| Halter für Pi mit DigiAMP+ | `pi_halter.stl` | 97 × 68 × 8,5 | PETG oder PLA | 1 |
 | Tastenadapter Cherry MX → Taste | `tastenadapter.stl` | 11 × 11 × 8 | PETG oder PLA | 6 (in einer Datei) |
 
 Alle Teile passen auf ein Druckbett von 220 × 220 mm. Die Träger in Schwarz drucken, damit durch die Tasten- und Knopflöcher nichts Helles durchscheint.
@@ -55,10 +55,10 @@ Maße ab der linken unteren Ecke der Frontplatte (px nach rechts, pz nach oben).
   - Innen hat er 4 Kammern: U-Band, K-Band, Stationsmarken und L-Band. Trennwände verhindern, dass Licht zwischen den Reihen überspricht.
   - Die LED-Streifen kleben innen auf der Rückwand. Das Kabel geht durch den Schlitz rechts hinten.
 - **Pi-Halter:**
-  - Er liegt auf dem Boden des Technikfachs, wird mit 4 Spax 3 × 10 festgeschraubt und hält Pi und HAT.
-  - Der Pi sitzt vorne, die HAT zeigt nach hinten. Ihre Schraubklemmen liegen dann zur Rückwand hin, gut erreichbar über den magnetischen Deckel.
-  - Pi auf 6 mm hohen Säulen. Die freien HAT-Löcher sitzen auf 18,6 mm hohen Säulen, passend zu 11 mm Abstand zwischen Pi und HAT.
-  - Schrauben M2,5 selbstschneidend in die Säulen oder Gewindeeinsätze M2,5 einschmelzen.
+  - Er liegt auf dem Boden des Technikfachs, wird mit 4 Spax 3 × 10 festgeschraubt und hält den Pi.
+  - Der DigiAMP+ (58 × 65 mm) steckt direkt auf dem Pi und wird mit den mitgelieferten Abstandsbolzen auf den vier Pi-Löchern verschraubt. Er braucht deshalb keine eigenen Säulen.
+  - Pi auf 6 mm hohen Säulen. Die unteren Schrauben der Abstandsbolzen gehen durch den Pi in die Säulen: M2,5 selbstschneidend oder Gewindeeinsätze M2,5 einschmelzen. Ist die mitgelieferte Schraube zu kurz, eine M2,5 × 12 nehmen.
+  - Hohlbuchse und Lautsprecherklemmen des DigiAMP+ sollen zur Rückwand zeigen. Wo genau sie liegen, steht in der Doku nicht; beim Einbau den Pi notfalls um 180° drehen. Die vier Säulen passen auch dann, weil das Lochbild (58 × 49 mm) symmetrisch ist; der Pi steht dann seitlich 21 mm über die Halterplatte hinaus.
 
 ## Beleuchtung hinter der Frontplatte
 
@@ -85,9 +85,9 @@ Ein Bildschirm hinter der Platte wäre nur durch die drei 5 mm hohen Schlitze zu
 Hinter jedem Schlitz liegt eine eigene Kammer mit einem LED-Streifen. Der weiße 0,8-mm-Diffusor vorne verteilt das Licht gleichmäßig, wie die alten Skalenlampen.
 
 - **Streifen:** WS2812B mit 144 LEDs/m und 10 mm Breite. Etwa 4 × 28 LEDs (4 × 194 mm), zusammen 112 LEDs. Einzeln ansteuerbare LEDs können einen **Senderzeiger** darstellen. An der Position des eingestellten Senders leuchtet in allen Reihen eine LED rot, wie der Zeiger früher. Für das aktive Band leuchtet die passende Reihe heller.
-- **Ansteuerung:** WS2812B brauchen am Pi einen PWM-, PCM- oder SPI-Pin. Die sind alle schon belegt: GPIO12 durch einen Drehgeber, GPIO18/21 durch I²S, GPIO10 durch die Schalter-Erkennung. Am einfachsten ist deshalb ein kleiner Mikrocontroller wie ein RP2040-Zero (ca. 5 €). Er hängt per USB am Pi und bekommt die Zeigerposition als einfache serielle Befehle. Er versorgt die LEDs auch mit 5 V.
+- **Ansteuerung:** WS2812B brauchen am Pi einen PWM-, PCM- oder SPI-Pin. Die sind alle schon belegt: GPIO12 durch einen Drehgeber, GPIO18 bis 21 durch den DigiAMP+ (I²S), GPIO10 durch den A/E-Schalter. Am einfachsten ist deshalb ein kleiner Mikrocontroller wie ein RP2040-Zero (ca. 5 €). Er hängt per USB am Pi und bekommt die Zeigerposition als einfache serielle Befehle. Er versorgt die LEDs auch mit 5 V.
 - **Strom:** Bei voller Helligkeit in Weiß bräuchten 112 LEDs fast 7 A. Als Hintergrundlicht reichen etwa 10 % Helligkeit, das sind rund 0,4 A und damit kein Problem für den USB-Anschluss. Die Helligkeit in der Firmware begrenzen.
-- **Einfachste Variante ohne Zeiger:** warmweißer 5-V-LED-Streifen, über einen MOSFET an GPIO20 gedimmt (GPIO20 ist frei). Dann leuchtet die Skala gleichmäßig wie früher, aber ohne Zeiger.
+- **Einfachste Variante ohne Zeiger:** warmweißer 5-V-LED-Streifen, über einen MOSFET an GPIO9 gedimmt (GPIO9 ist frei, solange SPI aus bleibt). Dann leuchtet die Skala gleichmäßig wie früher, aber ohne Zeiger.
 - **Tasten beleuchten (optional):** Cherry-MX-Schalter haben eine Öffnung für eine 3-mm-LED. Mit durchscheinenden Tastenkappen könnte die gedrückte Bandtaste leuchten. Die Originaltasten sind aber schwarz und undurchsichtig.
 
 ## Noch offen
@@ -95,4 +95,3 @@ Hinter jedem Schlitz liegt eine eigene Kammer mit einem LED-Streifen. Der weiße
 - **Knöpfe:** Für die Befestigung der Originalknöpfe auf der 6-mm-Welle fehlt noch ein Adapter. Dafür brauche ich die Bohrung im Knopf: Durchmesser, Tiefe und ob rund, abgeflacht oder mit Feder.
 - **A/E-Schalter:** Der Platz ist wie ein Drehgeber ausgelegt (12 × 12 mm).
 - **Wellenlänge der Drehgeber:** Angenommen sind 20 mm ab Vorderseite des Drehgebers. Bei anderer Länge `enc_welle` in `traeger.scad` ändern, Turm und Platine rücken mit.
-- **Pi-Halter an die neue Platine anpassen (noch zu tun):** Der Radio HAT ist seit Rev. 1.1 (17.11.2026) 65 × 70 mm statt 65 × 65 mm. Er ist auf der Seite der Schraubklemmen (zur Rückwand hin) 5 mm länger; dort sitzen jetzt Klemmen bis 11 mm Tiefe. Das Lochbild (58 × 49 mm, Lage zum GPIO-Stecker) ist unverändert. In `traeger.scad` stehen Halter und Platzhalter der Platine noch auf 65 × 65 mm (`cube([65, 65, 1.6])`); prüfen, ob Halter, Klemmen und Kabel mit 5 mm mehr Länge noch in das Technikfach passen, und Platzhalter, Halter und STL anpassen.

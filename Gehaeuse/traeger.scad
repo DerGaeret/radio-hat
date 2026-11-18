@@ -1,8 +1,7 @@
 // 3D-Druckteile für das Technikfach – alle Maße in mm
 // Koordinaten der Frontteile: px = ab linker Kante der Frontplatte, pz = ab Unterkante der Frontplatte,
 // y = Tiefe wie im Gehäuse (Frontplatte vorne y=7, hinten y=10).
-// Ansicht/Export: teil = "alle" | "traeger_links" | "traeger_rechts" | "lichtkasten" | "pi_halter"
-//                       | "tastenadapter"
+// Ansicht/Export: teil = "alle" | "traeger_links" | "traeger_rechts" | "lichtkasten" | "pi_halter" | "tastenadapter"
 teil = "alle";
 $fn = 40;
 
@@ -148,30 +147,30 @@ module lichtkasten() {
   }
 }
 
-/* ---------- Halter für Raspberry Pi + Radio HAT (Gehäusekoordinaten) ---------- */
+/* ---------- Halter für Raspberry Pi + DigiAMP+ (Gehäusekoordinaten) ---------- */
+// Der DigiAMP+ (58 x 65 mm) sitzt direkt auf dem Pi, mit den Abstandsbolzen aus seinem Lieferumfang
+// auf den vier Pi-Löchern. Der Halter trägt deshalb nur noch den Pi.
 pi_gpio_y = 105;   // GPIO-Kante des Pi (Gehäuse-y)
 pi_x0     = 290;   // linke Kante des Pi (Gehäuse-x)
 boden_z   = 8;
 pi_hoehe  = 6;     // Pi-Platine liegt 6 mm über der Halterplatte
-hat_abst  = 11;    // Abstand Pi-Platine zu HAT-Platine (README)
+amp_abst  = 9;     // Abstand Pi-Platine zu DigiAMP+-Platine, nur für die Vorschau (Bolzen aus dem Lieferumfang)
 ph_t      = 2.5;
 pi_loecher  = [[3.5,3.5],[61.5,3.5],[3.5,52.5],[61.5,52.5]];   // Pi-Koordinaten (y ab GPIO-Kante Richtung Pi)
-hat_frei    = [[3.5,-45.5],[61.5,-45.5]];                         // freie HAT-Löcher
 function pi2g(p) = [pi_x0 + p[0], pi_gpio_y - p[1]];
 
 module pi_halter() {
-  x0 = pi_x0-6; x1 = pi_x0+91; y0 = pi_gpio_y-62; y1 = pi_gpio_y+60;
+  x0 = pi_x0-6; x1 = pi_x0+91; y0 = pi_gpio_y-62; y1 = pi_gpio_y+6;
   difference() {
     union() {
       translate([x0, y0, boden_z]) cube([x1-x0, y1-y0, ph_t]);
       for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z]) cylinder(d=6, h=ph_t+pi_hoehe);
-      for (p=hat_frei) translate([pi2g(p)[0], pi2g(p)[1], boden_z]) cylinder(d=6, h=ph_t+pi_hoehe+1.6+hat_abst);
     }
-    for (p=concat(pi_loecher, hat_frei)) translate([pi2g(p)[0], pi2g(p)[1], boden_z+1]) cylinder(d=2.2, h=40);
+    for (p=pi_loecher) translate([pi2g(p)[0], pi2g(p)[1], boden_z+1]) cylinder(d=2.2, h=40);
     for (x=[x0+5, x1-5], y=[y0+5, y1-5]) translate([x, y, boden_z-1]) {   // Spax 3 x 10 in den Boden
       cylinder(d=3.2, h=10); translate([0,0,ph_t-0.5]) cylinder(d=6.5, h=10);
     }
-    translate([x0+20, y0+20, boden_z-1]) cube([x1-x0-40, y1-y0-40, 5]);       // Material sparen
+    translate([x0+20, y0+14, boden_z-1]) cube([x1-x0-40, y1-y0-28, 5]);       // Material sparen
   }
 }
 
@@ -205,9 +204,9 @@ module bauteile_vorschau() {
 module pi_vorschau() {
   pz = boden_z + ph_t + pi_hoehe;
   color("Green") translate([pi_x0, pi_gpio_y-56, pz]) cube([85, 56, 1.6]);
-  color("DarkGreen") translate([pi_x0, pi_gpio_y-7, pz+1.6+hat_abst]) cube([65, 65, 1.6]);
   color("Silver") translate([pi_x0+66, pi_gpio_y-54, pz+1.6]) cube([21, 52, 16]);
-  color("DimGray") translate([pi_x0+20, pi_gpio_y+8, pz+3.2+hat_abst]) cylinder(d=10, h=20);
+  // DigiAMP+ 65 x 58 mm über dem Pi; Hohlbuchse und Schraubklemmen nur angedeutet
+  color("DarkGreen") translate([pi_x0, pi_gpio_y-58, pz+1.6+amp_abst]) cube([65, 58, 1.6]);
 }
 
 /* ---------- Einbau ins Gehäuse ---------- */

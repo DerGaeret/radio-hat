@@ -1,4 +1,0 @@
-(version 1)
-(rule "Waermefallen Unterseite"
-   (layer "B.Cu")
-   (constraint min_resolved_spokes 1))
