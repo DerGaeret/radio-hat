@@ -2,7 +2,7 @@
 
 Stand 18.11.2026. Links am 18.11.2026 geprüft (Reichelt-Seiten erreichbar, Bezeichnung passt). Preise und Lagerbestand bitte beim Bestellen ansehen. „Suche“ heißt: kein fester Artikel, der Link öffnet eine Suche; dort ein passendes Angebot nehmen.
 
-Die bebilderte Erklärung zu allen Teilen steht in der Artifact-Seite „Retro-Radio Technik“ (Link im Chat) und kurz in `README.md`.
+Die bebilderte Erklärung zu allen Teilen steht auf der Seite [Retro-Radio Technik](https://claude.ai/artifact/NMvpSek8xF2TUQraDzXtam) (privat, nur für den Besitzer) und kurz in `README.md`.
 
 ## Vorhanden bzw. vom Originalradio
 
