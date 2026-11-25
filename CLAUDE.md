@@ -88,9 +88,16 @@ Nichts davon ist am Gerät getestet.
 
 Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt. Drucker des Nutzers: Qidi Plus 4 (305 × 305 × 280) mit OrcaSlicer → Träger einteilig `traeger.stl` (296 mm), Orca-Einstellungen in `DRUCKTEILE.md`. Träger mit Kupplungsrohren, A/E-Säulen und Aussparung für die Original-Frontplattenmuttern, Kupplungen, A/E-Platte, Pi- und Steuerplatinen-Halter. Tasten 8 mm vor der Frontplatte, Adapter flach zum Aufkleben.
 
+## Anforderungen Wiedergabe (Nutzer 26.11.2026)
+
+- Quellen: Spotify Connect, AirPlay, Internetradio; Bluetooth nur, wenn es nichts kostet. Lautsprecher, Tasten, Drehgeber und Gehäuse bleiben.
+- Start soll schnell gehen (Pi-Kaltstart 20–30 s ist zu lang). Andere Hardware als der Pi 4B ist erlaubt.
+- Prüfung 26.11.: ESP32 verworfen (kein DigiAMP+, Spotify+AirPlay 2+Internetradio mit 3 Drehgebern nur mit eigener Firmware). Vorschlag: Pi bleibt, A/E schaltet in Standby (Daemon an GPIO10 statt `gpio-shutdown`), Hardware unverändert. Treiber `pcm512x` hat keine Bass/Höhen-Regler → Klang, Hochpass, −1-dB-Grenze in CamillaDSP hinter ALSA-Loopback (mehrere Quellen). Ein Neustart im Standby schaltet ganz ab (GPIO9 fällt) → keine automatischen Neustarts.
+
 ## Offene Fragen an den Nutzer (Antworten stehen noch aus)
 
-1. Optional: Länge und Ø der Gewindebuchse des A/E-Schalters (geschätzt 8 mm, bis 12 mm passt es).
+1. Standby mit Pi 4B (vorhanden) oder Pi Zero 2 W (weniger Standby-Strom, neuer `pi_halter`)? Dauer-Standby oder nach N Stunden ganz aus?
+2. Optional: Länge und Ø der Gewindebuchse des A/E-Schalters (geschätzt 8 mm, bis 12 mm passt es).
 
 ## Nächste Schritte (Stand 18.11.2026)
 
