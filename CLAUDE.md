@@ -91,13 +91,12 @@ Entwurf v2 (18.11.2026, siehe `Gehaeuse/DRUCKTEILE.md`), noch nicht gedruckt. Dr
 ## Anforderungen Wiedergabe (Nutzer 26.11.2026)
 
 - Quellen: Spotify Connect, AirPlay, Internetradio; Bluetooth nur, wenn es nichts kostet. Lautsprecher, Tasten, Drehgeber und Gehäuse bleiben.
-- Start soll schnell gehen (Pi-Kaltstart 20–30 s ist zu lang). Andere Hardware als der Pi 4B ist erlaubt.
-- Prüfung 26.11.: ESP32 verworfen (kein DigiAMP+, Spotify+AirPlay 2+Internetradio mit 3 Drehgebern nur mit eigener Firmware). Vorschlag: Pi bleibt, A/E schaltet in Standby (Daemon an GPIO10 statt `gpio-shutdown`), Hardware unverändert. Treiber `pcm512x` hat keine Bass/Höhen-Regler → Klang, Hochpass, −1-dB-Grenze in CamillaDSP hinter ALSA-Loopback (mehrere Quellen). Ein Neustart im Standby schaltet ganz ab (GPIO9 fällt) → keine automatischen Neustarts.
+- Pi 4B bleibt; Start darf 20–30 s dauern (Nutzer 26.11., zuerst „schnell“, dann zurückgenommen) → kein Standby, Ausschalten bleibt wie geplant (`gpio-shutdown` GPIO10, Pololu schaltet ab).
+- Prüfung 26.11.: ESP32 verworfen (kein DigiAMP+, Spotify+AirPlay 2+Internetradio mit 3 Drehgebern nur mit eigener Firmware). Treiber `pcm512x` hat keine Bass/Höhen-Regler → Klang, Hochpass, −1-dB-Grenze später in CamillaDSP hinter ALSA-Loopback (mehrere Quellen: raspotify, shairport-sync, MPD, optional bluez-alsa). Spotify Connect braucht Premium.
 
 ## Offene Fragen an den Nutzer (Antworten stehen noch aus)
 
-1. Standby mit Pi 4B (vorhanden) oder Pi Zero 2 W (weniger Standby-Strom, neuer `pi_halter`)? Dauer-Standby oder nach N Stunden ganz aus?
-2. Optional: Länge und Ø der Gewindebuchse des A/E-Schalters (geschätzt 8 mm, bis 12 mm passt es).
+1. Optional: Länge und Ø der Gewindebuchse des A/E-Schalters (geschätzt 8 mm, bis 12 mm passt es).
 
 ## Nächste Schritte (Stand 18.11.2026)
 
